@@ -1,0 +1,15 @@
+.title{
+  color: black;
+  text-align: center;
+}
+
+.nxtBtn{
+  color: white;
+}
+
+StackLayout{
+    background-image: ~/images/huecolor.png;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
