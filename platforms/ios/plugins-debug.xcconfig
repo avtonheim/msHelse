@@ -1,4 +1,4 @@
 ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-CODE_SIGN_ENTITLEMENTS = mHealth/mHealth.entitlements
+CODE_SIGN_ENTITLEMENTS = msHelse/msHelse.entitlements
 HEADER_SEARCH_PATHS = $(inherited) ${PROJECT_DIR}/../../node_modules/nativescript-sqlite/platforms/ios
