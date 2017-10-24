@@ -1,0 +1,20 @@
+<Page loaded="onLoaded">
+  <Page.actionBar>
+         <Image src="images/ikon.png" class="action-image"></Image>
+         <ActionBar title="mHelse" class="action-bar"></ActionBar>
+         <NavigationButton text="Tilbake" tap="tapHome"/>
+     </Page.actionBar>
+
+    <StackLayout>
+      <Progress value="{{ someProperty }}" />
+      <Label text="Symptom" style="font-weight: bold;"/>
+      <Label text="{{ explSymptom }}" textWrap="true"/>
+      <GridLayout rows="*,*,*" columns="*,*" width="350" height="250">
+        <Button row="0" col="0" text="Fatugue"/>
+        <Button row="0" col="1" text="Søvnproblem"/>
+        <Button row="1" col="0" text="Husk"/>
+        <Button row="1" col="1" text="Synsproblem"/>
+    </GridLayout>
+      <Button class="nxtBtn" text="Neste" tap="onNavTodo"/>
+    </StackLayout>
+</Page>

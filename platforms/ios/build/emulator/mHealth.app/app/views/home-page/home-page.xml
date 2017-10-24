@@ -1,0 +1,22 @@
+<Page>
+
+  <Page.actionBar>
+         <ActionBar title="mHelse" icon="" class="action-bar">
+         </ActionBar>
+     </Page.actionBar>
+<StackLayout class="content">
+  <Label class="textJustify" text="Velkommen til mHealth"/>
+  <Label class="textJustify" textWrap="true" text="For å navigere til andre sider kan du klikke på ein av knappane nedanfor"/>
+  <GridLayout rows="*,*" columns="*,*" width="300" height="300" style="margin-top: 200px;">
+    <StackLayout row="0" col="0" class="tile">
+      <Image src="~/images/trening.png" tap="onTap" />
+    </StackLayout>
+    <StackLayout row="0" col="1" class="tile">
+      <Image src="~/images/dabok.png" tap="tapDiary" />
+    </StackLayout>
+    <StackLayout row="1" col="0" class="tile">
+      <Image src="~/images/analyse.png" tap="tapVisual" />
+    </StackLayout>
+  </GridLayout>
+</StackLayout>
+</Page>

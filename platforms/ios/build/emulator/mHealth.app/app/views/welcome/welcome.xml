@@ -1,0 +1,5 @@
+<Page loaded="onLoaded">
+  <StackLayout>
+      <Image id="view" src="~/images/mhelse.png" width="200" height="200"/>
+  </StackLayout>
+</Page>

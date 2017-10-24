@@ -1,0 +1,12 @@
+<Page>
+  <Page.actionBar>
+         <ActionBar title="mHelse" icon="" class="action-bar">
+         </ActionBar>
+     </Page.actionBar>
+<ScrollView>
+  <StackLayout class="content">
+    <Label text="Om mHealth applikasjonen"/>
+    <Button text="Dagbok" tap="tapDiary"/>
+  </StackLayout>
+</ScrollView>
+</Page>

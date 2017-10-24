@@ -1,0 +1,7 @@
+{
+    "chartist": true,
+    "nativescript-sqlite": true,
+    "nativescript-theme-core": true,
+    "tns-core-modules": true,
+    "tns-core-modules-widgets": true
+}

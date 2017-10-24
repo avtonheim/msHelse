@@ -1,0 +1,17 @@
+<Page loaded="onLoaded">
+  <Page.actionBar>
+         <Image src="images/ikon.png" class="action-image"></Image>
+         <ActionBar title="mHelse" class="action-bar"></ActionBar>
+         <NavigationButton text="Tilbake" tap="tapHome"/>
+     </Page.actionBar>
+  <ScrollView>
+
+    <StackLayout class="content">
+      <Label text="Generell tekst"/>
+      <TextField id="subject" hint="Er det noko anna du vil legge til? Endring i symptom, humør eller likande?"/>
+
+      <Progress value="{{ someProperty }}" />
+      <Button class="nxtBtn" text="Ferdig" tap="finishDiary"/>
+    </StackLayout>
+  </ScrollView>
+</Page>

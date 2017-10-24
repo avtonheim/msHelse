@@ -1,0 +1,10 @@
+GridLayout button{
+  color: white;
+  text-align: center;
+  background-color: gray;
+  margin: 20px;
+}
+
+StackLayout label {
+   padding: 20px;
+}

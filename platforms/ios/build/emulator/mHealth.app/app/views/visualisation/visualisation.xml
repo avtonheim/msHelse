@@ -1,0 +1,13 @@
+<Page loaded="onLoaded">
+  <Page.actionBar>
+         <ActionBar title="mHelse" icon="" class="action-bar">
+         </ActionBar>
+     </Page.actionBar>
+     <StackLayout>
+       <GridLayout class="graph" rows="*" columns="*" width="300" height="200">
+       <Label text="Dei siste tre dagane"/>
+     </GridLayout>
+      <Label text="Visualisering av dagbok"/>
+      <Button text="Tilbake" tap="onTap"/>
+    </StackLayout>
+</Page>

@@ -1,0 +1,12 @@
+<Page loaded="onLoaded">
+  <Page.actionBar>
+         <Image src="~/images/ikon.png"></Image>
+         <ActionBar title="mHelse" class="action-bar"></ActionBar>
+         <NavigationButton text="Tilbake" tap="onNavBtnTap"/>
+     </Page.actionBar>
+    <StackLayout>
+      <Progress value="{{ someProperty }}" />
+      <Label text="Todo!" style="font-weight: bold;"/>
+      <Button class="nxtBtn" text="Neste" tap="navText"/>
+  </StackLayout>
+</Page>

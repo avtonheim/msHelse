@@ -1,0 +1,13 @@
+<Page loaded="onLoaded">
+  <Page.actionBar>
+         <ActionBar title="mHelse" class="action-bar"></ActionBar>
+         <NavigationButton text="Tilbake" tap="tapHome"/>
+     </Page.actionBar>
+    <StackLayout>
+      <Progress value="{{ someProperty }}" />
+      <GridLayout id="panTouch" rows="*" columns="*" width="auto" height="500">
+          <Label class="title" text="Korleis har du det?"/>
+      </GridLayout>
+      <Button class="nxtBtn" text="Neste" tap="navSymptom"/>
+  </StackLayout>
+</Page>
