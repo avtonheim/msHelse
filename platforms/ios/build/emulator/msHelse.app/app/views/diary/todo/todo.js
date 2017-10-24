@@ -11,4 +11,4 @@ exports.onLoaded = onLoaded;
 function navText(){
   frameModule.topmost().navigate('views/diary/text/text');
 }
-exports.navText = navText;
+exports.navText = navText; 

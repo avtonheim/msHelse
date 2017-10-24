@@ -8,6 +8,7 @@ require("./bundle-config");
 var application = require("application");
 
 application.start({ moduleName: "views/welcome/welcome" });
+//application.start({ moduleName: "views/diary/lists/lists" });
 
 /*
 Do not place any code after the application has been started as it will not

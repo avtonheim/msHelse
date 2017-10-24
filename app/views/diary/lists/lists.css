@@ -1,0 +1,12 @@
+
+.listItem{
+  height: auto;
+  margin-left: 20px;
+  text-align: left;
+  font-weight: bold;
+
+}
+.deleteItem{
+  text-align: right;
+  margin-right: 20px;
+}

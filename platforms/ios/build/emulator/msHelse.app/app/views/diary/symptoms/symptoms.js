@@ -4,8 +4,7 @@ var page;
 function onLoaded(args){
   page = args.object;
   page.bindingContext = { someProperty : 50};
-  page.bindingContext = { explSymptom : "Her kan du legge inn dine symptom sidan sist du fullførte dagboka di. Du kan velje fleire symptom."};
-
+  page.bindingContext = { explSymptom : "Her kan du legge inn dine symptom sidan sist du fullførte dagboka di. Du kan velje fleire symptom"};
 }
 exports.onLoaded = onLoaded;
 
