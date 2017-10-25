@@ -4,13 +4,12 @@
          <ActionBar title="mHelse" class="action-bar"></ActionBar>
          <NavigationButton text="Tilbake" tap="tapHome"/>
      </Page.actionBar>
-    <StackLayout class="content">
-      <StackLayout style="height: 200px; text-align: center">
+    <StackLayout>
+      <Progress value="{{ someProperty }}" />
+      <StackLayout class="content" style="height: 200px; text-align: center">
         <Label class="title" text="Velkommen til dagboka di!"/>
         <Label text="Denne dagboka tar ikkje lang tid å fylle ut."/>
       </StackLayout>
-
-        <Progress value="{{ someProperty }}" />
         <Button class="nxtBtn" text="Neste" tap="onNavPinch"/>
   </StackLayout>
 

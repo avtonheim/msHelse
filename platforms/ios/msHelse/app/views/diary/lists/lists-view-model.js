@@ -29,16 +29,13 @@ function createViewModel(database) {
         });
     }
 
-    /*Slette ein og ein*/
     viewModel.delete = function() {
-    Dialogs.confirm("Er du sikker på at du vil slette dette gjøremålet?").then((agree) => {
+    Dialogs.confirm("Er du sikker på at du vil slette alle gjøremål?").then((agree) => {
         if(agree){
-
-            db.execSQL("DELETE id, list_name FROM lists", []).then(
+            database.execSQL("DELETE FROM lists WHERE ID = 1").then(
                 (err) => {
                     if(!err){
                         Dialogs.alert("Dine gjøremål er sletta!");
-                        lists = [];
                         viewModel.set('list_name', []);
                     }
                 }

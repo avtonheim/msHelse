@@ -6,15 +6,16 @@
      </Page.actionBar>
 
     <StackLayout>
+      <Progress value="{{ someProperty }}"/>
+      <Label class="content" text="Symptom" style="font-weight: bold;"/>
+      <Label class="content" text="Her kan du legge inn dine symptom sidan sist du fullførte dagboka di. Du kan velje fleire symptom" textWrap="true"/>
 
-      <Label text="Symptom" style="font-weight: bold;"/>
-      <Label text="{{ explSymptom }}" textWrap="true"/>
-      <Progress value="{{ someProperty }}" />
       <GridLayout rows="*,*,*" columns="*,*" width="350" height="250">
         <Button row="0" col="0" text="Fatugue"/>
         <Button row="0" col="1" text="Søvnproblem"/>
         <Button row="1" col="0" text="Husk"/>
         <Button row="1" col="1" text="Synsproblem"/>
+
     </GridLayout>
       <Button class="nxtBtn" text="Neste" tap="onNavTodo"/>
     </StackLayout>

@@ -2,11 +2,6 @@ var Sqlite = require("nativescript-sqlite");
 var createViewModel = require("./lists-view-model").createViewModel;
 var FrameModule = require("ui/frame");
 
-function onLoaded(args){
-var page = args.object;
-page.bindingContext = { someProperty : 80};
-}
-exports.onLoaded = onLoaded;
 
 /*Next buttin to text-general*/
 function navText(){

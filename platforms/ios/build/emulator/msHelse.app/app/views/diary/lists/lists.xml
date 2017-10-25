@@ -1,0 +1,23 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="onNavigatingTo">
+    <Page.actionBar>
+        <ActionBar title="msHelse" class="action-bar">
+            <ActionBar.actionItems>
+                <ActionItem text="New" tap="{{ insert }}" ios.position="right" />
+            </ActionBar.actionItems>
+        </ActionBar>
+    </Page.actionBar>
+    <StackLayout>
+      <Progress value="70"/>
+      <Label text="Todo!" style="font-weight: bold;"/>
+      <Label text="Legg inn dine gjøremål for morgondagen. Maks fem gjøremål!" textWrap="true"/>
+      <ListView items="{{ lists }}">
+          <ListView.itemTemplate>
+              <StackLayout>
+                  <Label class="listItem" text="{{ list_name }}" />
+                  <Button class="deleteItem" text="Slett" tap="{{ delete }}"/>
+              </StackLayout>
+          </ListView.itemTemplate>
+      </ListView>
+      <Button class="nxtBtn" text="Neste" tap="navText"/>
+  </StackLayout>
+</Page>

@@ -2,22 +2,22 @@
     <Page.actionBar>
         <ActionBar title="msHelse" class="action-bar">
             <ActionBar.actionItems>
-                <ActionItem text="New" tap="{{ insert }}" ios.position="right" />
+                <ActionItem text="Ny" tap="{{ insert }}" ios.position="right" />
             </ActionBar.actionItems>
         </ActionBar>
     </Page.actionBar>
     <StackLayout>
-      <Progress value="{{ someProperty }}" />
-      <Label text="Todo!" style="font-weight: bold;"/>
-      <Label text="Legg inn dine gjøremål for morgondagen. Maks fem gjøremål!" textWrap="true"/>
-      <ListView items="{{ lists }}">
+      <Progress value="70"/>
+      <Label class="content" text="Todo!" style="font-weight: bold;"/>
+      <Label class="content" text="Legg inn dine gjøremål for morgondagen. Maks fem gjøremål!" textWrap="true"/>
+      <ListView items="{{ lists }}" id="listContainer">
           <ListView.itemTemplate>
-              <StackLayout>
-                  <Label class="listItem" text="{{ list_name }}" />
-                  <Button class="deleteItem" text="Slett" tap="{{ delete }}"/>
+              <StackLayout class="listItem">
+                  <Label class="listItems" text="{{ list_name }}" />
               </StackLayout>
           </ListView.itemTemplate>
       </ListView>
+      <Button class="deleteItem" text="Slett alt" tap="{{ delete }}" />
       <Button class="nxtBtn" text="Neste" tap="navText"/>
   </StackLayout>
 </Page>

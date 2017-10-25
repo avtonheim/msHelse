@@ -2,16 +2,17 @@
   <Page.actionBar>
          <Image src="images/ikon.png" class="action-image"></Image>
          <ActionBar title="mHelse" class="action-bar"></ActionBar>
-         <NavigationButton text="Tilbake" tap="tapHome"/>
+         <NavigationButton text="Tilbake" tap="tapBackList"/>
      </Page.actionBar>
-  <ScrollView>
-
+     <StackLayout>
+       <Progress value="{{ someProperty }}" />
     <StackLayout class="content">
-      <Label text="Generell tekst"/>
-      <TextField id="subject" hint="Er det noko anna du vil legge til? Endring i symptom, humør eller likande?"/>
-
-      <Progress value="{{ someProperty }}" />
+      <Label text="Generelt" style="font-weight: bold;"/>
+      <Label text="Legg inn dine eigne notat som du syns bør vere med!" textWrap="true"/>
+      <ScrollView>
+        <TextView id="subject" hint="Er det noko anna du vil legge til? Endring i symptom, humør eller likande?" textWrap="true"/>
+      </ScrollView>
       <Button class="nxtBtn" text="Ferdig" tap="finishDiary"/>
     </StackLayout>
-  </ScrollView>
+  </StackLayout>
 </Page>
