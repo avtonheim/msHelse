@@ -15,6 +15,11 @@ function tapVisual(){
 }
 exports.tapVisual = tapVisual;
 
+function tapTodo(){
+  frameModule.topmost().navigate('views/lists/lists');
+}
+exports.tapTodo = tapTodo;
+
 function tapHome(){
   frameModule.topmost().navigate('views/home-page/home-page');
 }

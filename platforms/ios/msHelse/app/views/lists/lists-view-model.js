@@ -8,7 +8,7 @@ function createViewModel(database) {
     viewModel.lists = new ObservableArray([]);
 
     viewModel.insert = function() {
-        Dialogs.prompt("Todo List Name", "").then(result => {
+        Dialogs.prompt("Nytt gjøremål. Legg til tekst i boksen", "").then(result => {
             database.execSQL("INSERT INTO lists (list_name) VALUES (?)", [result.text]).then(id => {
                 this.lists.push({id: id, list_name: result.text});
             }, error => {
@@ -17,11 +17,11 @@ function createViewModel(database) {
         });
     }
 
-
     viewModel.select = function() {
         this.lists = new ObservableArray([]);
         database.all("SELECT id, list_name FROM lists").then(rows => {
             for(var row in rows) {
+                console.log("RESULT", rows[row]);
                 this.lists.push({id: rows[row][0], list_name: rows[row][1]});
             }
         }, error => {
@@ -29,21 +29,16 @@ function createViewModel(database) {
         });
     }
 
+    //Deleting whole table
     viewModel.delete = function() {
-    Dialogs.confirm("Er du sikker på at du vil slette alle gjøremål?").then((agree) => {
-        if(agree){
-            database.execSQL("DELETE FROM lists WHERE ID = 1").then(
-                (err) => {
-                    if(!err){
-                        Dialogs.alert("Dine gjøremål er sletta!");
-                        viewModel.set('list_name', []);
-                    }
-                }
-            );
-        }
+      new Sqlite("test.db", function(err, db) {
+        database.execSQL("DROP TABLE IF EXISTS lists", [], function(err) {
+            Dialogs.alert("Alle gjøremål er sletta");
+            viewModel.set('lists', []);
+        });
     });
+}
 
-    }
 
     viewModel.select();
 

@@ -1,6 +1,5 @@
 var frameModule = require('ui/frame');
 
-
 function onLoaded(args){
   var page = args.object;
   page.bindingContext = { someProperty : 50};
@@ -12,7 +11,7 @@ function tapHome(){
 }
 exports.tapHome = tapHome;
 
-function onNavTodo(){
-  frameModule.topmost().navigate('views/diary/lists/lists');
+function onNavText(){
+  frameModule.topmost().navigate('views/diary/text/text');
 }
-exports.onNavTodo = onNavTodo;
+exports.onNavText = onNavText;

@@ -6,11 +6,18 @@
      </Page.actionBar>
     <StackLayout>
       <Progress value="{{ someProperty }}" />
-      <StackLayout class="content" style="height: 200px; text-align: center">
+      <StackLayout class="content">
         <Label class="title" text="Velkommen til dagboka di!"/>
-        <Label text="Denne dagboka tar ikkje lang tid å fylle ut."/>
+        <Label text="I dagboka vil du bli spurt om fire ting:" textWrap="true"/>
       </StackLayout>
-        <Button class="nxtBtn" text="Neste" tap="onNavPinch"/>
+        <GridLayout rows="*" columns="*" height="400">
+          <StackLayout row="0" col="0">
+            <Image src="~/images/standebilete.png" />
+          </StackLayout>
+        </GridLayout>
+        <StackLayout>
+          <Button class="nxtBtn" text="Neste" tap="onNavPinch"/>
+        </StackLayout>
   </StackLayout>
 
 

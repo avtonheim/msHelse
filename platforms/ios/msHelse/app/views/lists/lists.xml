@@ -1,0 +1,20 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="onNavigatingTo">
+    <Page.actionBar>
+        <ActionBar title="msHelse" class="action-bar">
+            <ActionBar.actionItems>
+                <ActionItem text="Ny" tap="{{ insert }}" ios.position="right" />
+            </ActionBar.actionItems>
+        </ActionBar>
+    </Page.actionBar>
+    <StackLayout>
+        <ListView items="{{ lists }}" class="listLayout" itemTap="navigateToTasks">
+            <ListView.itemTemplate>
+                <StackLayout>
+                    <Label class="listItems" text="{{ list_name }}" />
+                </StackLayout>
+            </ListView.itemTemplate>
+        </ListView>
+        <Button text="Slett alt" tap="{{ delete }}"/>
+        <Button text="console" tap="{{ select }}"/>
+      </StackLayout>
+</Page>

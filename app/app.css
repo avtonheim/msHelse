@@ -26,6 +26,7 @@ components that have the btn class name.
 }
 .content{
   margin: 20px;
+  text-align: center;
 }
 /*Next button in the whole app*/
 .nxtBtn{
@@ -37,4 +38,11 @@ components that have the btn class name.
 .title{
   font-size: 20;
   font-weight: bold;
+}
+.listLayout{
+  margin: 20px;
+}
+.listItems{
+  font-size: 25pt;
+  text-align: center;
 }
