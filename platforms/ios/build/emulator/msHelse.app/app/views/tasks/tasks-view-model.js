@@ -11,6 +11,7 @@ function createViewModel(database, listId) {
     viewModel.insert = function() {
         Dialogs.prompt("Task Name", "").then(result => {
             database.execSQL("INSERT INTO tasks (list_id, task_name) VALUES (?, ?)", [this.listId, result.text]).then(id => {
+                console.log("INSERT", id);
                 this.tasks.push(result.text);
             }, error => {
                 console.log("INSERT ERROR", error);
@@ -28,8 +29,6 @@ function createViewModel(database, listId) {
             console.log("SELECT ERROR", error);
         });
     }
-
-
 
     viewModel.select();
 

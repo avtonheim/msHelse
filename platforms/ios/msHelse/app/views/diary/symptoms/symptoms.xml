@@ -11,10 +11,10 @@
       <Label class="content" text="Her kan du legge inn dine symptom sidan sist du fullførte dagboka di. Du kan velje fleire symptom" textWrap="true"/>
 
       <GridLayout rows="*,*,*" columns="*,*" width="350" height="250">
-        <Button row="0" col="0" text="Fatugue"/>
-        <Button row="0" col="1" text="Søvnproblem"/>
-        <Button row="1" col="0" text="Husk"/>
-        <Button row="1" col="1" text="Synsproblem"/>
+        <Button row="0" col="0" text="Fatugue" tap="onTap"/>
+        <Button row="0" col="1" text="Søvnproblem" tap="onTap"/>
+        <Button row="1" col="0" text="Husk" tap="onTap"/>
+        <Button row="1" col="1" text="Synsproblem" tap="{{ onTap }}"/>
 
     </GridLayout>
       <Button class="nxtBtn" text="Neste" tap="onNavText"/>

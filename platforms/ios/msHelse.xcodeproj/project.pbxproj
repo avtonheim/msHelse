@@ -154,8 +154,7 @@
 				ORGANIZATIONNAME = Telerik;
 				TargetAttributes = {
 					858B83EF18CA22B800AB12DE = {
-						DevelopmentTeam = {
-						};
+						DevelopmentTeam = VJK586M6CX;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -343,8 +342,7 @@
 				CLANG_ENABLE_MODULES = NO;
 				CLANG_MODULES_AUTOLINK = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = {
-				};
+				DEVELOPMENT_TEAM = VJK586M6CX;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "msHelse/msHelse-Prefix.pch";
@@ -372,8 +370,7 @@
 				CLANG_ENABLE_MODULES = NO;
 				CLANG_MODULES_AUTOLINK = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = {
-				};
+				DEVELOPMENT_TEAM = VJK586M6CX;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "msHelse/msHelse-Prefix.pch";

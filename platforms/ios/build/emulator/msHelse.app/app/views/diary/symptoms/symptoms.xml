@@ -17,6 +17,6 @@
         <Button row="1" col="1" text="Synsproblem"/>
 
     </GridLayout>
-      <Button class="nxtBtn" text="Neste" tap="onNavTodo"/>
+      <Button class="nxtBtn" text="Neste" tap="onNavText"/>
     </StackLayout>
 </Page>

@@ -1,5 +1,5 @@
 {
-  "description": "NativeScript Application",
+  "description": "Multiple sclerosis application, master thesis. Developed by Aleksander Nygård Tonheim, University of Bergen.",
   "license": "SEE LICENSE IN <your-license-filename>",
   "readme": "NativeScript Application",
   "repository": "<fill-your-repository-here>",
@@ -14,5 +14,6 @@
     "nativescript-theme-core": "~1.0.2",
     "tns-core-modules": "~3.2.0"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "author": "Aleksander Nygård Tonheim"
 }

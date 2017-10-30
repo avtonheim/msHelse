@@ -1,13 +1,13 @@
-.title{
-  color: black;
+#overText{
   text-align: center;
+  margin-top: 20%;
 }
 
 .nxtBtn{
   color: white;
 }
 
-StackLayout{
+#rogBiff{
     background-image: ~/images/huecolor.png;
     background-repeat: no-repeat;
     background-position: center;
