@@ -11,6 +11,7 @@ pan.on(gestures.GestureTypes.pan, function(args) {
 page.bindingContext = { someProperty : 30};
 } exports.onLoaded = onLoaded;
 
+
 function navSymptom(){
   frameModule.topmost().navigate('views/diary/symptoms/symptoms');
 }

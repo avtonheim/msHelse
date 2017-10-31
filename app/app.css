@@ -46,3 +46,39 @@ components that have the btn class name.
   font-size: 25pt;
   text-align: center;
 }
+/*Start and end button in diary component*/
+.startEndBtn{
+  margin-top: 20%;
+  width: 400px;
+  border-radius: 15px;
+  background-color: green;
+  color: white;
+  font-weight: bold;
+  font-size: 20pt;
+}
+/*App icon*/
+.iconTitle{
+  text-align: center;
+  width: 200px;
+}
+/*Test*/
+.list-view-item {
+  height: 48;
+  font-size: 16;
+  color: #212121;
+  background-color: #FFFFFF;
+  padding-top: 16;
+  padding-bottom: 16;
+  padding-left: 16;
+  padding-right: 16;
+}
+
+.selected {
+  height: 48;
+  font-size: 16;
+  background-color: #DCEDC8;
+  padding-top: 16;
+  padding-bottom: 16;
+  padding-left: 16;
+  padding-right: 16;
+}

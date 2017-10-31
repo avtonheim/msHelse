@@ -10,10 +10,10 @@
 		CD45EE7C18DC2D5800FB50C0 /* app in Resources */ = {isa = PBXBuildFile; fileRef = CD45EE7A18DC2D5800FB50C0 /* app */; };
 		CD62955D1BB2678900AE3A93 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CD62955C1BB2678900AE3A93 /* main.m */; };
 		9D4CCCFE97C74FA98CD012AD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A26AF39FFBFB404290CEB1EB /* Assets.xcassets */; };
-		A9ACFAE854A94A47BCC1B917 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2AA7F32C66CC45749CA87D82 /* LaunchScreen.storyboard */; };
-		ECD53A9DE35448E5B450B8AB /* build.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = AD40F00553EE4523ABB4EDDE /* build.xcconfig */; };
 		441AA13FD25E48C49BA048C3 /* TNSWidgets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7DA6E08A0CB472B8AAEC18B /* TNSWidgets.framework */; };
 		8087258321434504A9FDDEDC /* TNSWidgets.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F7DA6E08A0CB472B8AAEC18B /* TNSWidgets.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6167F722F0DA4484B4BF3C63 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C96E5E82EE774703BDF5BB1F /* LaunchScreen.storyboard */; };
+		00779D79E53743D1AFBDE88A /* build.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 905604E070DB4005A2FF9345 /* build.xcconfig */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,9 +42,9 @@
 		CDD59A271BB43B5D00EC2671 /* build-release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "build-release.xcconfig"; sourceTree = "<group>"; };
 		CDF4743E1BA4855C0087EA85 /* build.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = build.xcconfig; sourceTree = "<group>"; };
 		A26AF39FFBFB404290CEB1EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = unknown; name = Assets.xcassets; path = "msHelse/Resources/Assets.xcassets"; sourceTree = "<group>"; fileEncoding = 4; };
-		2AA7F32C66CC45749CA87D82 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = unknown; name = LaunchScreen.storyboard; path = "msHelse/Resources/LaunchScreen.storyboard"; sourceTree = "<group>"; fileEncoding = 4; };
-		AD40F00553EE4523ABB4EDDE /* build.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = unknown; name = build.xcconfig; path = "msHelse/Resources/build.xcconfig"; sourceTree = "<group>"; fileEncoding = 4; };
 		F7DA6E08A0CB472B8AAEC18B /* TNSWidgets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TNSWidgets.framework; path = "$(SRCROOT)/../../node_modules/tns-core-modules-widgets/platforms/ios/TNSWidgets.framework"; sourceTree = "<group>"; };
+		C96E5E82EE774703BDF5BB1F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = unknown; name = LaunchScreen.storyboard; path = "msHelse/Resources/LaunchScreen.storyboard"; sourceTree = "<group>"; fileEncoding = 4; };
+		905604E070DB4005A2FF9345 /* build.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = unknown; name = build.xcconfig; path = "msHelse/Resources/build.xcconfig"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,8 +113,8 @@
 			isa = PBXGroup;
 			children = (
 				A26AF39FFBFB404290CEB1EB /* Assets.xcassets */,
-				2AA7F32C66CC45749CA87D82 /* LaunchScreen.storyboard */,
-				AD40F00553EE4523ABB4EDDE /* build.xcconfig */,
+				C96E5E82EE774703BDF5BB1F /* LaunchScreen.storyboard */,
+				905604E070DB4005A2FF9345 /* build.xcconfig */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -184,8 +184,8 @@
 				CD45EE7C18DC2D5800FB50C0 /* app in Resources */,
 				858B842D18CA22B800AB12DE /* InfoPlist.strings in Resources */,
 				9D4CCCFE97C74FA98CD012AD /* Assets.xcassets in Resources */,
-				A9ACFAE854A94A47BCC1B917 /* LaunchScreen.storyboard in Resources */,
-				ECD53A9DE35448E5B450B8AB /* build.xcconfig in Resources */,
+				6167F722F0DA4484B4BF3C63 /* LaunchScreen.storyboard in Resources */,
+				00779D79E53743D1AFBDE88A /* build.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

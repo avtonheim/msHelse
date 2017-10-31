@@ -1,13 +1,19 @@
 <Page loaded="onLoaded">
   <Page.actionBar>
-         <ActionBar title="mHelse" class="action-bar"></ActionBar>
-         <NavigationButton text="Tilbake" tap="tapHome"/>
+         <ActionBar title="mHelse" class="action-bar">
+           <StackLayout>
+              <Image src="~/images/tittel.png" class="iconTitle" ios.position="center"></Image>
+           </StackLayout>
+           <ActionItem text="Neste" tap="navSymptom" ios.position="right"/>
+           </ActionBar>
      </Page.actionBar>
-    <StackLayout>
+    <StackLayout id="rogBiff">
       <Progress value="{{ someProperty }}" />
       <GridLayout id="panTouch" rows="*" columns="*" width="auto" height="500">
-          <Label class="title" text="Korleis har du det?"/>
+          <StackLayout id="overText">
+            <Label class="title" text="Korleis har du det?"/>
+            <Label text="(Sveip på skjermen og trykk 'Neste')"/>
+          </StackLayout>
       </GridLayout>
-      <Button class="nxtBtn" text="Neste" tap="navSymptom"/>
   </StackLayout>
 </Page>

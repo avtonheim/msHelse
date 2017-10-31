@@ -1,20 +1,19 @@
 <Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="onNavigatingTo">
     <Page.actionBar>
-        <ActionBar title="msHelse" class="action-bar">
+        <ActionBar class="action-bar">
+          <StackLayout>
+             <Image src="~/images/tittel.png" class="iconTitle" ios.position="center"></Image>
+          </StackLayout>
             <ActionBar.actionItems>
                 <ActionItem text="Ny" tap="{{ insert }}" ios.position="right" />
             </ActionBar.actionItems>
         </ActionBar>
     </Page.actionBar>
-    <StackLayout>
-        <ListView items="{{ lists }}" class="listLayout" itemTap="navigateToTasks">
+        <ListView items="{{ lists }}" class="listLayout">
             <ListView.itemTemplate>
                 <StackLayout>
-                    <Label class="listItems" text="{{ list_name }}" />
+                    <Label text="{{ list_name }}" class="list-view-item" tap="markDone"/>
                 </StackLayout>
             </ListView.itemTemplate>
         </ListView>
-        <Button text="Slett alt" tap="{{ delete }}"/>
-        <Button text="console" tap="{{ select }}"/>
-      </StackLayout>
 </Page>

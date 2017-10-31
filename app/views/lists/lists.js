@@ -16,11 +16,14 @@ function onNavigatingTo(args) {
     });
 } exports.onNavigatingTo = onNavigatingTo;
 
+//TODO: make a checklist of checked items
 
-function navigateToTasks(args) {
-    FrameModule.topmost().navigate({moduleName: "views/tasks/tasks", context: {listId: args.object.bindingContext.lists.getItem(args.index).id}});
-} 
-exports.navigateToTasks = navigateToTasks;
+function markDone(args) {
+  var listId = args.view;
+  listId.backgroundColor = "#3489db";
+  console.log("Changed " + listId + " to selected");
+
+} exports.markDone = markDone;
 
 /*Next buttin to text-general*/
 function navText(){

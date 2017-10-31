@@ -3,6 +3,9 @@ var ObservableArray = require("data/observable-array").ObservableArray;
 var Sqlite = require("nativescript-sqlite");
 var Dialogs = require("ui/dialogs");
 
+//Read more of SQLITE in nativescript
+//https://developer.telerik.com/products/nativescript/going-off-the-grid-with-nativescript/
+
 function createViewModel(database) {
     var viewModel = new Observable();
     viewModel.lists = new ObservableArray([]);
@@ -21,7 +24,6 @@ function createViewModel(database) {
         this.lists = new ObservableArray([]);
         database.all("SELECT id, list_name FROM lists").then(rows => {
             for(var row in rows) {
-                console.log("RESULT", rows[row]);
                 this.lists.push({id: rows[row][0], list_name: rows[row][1]});
             }
         }, error => {

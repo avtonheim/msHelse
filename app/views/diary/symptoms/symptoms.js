@@ -18,5 +18,6 @@ function onNavText(){
 exports.onNavText = onNavText;
 
 function onTap(eventData){
-  console.log("tap!", eventData.propertyName);
-} exports.onTap = onTap;
+  console.log("tap!");
+}
+exports.onTap = onTap;
