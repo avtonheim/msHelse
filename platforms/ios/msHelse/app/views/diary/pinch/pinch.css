@@ -1,6 +1,10 @@
 #overText{
   text-align: center;
-  margin-top: 20%;
+  color: white;
+  margin-top: 35%;
+}
+#overText .title{
+  font-size: 35pt;
 }
 
 .nxtBtn{

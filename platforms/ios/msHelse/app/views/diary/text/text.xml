@@ -12,7 +12,11 @@
     <StackLayout class="content">
       <Label text="Generelt" style="font-weight: bold;"/>
       <Label text="Legg inn dine eigne notat som du syns bør vere med!" textWrap="true"/>
-        <TextView id="subject" hint="Er det noko anna du vil legge til? Endring i symptom, humør eller likande?" textWrap="true"/>
+        <TextView id="subject" hint="Er det noko anna du vil legge til? Endring i symptom, humør eller likande?" text="{{ textItem }}" textWrap="true"/>
+        <StackLayout>
+          <Button text="Lagre" tap="{{ insert }}"/>
+          <Button text="console.log" tap="{{ select }}"/>
+        </StackLayout>
       <Button class="startEndBtn" text="Fullfør dagboka" tap="finishDiary"/>
     </StackLayout>
   </StackLayout>

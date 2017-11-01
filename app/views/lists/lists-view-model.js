@@ -33,7 +33,7 @@ function createViewModel(database) {
 
     //Deleting whole table
     viewModel.delete = function() {
-      new Sqlite("test.db", function(err, db) {
+      new Sqlite("my.db", function(err, db) {
         database.execSQL("DROP TABLE IF EXISTS lists", [], function(err) {
             Dialogs.alert("Alle gjøremål er sletta");
             viewModel.set('lists', []);

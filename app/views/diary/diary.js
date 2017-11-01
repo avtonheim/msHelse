@@ -7,12 +7,6 @@ function onLoaded(args){
 exports.onLoaded = onLoaded;
 
 
-function tapHome(){
-  frameModule.topmost().navigate('views/home-page/home-page');
-}
-exports.tapHome = tapHome;
-
-
 function onNavPinch(){
   frameModule.topmost().navigate('views/diary/pinch/pinch');
 }

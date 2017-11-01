@@ -9,7 +9,7 @@
      </Page.actionBar>
     <StackLayout id="rogBiff">
       <Progress value="{{ someProperty }}" />
-      <GridLayout id="panTouch" rows="*" columns="*" width="auto" height="500">
+      <GridLayout id="panTouch" rows="*" columns="*" width="auto" height="auto">
           <StackLayout id="overText">
             <Label class="title" text="Korleis har du det?"/>
             <Label text="(Sveip på skjermen og trykk 'Neste')"/>
