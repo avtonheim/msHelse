@@ -1,7 +1,7 @@
 var frameModule = require('ui/frame');
 
 function onTap(){
-  frameModule.topmost().navigate('views/about-page/about-page');
+  frameModule.topmost().navigate('views/training/training');
 }
 exports.onTap = onTap;
 

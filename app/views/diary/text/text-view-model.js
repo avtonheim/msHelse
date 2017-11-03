@@ -30,6 +30,7 @@ function createViewModel(database) {
             });
         }
 
+    viewModel.select();
 
     return viewModel;
 }

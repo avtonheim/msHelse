@@ -1,0 +1,21 @@
+<Page loaded="onLoaded">
+  <Page.actionBar>
+         <ActionBar class="action-bar">
+           <StackLayout>
+              <Image src="~/images/tittel.png" class="iconTitle" ios.position="center"></Image>
+           </StackLayout>
+         </ActionBar>
+     </Page.actionBar>
+  <StackLayout>
+    <StackLayout class="content">
+      <Label class="title" text="Trening"/>
+      <Label text="Her vil du finne ulike øvelser for trening"/>
+    </StackLayout>
+    <StackLayout class="trainingStack">
+      <Label text="ØVELSE: Strekk ut"/>
+    </StackLayout>
+    <StackLayout class="trainingStack">
+      <Label text="ØVELSE: Stress ned"/>
+    </StackLayout>
+  </StackLayout>
+</Page>

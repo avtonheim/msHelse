@@ -64,7 +64,7 @@ components that have the btn class name.
 /*Todo-list*/
 .list-view-item {
   height: 48;
-  font-size: 16;
+  font-size: 20;
   color: #212121;
   background-color: #FFFFFF;
   padding-top: 16;
@@ -72,13 +72,21 @@ components that have the btn class name.
   padding-left: 16;
   padding-right: 16;
 }
-
-.selected {
-  height: 48;
-  font-size: 16;
-  background-color: #DCEDC8;
-  padding-top: 16;
-  padding-bottom: 16;
-  padding-left: 16;
-  padding-right: 16;
+.graph{
+  background-color: blue;
+  text-align: center;
+  color: white;
+  margin-bottom: 10px;
+}
+.trainingStack{
+  height: 300px;
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  margin-top: 20px;
+  background-color:#42f49b;
+}
+.trainingStack Label{
+  margin-top: 40%;
 }
