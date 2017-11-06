@@ -1,5 +1,5 @@
 var Observable = require("data/observable").Observable;
-var ObservableArray = require('data/observable-array').ObservableArray;
+var ObservableArray = require("data/observable-array").ObservableArray;
 var Sqlite = require("nativescript-sqlite");
 var Dialogs = require("ui/dialogs");
 
@@ -8,6 +8,8 @@ var Dialogs = require("ui/dialogs");
 
 function createViewModel(database) {
     var viewModel = new Observable();
+    viewModel.amount = new ObservableArray([]);
+
 
     viewModel.insert = function(args) {
           var btnId = args.object.text;
@@ -22,30 +24,28 @@ function createViewModel(database) {
       }
 
       viewModel.select = function() {
-          this.symptoms = new ObservableArray([]);
-          database.all("SELECT id, symptomItem FROM symptoms").then(rows => {
-              for(var row in rows) {
-                  this.symptoms.push({id: rows[row][0], list_name: rows[row][1]});
-              }
-          }, error => {
-              console.log("SELECT ERROR", error);
-          });
-      }
-/*
-      viewModel.select = function() {
             //this.symptoms = new ObservableArray([]);
             database.all("SELECT * FROM symptoms").then(rows => {
                 for(var row in rows) {
-                   console.log(rows[row]);
+                 console.log(rows[row]);
                 }
             }, error => {
                 console.log("SELECT ERROR", error);
             });
         }
 
-*/
-    viewModel.select();
+    viewModel.showAmountFatigue = function() {
+      this.amount = new ObservableArray([]);
+      database.all("SELECT symptomItem, COUNT(*) FROM symptoms").then(rows => {
+        for(var row in rows) {
+            this.amount.push({symptomItem: rows[row][1]});
+        }
+      }, error =>{
+        console.log("INSERT ERROR", error);
+      });
+    }
 
+    viewModel.showAmountFatigue();
     return viewModel;
 }
 exports.createViewModel = createViewModel;

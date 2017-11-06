@@ -15,7 +15,16 @@
           <Label text="Korleis har du det?"/>
         </StackLayout>
         <StackLayout class="tile" row="0" col="1">
-          <Label text="symptom" tap="{{ select }}"/>
+
+          <ListView>
+          <ListView.itemTemplate>
+              <StackLayout>
+                  <Label text="{{ amount }}"/>
+              </StackLayout>
+          </ListView.itemTemplate>
+          </ListView>
+          <Label text="Symptoms" tap="{{ showAmountFatigue }}"/>
+          <Label text="console" tap="{{ select }}"/>
         </StackLayout>
         <StackLayout class="tile" row="1" col="0">
           <Label text="Tekst"/>
