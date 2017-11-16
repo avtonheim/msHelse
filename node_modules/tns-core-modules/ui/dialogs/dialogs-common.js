@@ -27,9 +27,9 @@ exports.getCurrentPage = getCurrentPage;
 function applySelectors(view) {
     var currentPage = getCurrentPage();
     if (currentPage) {
-        var styleScope = currentPage._getStyleScope();
+        var styleScope = currentPage._styleScope;
         if (styleScope) {
-            styleScope.applySelectors(view);
+            styleScope.matchSelectors(view);
         }
     }
 }

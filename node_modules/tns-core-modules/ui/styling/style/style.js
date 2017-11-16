@@ -13,4 +13,9 @@ var Style = (function (_super) {
     return Style;
 }(observable_1.Observable));
 exports.Style = Style;
+Style.prototype.PropertyBag = (function () {
+    function class_1() {
+    }
+    return class_1;
+}());
 //# sourceMappingURL=style.js.map

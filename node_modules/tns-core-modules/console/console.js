@@ -173,7 +173,7 @@ var Console = (function () {
         return res;
     };
     Console.prototype.timeMillis = function () {
-        return java.lang.System.nanoTime() / 1000000;
+        return __time();
     };
     Console.prototype.time = function (reportName) {
         var name = reportName ? '__' + reportName : '__internal_console_time__';

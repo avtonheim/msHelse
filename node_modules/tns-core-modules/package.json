@@ -2,25 +2,25 @@
   "_args": [
     [
       {
-        "raw": "tns-core-modules@~3.2.0",
+        "raw": "tns-core-modules",
         "scope": null,
         "escapedName": "tns-core-modules",
         "name": "tns-core-modules",
-        "rawSpec": "~3.2.0",
-        "spec": ">=3.2.0 <3.3.0",
-        "type": "range"
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
       },
-      "/Users/aleksandernygardtonheim/mHealth/node_modules/tns-template-hello-world"
+      "/Users/aleksandernygardtonheim/msHelse"
     ]
   ],
-  "_from": "tns-core-modules@>=3.2.0 <3.3.0",
-  "_id": "tns-core-modules@3.2.0",
+  "_from": "tns-core-modules@latest",
+  "_id": "tns-core-modules@3.3.0",
   "_inCache": true,
   "_location": "/tns-core-modules",
-  "_nodeVersion": "6.11.3",
+  "_nodeVersion": "6.11.5",
   "_npmOperationalInternal": {
     "host": "s3://npm-registry-packages",
-    "tmp": "tmp/tns-core-modules-3.2.0.tgz_1504786389674_0.9075365571770817"
+    "tmp": "tmp/tns-core-modules-3.3.0.tgz_1509021519747_0.7683770614676178"
   },
   "_npmUser": {
     "name": "tns-bot",
@@ -29,24 +29,25 @@
   "_npmVersion": "4.6.1",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "tns-core-modules@~3.2.0",
+    "raw": "tns-core-modules",
     "scope": null,
     "escapedName": "tns-core-modules",
     "name": "tns-core-modules",
-    "rawSpec": "~3.2.0",
-    "spec": ">=3.2.0 <3.3.0",
-    "type": "range"
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
   },
   "_requiredBy": [
-    "/tns-template-hello-world"
+    "#USER",
+    "/"
   ],
-  "_resolved": "https://registry.npmjs.org/tns-core-modules/-/tns-core-modules-3.2.0.tgz",
-  "_shasum": "bf471895b73cb5e5549c44f25341df7f5d34f9c2",
+  "_resolved": "https://registry.npmjs.org/tns-core-modules/-/tns-core-modules-3.3.0.tgz",
+  "_shasum": "4feb1f31113c554f0bb47984ac496fccdb5af156",
   "_shrinkwrap": null,
-  "_spec": "tns-core-modules@~3.2.0",
-  "_where": "/Users/aleksandernygardtonheim/mHealth/node_modules/tns-template-hello-world",
+  "_spec": "tns-core-modules",
+  "_where": "/Users/aleksandernygardtonheim/msHelse",
   "dependencies": {
-    "tns-core-modules-widgets": "3.2.0"
+    "tns-core-modules-widgets": "3.3.0"
   },
   "description": "Telerik NativeScript Core Modules",
   "devDependencies": {
@@ -55,12 +56,13 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "bf471895b73cb5e5549c44f25341df7f5d34f9c2",
-    "tarball": "https://registry.npmjs.org/tns-core-modules/-/tns-core-modules-3.2.0.tgz"
+    "shasum": "4feb1f31113c554f0bb47984ac496fccdb5af156",
+    "tarball": "https://registry.npmjs.org/tns-core-modules/-/tns-core-modules-3.3.0.tgz"
   },
   "files": [
     "**/*.d.ts",
     "**/*.js",
+    "**/package.json",
     "!android17.d.ts",
     "!ios.d.ts",
     "!bin/",
@@ -103,7 +105,7 @@
   "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
-    "url": "https://github.com/NativeScript/NativeScript/commit/edf2a21285c5d4383d6868812cfd81e432e17e22"
+    "url": "https://github.com/NativeScript/NativeScript/commit/5e0de0a8b84d81b52510fd979d920ae8d51956c4"
   },
   "snapshot": {
     "android": {
@@ -116,5 +118,5 @@
     }
   },
   "typings": "tns-core-modules.d.ts",
-  "version": "3.2.0"
+  "version": "3.3.0"
 }

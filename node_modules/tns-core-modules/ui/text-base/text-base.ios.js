@@ -115,6 +115,7 @@ var TextBase = (function (_super) {
         if (this.style.lineHeight) {
             var paragraphStyle = NSMutableParagraphStyle.alloc().init();
             paragraphStyle.lineSpacing = this.lineHeight;
+            paragraphStyle.alignment = this.nativeViewProtected.textAlignment;
             attrText.addAttributeValueRange(NSParagraphStyleAttributeName, paragraphStyle, { location: 0, length: attrText.length });
         }
         if (this.nativeViewProtected instanceof UIButton) {
@@ -149,6 +150,7 @@ var TextBase = (function (_super) {
         if (style.lineHeight) {
             var paragraphStyle = NSMutableParagraphStyle.alloc().init();
             paragraphStyle.lineSpacing = style.lineHeight;
+            paragraphStyle.alignment = this.nativeViewProtected.textAlignment;
             dict.set(NSParagraphStyleAttributeName, paragraphStyle);
         }
         var isTextView = this.nativeViewProtected instanceof UITextView;

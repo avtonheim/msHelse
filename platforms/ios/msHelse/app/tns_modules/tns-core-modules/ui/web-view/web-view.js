@@ -54,7 +54,11 @@ var UIWebViewDelegateImpl = (function (_super) {
         }
         var owner = this._owner.get();
         if (owner) {
-            owner._onLoadFinished(webView.request.URL.absoluteString);
+            var src = owner.src;
+            if (webView.request && webView.request.URL) {
+                src = webView.request.URL.absoluteString;
+            }
+            owner._onLoadFinished(src);
         }
     };
     UIWebViewDelegateImpl.prototype.webViewDidFailLoadWithError = function (webView, error) {

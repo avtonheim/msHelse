@@ -1,8 +1,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var color_1 = require("../../color");
-var font_1 = require("./font");
+var font_1 = require("../../ui/styling/font");
 var utils_1 = require("../../utils/utils");
-var background_1 = require("./background");
+var background_1 = require("../../ui/styling/background");
 var platform_1 = require("../../platform");
 var style_1 = require("./style");
 var properties_1 = require("../core/properties");

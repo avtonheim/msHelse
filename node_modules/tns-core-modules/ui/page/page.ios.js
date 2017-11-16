@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var page_common_1 = require("./page-common");
 var application_1 = require("../../application");
 var platform_1 = require("../../platform");
-var uiUtils = require("tns-core-modules/ui/utils");
+var uiUtils = require("../../ui/utils");
 var profiling_1 = require("../../profiling");
 __export(require("./page-common"));
 var utils_1 = require("../../utils/utils");

@@ -1,7 +1,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var types_1 = require("../../../utils/types");
-var utils_1 = require("../../../utils/utils");
-var selectorParser = require("../css-selector-parser");
+var utils_common_1 = require("../../../utils/utils-common");
+var parser = require("../../../css/parser");
 var Match;
 (function (Match) {
     Match.Dynamic = true;
@@ -22,7 +22,7 @@ function SelectorProperties(specificity, rarity, dynamic) {
     return function (cls) {
         cls.prototype.specificity = specificity;
         cls.prototype.rarity = rarity;
-        cls.prototype.combinator = "";
+        cls.prototype.combinator = undefined;
         cls.prototype.dynamic = dynamic;
         return cls;
     };
@@ -153,7 +153,7 @@ var AttributeSelector = (function (_super) {
         if (!value) {
             _this.match = function (node) { return false; };
         }
-        var escapedValue = utils_1.escapeRegexSymbols(value);
+        var escapedValue = utils_common_1.escapeRegexSymbols(value);
         var regexp = null;
         switch (test) {
             case "^=":
@@ -401,67 +401,60 @@ exports.fromAstNodes = fromAstNodes;
 function createDeclaration(decl) {
     return { property: decl.property.toLowerCase(), value: decl.value };
 }
+function createSimpleSelectorFromAst(ast) {
+    switch (ast.type) {
+        case "*": return new UniversalSelector();
+        case "#": return new IdSelector(ast.identifier);
+        case "": return new TypeSelector(ast.identifier.replace(/-/, '').toLowerCase());
+        case ".": return new ClassSelector(ast.identifier);
+        case ":": return new PseudoClassSelector(ast.identifier);
+        case "[]": return ast.test ? new AttributeSelector(ast.property, ast.test, ast.value) : new AttributeSelector(ast.property);
+    }
+}
+function createSimpleSelectorSequenceFromAst(ast) {
+    if (ast.length === 0) {
+        return new InvalidSelector(new Error("Empty simple selector sequence."));
+    }
+    else if (ast.length === 1) {
+        return createSimpleSelectorFromAst(ast[0]);
+    }
+    else {
+        return new SimpleSelectorSequence(ast.map(createSimpleSelectorFromAst));
+    }
+}
+function createSelectorFromAst(ast) {
+    if (ast.length === 0) {
+        return new InvalidSelector(new Error("Empty selector."));
+    }
+    else if (ast.length <= 2) {
+        return createSimpleSelectorSequenceFromAst(ast[0]);
+    }
+    else {
+        var simpleSelectorSequences = [];
+        for (var i = 0; i < ast.length; i += 2) {
+            var simpleSelectorSequence = createSimpleSelectorSequenceFromAst(ast[i]);
+            var combinator = ast[i + 1];
+            if (combinator) {
+                simpleSelectorSequence.combinator = combinator;
+            }
+            simpleSelectorSequences.push(simpleSelectorSequence);
+        }
+        return new Selector(simpleSelectorSequences);
+    }
+}
 function createSelector(sel) {
     try {
-        var ast = selectorParser.parse(sel);
-        if (ast.length === 0) {
+        var parsedSelector = parser.parseSelector(sel);
+        if (!parsedSelector) {
             return new InvalidSelector(new Error("Empty selector"));
         }
-        var selectors = ast.map(createSimpleSelector);
-        var sequences = [];
-        for (var seqStart = 0, seqEnd = 0, last = selectors.length - 1; seqEnd <= last; seqEnd++) {
-            var sel_1 = selectors[seqEnd];
-            var astComb = ast[seqEnd].comb;
-            if (astComb || seqEnd === last) {
-                if (seqStart === seqEnd) {
-                    sel_1.combinator = astComb;
-                    sequences.push(sel_1);
-                }
-                else {
-                    var sequence = new SimpleSelectorSequence(selectors.slice(seqStart, seqEnd + 1));
-                    sequence.combinator = astComb;
-                    sequences.push(sequence);
-                }
-                seqStart = seqEnd + 1;
-            }
-        }
-        if (sequences.length === 1) {
-            return sequences[0];
-        }
-        else {
-            return new Selector(sequences);
-        }
+        return createSelectorFromAst(parsedSelector.value);
     }
     catch (e) {
         return new InvalidSelector(e);
     }
 }
 exports.createSelector = createSelector;
-function createSimpleSelector(sel) {
-    if (selectorParser.isUniversal(sel)) {
-        return new UniversalSelector();
-    }
-    else if (selectorParser.isId(sel)) {
-        return new IdSelector(sel.ident);
-    }
-    else if (selectorParser.isType(sel)) {
-        return new TypeSelector(sel.ident.replace(/-/, '').toLowerCase());
-    }
-    else if (selectorParser.isClass(sel)) {
-        return new ClassSelector(sel.ident);
-    }
-    else if (selectorParser.isPseudo(sel)) {
-        return new PseudoClassSelector(sel.ident);
-    }
-    else if (selectorParser.isAttribute(sel)) {
-        if (sel.test) {
-            return new AttributeSelector(sel.prop, sel.test, sel.value);
-        }
-        else {
-            return new AttributeSelector(sel.prop);
-        }
-    }
-}
 function isRule(node) {
     return node.type === "rule";
 }

@@ -6,14 +6,12 @@ var content_view_1 = require("../content-view");
 var frame_1 = require("../frame");
 var action_bar_1 = require("../action-bar");
 var style_scope_1 = require("../styling/style-scope");
-var file_system_1 = require("../../file-system");
 var profiling_1 = require("../../profiling");
 __export(require("../content-view"));
 var PageBase = (function (_super) {
     __extends(PageBase, _super);
     function PageBase() {
         var _this = _super.call(this) || this;
-        _this._cssFiles = {};
         _this._styleScope = new style_scope_1.StyleScope();
         return _this;
     }
@@ -30,8 +28,7 @@ var PageBase = (function (_super) {
         },
         set: function (value) {
             this._styleScope.css = value;
-            this._cssFiles = {};
-            this._refreshCss();
+            this._onCssStateChange();
         },
         enumerable: true,
         configurable: true
@@ -86,50 +83,13 @@ var PageBase = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    PageBase.prototype.onLoaded = function () {
-        this._refreshCss();
-        _super.prototype.onLoaded.call(this);
-    };
-    PageBase.prototype.onUnloaded = function () {
-        var styleScope = this._styleScope;
-        _super.prototype.onUnloaded.call(this);
-        this._styleScope = styleScope;
-    };
     PageBase.prototype.addCss = function (cssString) {
-        this._addCssInternal(cssString);
-    };
-    PageBase.prototype._addCssInternal = function (cssString, cssFileName) {
-        this._styleScope.addCss(cssString, cssFileName);
-        this._refreshCss();
+        this._styleScope.addCss(cssString);
+        this._onCssStateChange();
     };
     PageBase.prototype.addCssFile = function (cssFileName) {
-        if (cssFileName.indexOf("~/") === 0) {
-            cssFileName = file_system_1.path.join(file_system_1.knownFolders.currentApp().path, cssFileName.replace("~/", ""));
-        }
-        if (!this._cssFiles[cssFileName]) {
-            if (file_system_1.File.exists(cssFileName)) {
-                var file = file_system_1.File.fromPath(cssFileName);
-                var text = file.readTextSync();
-                if (text) {
-                    this._addCssInternal(text, cssFileName);
-                    this._cssFiles[cssFileName] = true;
-                }
-            }
-        }
-    };
-    PageBase.prototype._refreshCss = function () {
-        var scopeVersion = this._styleScope.ensureSelectors();
-        if (scopeVersion !== this._cssAppliedVersion) {
-            var styleScope_1 = this._styleScope;
-            this._resetCssValues();
-            var checkSelectors = function (view) {
-                styleScope_1.applySelectors(view);
-                return true;
-            };
-            checkSelectors(this);
-            content_view_1.eachDescendant(this, checkSelectors);
-            this._cssAppliedVersion = scopeVersion;
-        }
+        this._styleScope.addCssFile(cssFileName);
+        this._onCssStateChange();
     };
     PageBase.prototype.getKeyframeAnimationWithName = function (animationName) {
         return this._styleScope.getKeyframeAnimationWithName(animationName);
@@ -173,7 +133,7 @@ var PageBase = (function (_super) {
             return this;
         }
         else {
-            var context = arguments[1];
+            var context_1 = arguments[1];
             var closeCallback = arguments[2];
             var fullscreen = arguments[3];
             var page = void 0;
@@ -183,7 +143,7 @@ var PageBase = (function (_super) {
             else {
                 page = frame_1.resolvePageFromEntry({ moduleName: arguments[0] });
             }
-            page._showNativeModalView(this, context, closeCallback, fullscreen);
+            page._showNativeModalView(this, context_1, closeCallback, fullscreen);
             return page;
         }
     };
@@ -242,9 +202,6 @@ var PageBase = (function (_super) {
         };
         this.notify(args);
     };
-    PageBase.prototype._getStyleScope = function () {
-        return this._styleScope;
-    };
     PageBase.prototype.eachChildView = function (callback) {
         _super.prototype.eachChildView.call(this, callback);
         callback(this.actionBar);
@@ -256,16 +213,7 @@ var PageBase = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    PageBase.prototype._resetCssValues = function () {
-        var resetCssValuesFunc = function (view) {
-            view._batchUpdate(function () {
-                view._cancelAllAnimations();
-                content_view_1.resetCSSProperties(view.style);
-            });
-            return true;
-        };
-        resetCssValuesFunc(this);
-        content_view_1.eachDescendant(this, resetCssValuesFunc);
+    PageBase.prototype._inheritStyleScope = function (styleScope) {
     };
     PageBase.navigatingToEvent = "navigatingTo";
     PageBase.navigatedToEvent = "navigatedTo";
@@ -273,9 +221,6 @@ var PageBase = (function (_super) {
     PageBase.navigatedFromEvent = "navigatedFrom";
     PageBase.shownModallyEvent = "shownModally";
     PageBase.showingModallyEvent = "showingModally";
-    __decorate([
-        profiling_1.profile
-    ], PageBase.prototype, "onLoaded", null);
     __decorate([
         profiling_1.profile
     ], PageBase.prototype, "onNavigatingTo", null);

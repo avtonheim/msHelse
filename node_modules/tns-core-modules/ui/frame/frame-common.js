@@ -8,7 +8,7 @@ var file_system_1 = require("../../file-system");
 var builder_1 = require("../builder");
 var application = require("../../application");
 exports.application = application;
-var profiling_1 = require("tns-core-modules/profiling");
+var profiling_1 = require("../../profiling");
 __export(require("../core/view"));
 function onLivesync(args) {
     setTimeout(function () {
@@ -27,9 +27,6 @@ function onLivesync(args) {
     });
 }
 application.on("livesync", onLivesync);
-if (global && global.__inspector) {
-    require("tns-core-modules/debugger/devtools-elements");
-}
 var frameStack = [];
 function buildEntryFromArgs(arg) {
     var entry;
@@ -73,7 +70,6 @@ var entryCreatePage = profiling_1.profile("entry.create", function (entry) {
     if (!page) {
         throw new Error("Failed to create Page with entry.create() function.");
     }
-    page._refreshCss();
     return page;
 });
 var moduleCreatePage = profiling_1.profile("module.createPage", function (moduleNamePath, moduleExports) {
@@ -135,7 +131,7 @@ exports.resolvePageFromEntry = profiling_1.profile("resolvePageFromEntry", funct
             page = pageFromBuilder(moduleNamePath, moduleExports);
         }
         if (!page) {
-            throw new Error("Failed to load Page from entry.moduleName: " + entry.moduleName);
+            throw new Error("Failed to load page XML file for module: " + entry.moduleName);
         }
     }
     return page;
@@ -143,10 +139,10 @@ exports.resolvePageFromEntry = profiling_1.profile("resolvePageFromEntry", funct
 var FrameBase = (function (_super) {
     __extends(FrameBase, _super);
     function FrameBase() {
-        var _this = _super.call(this) || this;
-        _this._isInFrameStack = false;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this._backStack = new Array();
         _this._navigationQueue = new Array();
+        _this._isInFrameStack = false;
         return _this;
     }
     FrameBase.prototype.canGoBack = function () {
@@ -159,15 +155,11 @@ var FrameBase = (function (_super) {
         if (!this.canGoBack()) {
             return;
         }
-        if (!backstackEntry) {
-            backstackEntry = this._backStack.pop();
-        }
-        else {
+        if (backstackEntry) {
             var backIndex = this._backStack.indexOf(backstackEntry);
             if (backIndex < 0) {
                 return;
             }
-            this._backStack.splice(backIndex);
         }
         var navigationContext = {
             entry: backstackEntry,
@@ -182,6 +174,8 @@ var FrameBase = (function (_super) {
                 view_1.traceWrite("Going back scheduled", view_1.traceCategories.Navigation);
             }
         }
+    };
+    FrameBase.prototype._removeBackstackEntries = function (removed) {
     };
     FrameBase.prototype.navigate = function (param) {
         if (view_1.traceEnabled()) {
@@ -267,10 +261,12 @@ var FrameBase = (function (_super) {
             this.performNavigation(navigationContext);
         }
     };
+    FrameBase.prototype._clearBackStack = function () {
+        this._backStack.length = 0;
+    };
     FrameBase.prototype.performNavigation = function (navigationContext) {
         var navContext = navigationContext.entry;
         if (navigationContext.entry.entry.clearHistory) {
-            this._backStack.length = 0;
         }
         else if (FrameBase._isEntryBackstackVisible(this._currentEntry)) {
             this._backStack.push(this._currentEntry);
@@ -279,9 +275,19 @@ var FrameBase = (function (_super) {
         this._navigateCore(navContext);
     };
     FrameBase.prototype.performGoBack = function (navigationContext) {
-        var navContext = navigationContext.entry;
-        this._onNavigatingTo(navContext, navigationContext.isBackNavigation);
-        this._goBackCore(navContext);
+        var backstackEntry = navigationContext.entry;
+        if (!backstackEntry) {
+            backstackEntry = this._backStack.pop();
+            navigationContext.entry = backstackEntry;
+        }
+        else {
+            var index_1 = this._backStack.indexOf(backstackEntry);
+            var removed = this._backStack.splice(index_1 + 1);
+            this._backStack.pop();
+            this._removeBackstackEntries(removed);
+        }
+        this._onNavigatingTo(backstackEntry, true);
+        this._goBackCore(backstackEntry);
     };
     FrameBase.prototype._goBackCore = function (backstackEntry) {
         if (view_1.traceEnabled()) {

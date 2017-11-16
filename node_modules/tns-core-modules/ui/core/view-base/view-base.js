@@ -18,6 +18,7 @@ exports.Color = color_1.Color;
 var profiling_1 = require("../../../profiling");
 __export(require("../bindable"));
 __export(require("../properties"));
+var ssm = require("../../styling/style-scope");
 var styleScopeModule;
 function ensureStyleScopeModule() {
     if (!styleScopeModule) {
@@ -80,6 +81,7 @@ var ViewBase = (function (_super) {
     __extends(ViewBase, _super);
     function ViewBase() {
         var _this = _super.call(this) || this;
+        _this._cssState = new ssm.CssState(_this);
         _this.pseudoClassAliases = {
             'highlighted': [
                 'active',
@@ -113,8 +115,13 @@ var ViewBase = (function (_super) {
         get: function () {
             return this._style;
         },
-        set: function (value) {
-            throw new Error("View.style property is read-only.");
+        set: function (inlineStyle) {
+            if (typeof inlineStyle === "string") {
+                this.setInlineStyle(inlineStyle);
+            }
+            else {
+                throw new Error("View.style property is read-only.");
+            }
         },
         enumerable: true,
         configurable: true
@@ -150,16 +157,6 @@ var ViewBase = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(ViewBase.prototype, "inlineStyleSelector", {
-        get: function () {
-            return this._inlineStyleSelector;
-        },
-        set: function (value) {
-            this._inlineStyleSelector = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
     ViewBase.prototype.getViewById = function (id) {
         return getViewById(this, id);
     };
@@ -183,6 +180,7 @@ var ViewBase = (function (_super) {
     };
     ViewBase.prototype.onLoaded = function () {
         this._isLoaded = true;
+        this._cssState.onLoaded();
         this._resumeNativeUpdates();
         this._loadEachChild();
         this._emit("loaded");
@@ -197,6 +195,7 @@ var ViewBase = (function (_super) {
         this._suspendNativeUpdates();
         this._unloadEachChild();
         this._isLoaded = false;
+        this._cssState.onUnloaded();
         this._emit("unloaded");
     };
     ViewBase.prototype._suspendNativeUpdates = function () {
@@ -225,84 +224,8 @@ var ViewBase = (function (_super) {
             return true;
         });
     };
-    ViewBase.prototype._applyStyleFromScope = function () {
-        var scope = this._styleScope;
-        if (scope) {
-            scope.applySelectors(this);
-        }
-        else {
-            this._setCssState(null);
-        }
-    };
-    ViewBase.prototype._setCssState = function (next) {
-        var _this = this;
-        var previous = this._cssState;
-        this._cssState = next;
-        if (!this._invalidateCssHandler) {
-            this._invalidateCssHandler = function () {
-                if (_this._invalidateCssHandlerSuspended) {
-                    return;
-                }
-                _this.applyCssState();
-            };
-        }
-        try {
-            this._invalidateCssHandlerSuspended = true;
-            if (next) {
-                next.changeMap.forEach(function (changes, view) {
-                    if (changes.attributes) {
-                        changes.attributes.forEach(function (attribute) {
-                            view.addEventListener(attribute + "Change", _this._invalidateCssHandler);
-                        });
-                    }
-                    if (changes.pseudoClasses) {
-                        changes.pseudoClasses.forEach(function (pseudoClass) {
-                            var eventName = ":" + pseudoClass;
-                            view.addEventListener(":" + pseudoClass, _this._invalidateCssHandler);
-                            if (view[eventName]) {
-                                view[eventName](+1);
-                            }
-                        });
-                    }
-                });
-            }
-            if (previous) {
-                previous.changeMap.forEach(function (changes, view) {
-                    if (changes.attributes) {
-                        changes.attributes.forEach(function (attribute) {
-                            view.removeEventListener("onPropertyChanged:" + attribute, _this._invalidateCssHandler);
-                        });
-                    }
-                    if (changes.pseudoClasses) {
-                        changes.pseudoClasses.forEach(function (pseudoClass) {
-                            var eventName = ":" + pseudoClass;
-                            view.removeEventListener(eventName, _this._invalidateCssHandler);
-                            if (view[eventName]) {
-                                view[eventName](-1);
-                            }
-                        });
-                    }
-                });
-            }
-        }
-        finally {
-            this._invalidateCssHandlerSuspended = false;
-        }
-        this.applyCssState();
-    };
     ViewBase.prototype.notifyPseudoClassChanged = function (pseudoClass) {
         this.notify({ eventName: ":" + pseudoClass, object: this });
-    };
-    ViewBase.prototype.applyCssState = function () {
-        var _this = this;
-        this._batchUpdate(function () {
-            if (!_this._cssState) {
-                _this._cancelAllAnimations();
-                properties_1.resetCSSProperties(_this.style);
-                return;
-            }
-            _this._cssState.apply();
-        });
     };
     ViewBase.prototype.getAllAliasedStates = function (name) {
         var allStates = [];
@@ -329,16 +252,6 @@ var ViewBase = (function (_super) {
             if (this.cssPseudoClasses.has(allStates[i])) {
                 this.cssPseudoClasses.delete(allStates[i]);
                 this.notifyPseudoClassChanged(allStates[i]);
-            }
-        }
-    };
-    ViewBase.prototype._applyInlineStyle = function (inlineStyle) {
-        if (typeof inlineStyle === "string") {
-            try {
-                ensureStyleScopeModule();
-                styleScopeModule.applyInlineStyle(this, inlineStyle);
-            }
-            finally {
             }
         }
     };
@@ -420,20 +333,9 @@ var ViewBase = (function (_super) {
             this.domNode.onChildAdded(view);
         }
     };
-    ViewBase.prototype._setStyleScope = function (scope) {
-        this._styleScope = scope;
-        this._applyStyleFromScope();
-        this.eachChild(function (v) {
-            v._setStyleScope(scope);
-            return true;
-        });
-    };
     ViewBase.prototype._addViewCore = function (view, atIndex) {
         properties_1.propagateInheritableProperties(this, view);
-        var styleScope = this._styleScope;
-        if (styleScope) {
-            view._setStyleScope(styleScope);
-        }
+        view._inheritStyleScope(this._styleScope);
         properties_1.propagateInheritableCssProperties(this.style, view.style);
         if (this._context) {
             view._setupUI(this._context, atIndex);
@@ -457,9 +359,6 @@ var ViewBase = (function (_super) {
         view._parentChanged(this);
     };
     ViewBase.prototype._removeViewCore = function (view) {
-        if (this._styleScope === view._styleScope) {
-            view._setStyleScope(null);
-        }
         if (view.isLoaded) {
             view.onUnloaded();
         }
@@ -473,16 +372,10 @@ var ViewBase = (function (_super) {
     ViewBase.prototype.disposeNativeView = function () {
     };
     ViewBase.prototype.initNativeView = function () {
-        if (this._cssState) {
-            this._cssState.playPendingKeyframeAnimations();
-        }
     };
     ViewBase.prototype.resetNativeView = function () {
     };
     ViewBase.prototype.resetNativeViewInternal = function () {
-        if (this._cssState) {
-            this._cancelAllAnimations();
-        }
     };
     ViewBase.prototype._setupAsRootView = function (context) {
         this._setupUI(context);
@@ -616,8 +509,8 @@ var ViewBase = (function (_super) {
         this.addPseudoClass(state);
     };
     ViewBase.prototype._applyXmlAttribute = function (attribute, value) {
-        if (attribute === "style") {
-            this._applyInlineStyle(value);
+        if (attribute === "style" || attribute === "rows" || attribute === "columns" || attribute === "fontAttributes") {
+            this[attribute] = value;
             return true;
         }
         return false;
@@ -626,7 +519,8 @@ var ViewBase = (function (_super) {
         if (typeof style !== "string") {
             throw new Error("Parameter should be valid CSS string!");
         }
-        this._applyInlineStyle(style);
+        ensureStyleScopeModule();
+        styleScopeModule.applyInlineStyle(this, style);
     };
     ViewBase.prototype._parentChanged = function (oldParent) {
         var newParent = this.parent;
@@ -644,28 +538,6 @@ var ViewBase = (function (_super) {
     ViewBase.prototype.onResumeNativeUpdates = function () {
         properties_1.initNativeView(this);
     };
-    ViewBase.prototype._registerAnimation = function (animation) {
-        if (this._registeredAnimations === undefined) {
-            this._registeredAnimations = new Array();
-        }
-        this._registeredAnimations.push(animation);
-    };
-    ViewBase.prototype._unregisterAnimation = function (animation) {
-        if (this._registeredAnimations) {
-            var index_1 = this._registeredAnimations.indexOf(animation);
-            if (index_1 >= 0) {
-                this._registeredAnimations.splice(index_1, 1);
-            }
-        }
-    };
-    ViewBase.prototype._cancelAllAnimations = function () {
-        if (this._registeredAnimations) {
-            for (var _i = 0, _a = this._registeredAnimations; _i < _a.length; _i++) {
-                var animation = _a[_i];
-                animation.cancel();
-            }
-        }
-    };
     ViewBase.prototype.toString = function () {
         var str = this.typeName;
         if (this.id) {
@@ -680,6 +552,23 @@ var ViewBase = (function (_super) {
         }
         return str;
     };
+    ViewBase.prototype._onCssStateChange = function () {
+        this._cssState.onChange();
+        eachDescendant(this, function (child) {
+            child._cssState.onChange();
+            return true;
+        });
+    };
+    ViewBase.prototype._inheritStyleScope = function (styleScope) {
+        if (this._styleScope !== styleScope) {
+            this._styleScope = styleScope;
+            this._onCssStateChange();
+            this.eachChild(function (child) {
+                child._inheritStyleScope(styleScope);
+                return true;
+            });
+        }
+    };
     ViewBase.loadedEvent = "loaded";
     ViewBase.unloadedEvent = "unloaded";
     __decorate([
@@ -690,31 +579,16 @@ var ViewBase = (function (_super) {
     ], ViewBase.prototype, "onUnloaded", null);
     __decorate([
         profiling_1.profile
-    ], ViewBase.prototype, "_applyStyleFromScope", null);
-    __decorate([
-        profiling_1.profile
-    ], ViewBase.prototype, "_setCssState", null);
-    __decorate([
-        profiling_1.profile
-    ], ViewBase.prototype, "applyCssState", null);
-    __decorate([
-        profiling_1.profile
     ], ViewBase.prototype, "addPseudoClass", null);
     __decorate([
         profiling_1.profile
     ], ViewBase.prototype, "deletePseudoClass", null);
     __decorate([
         profiling_1.profile
-    ], ViewBase.prototype, "_applyInlineStyle", null);
-    __decorate([
-        profiling_1.profile
     ], ViewBase.prototype, "requestLayout", null);
     __decorate([
         profiling_1.profile
     ], ViewBase.prototype, "_addView", null);
-    __decorate([
-        profiling_1.profile
-    ], ViewBase.prototype, "_setStyleScope", null);
     __decorate([
         profiling_1.profile
     ], ViewBase.prototype, "_setupUI", null);
@@ -762,18 +636,11 @@ exports.classNameProperty = new properties_1.Property({
         if (typeof newValue === "string") {
             newValue.split(" ").forEach(function (c) { return classes.add(c); });
         }
-        resetStyles(view);
+        view._onCssStateChange();
     }
 });
 exports.classNameProperty.register(ViewBase);
-function resetStyles(view) {
-    view._applyStyleFromScope();
-    view.eachChild(function (child) {
-        resetStyles(child);
-        return true;
-    });
-}
-exports.idProperty = new properties_1.Property({ name: "id", valueChanged: function (view, oldValue, newValue) { return resetStyles(view); } });
+exports.idProperty = new properties_1.Property({ name: "id", valueChanged: function (view, oldValue, newValue) { return view._onCssStateChange(); } });
 exports.idProperty.register(ViewBase);
 function booleanConverter(v) {
     var lowercase = (v + '').toLowerCase();

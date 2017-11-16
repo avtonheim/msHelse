@@ -7,13 +7,17 @@ var constants_1 = require("../page/constants");
 var fragment_transitions_1 = require("./fragment.transitions");
 var profiling_1 = require("../../profiling");
 __export(require("./frame-common"));
-var HIDDEN = "_hidden";
 var INTENT_EXTRA = "com.tns.activity";
 var FRAMEID = "_frameId";
 var CALLBACKS = "_callbacks";
 var navDepth = -1;
 var fragmentId = -1;
 var activityInitialized;
+if (global && global.__inspector) {
+    var devtools = require("tns-core-modules/debugger/devtools-elements");
+    devtools.attachDOMInspectorEventCallbacks(global.__inspector);
+    devtools.attachDOMInspectorCommandCallbacks(global.__inspector);
+}
 var Frame = (function (_super) {
     __extends(Frame, _super);
     function Frame() {
@@ -67,6 +71,7 @@ var Frame = (function (_super) {
         var callbacks = newFragment[CALLBACKS];
         callbacks.frame = this;
         callbacks.entry = backstackEntry;
+        backstackEntry.fragment = newFragment;
         backstackEntry.fragmentTag = fragmentTag;
         backstackEntry.navDepth = navDepth;
         return newFragment;
@@ -81,8 +86,9 @@ var Frame = (function (_super) {
         var isBack = this._isBack;
         var page = this.currentPage;
         if (page) {
-            if (page.frame === this && isBack) {
-                this._removeView(page);
+            if (page.frame === this &&
+                (isBack || this.backStack.indexOf(this._currentEntry) < 0)) {
+                removeEntry(this._currentEntry, page, this, true);
             }
             if (page.isLoaded) {
                 page.onUnloaded();
@@ -116,37 +122,39 @@ var Frame = (function (_super) {
         fragmentId++;
         var newFragmentTag = "fragment" + fragmentId + "[" + navDepth + "]";
         var newFragment = this.createFragment(backstackEntry, newFragmentTag);
-        var fragmentTransaction = manager.beginTransaction();
+        var transaction = manager.beginTransaction();
         var animated = this._getIsAnimatedNavigation(backstackEntry.entry);
-        var navigationTransition = this._getNavigationTransition(backstackEntry.entry);
-        fragment_transitions_1._setAndroidFragmentTransitions(animated, navigationTransition, currentFragment, newFragment, fragmentTransaction, manager);
-        if (currentFragment) {
-            if (clearHistory) {
-                removeFragments(manager, fragmentTransaction);
-            }
-            else {
-                fragmentTransaction.addToBackStack(this._currentEntry.fragmentTag);
-            }
-            if (animated && !navigationTransition) {
-                fragmentTransaction.setTransition(android.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            }
-        }
-        fragmentTransaction.replace(this.containerViewId, newFragment, newFragmentTag);
-        fragmentTransaction.commit();
+        var navigationTransition = this._currentEntry ? this._getNavigationTransition(backstackEntry.entry) : null;
+        fragment_transitions_1._setAndroidFragmentTransitions(animated, navigationTransition, currentFragment, newFragment, transaction, manager);
         if (clearHistory) {
-            manager.popBackStackImmediate(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            destroyPages(this.backStack, true);
+            this._clearBackStack();
         }
+        if (currentFragment && animated && !navigationTransition) {
+            transaction.setTransition(android.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        }
+        transaction.replace(this.containerViewId, newFragment, newFragmentTag);
+        transaction.commit();
     };
     Frame.prototype._goBackCore = function (backstackEntry) {
         _super.prototype._goBackCore.call(this, backstackEntry);
         navDepth = backstackEntry.navDepth;
-        var manager = this._android.activity.getFragmentManager();
-        if (manager.getBackStackEntryCount() > 0) {
-            var fragmentInBackstack = manager.findFragmentByTag(backstackEntry.fragmentTag);
-            var currentFragment = manager.findFragmentByTag(this._currentEntry.fragmentTag);
-            fragment_transitions_1._waitForAnimationEnd(fragmentInBackstack, currentFragment);
-            manager.popBackStack(backstackEntry.fragmentTag, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        var activity = this._android.activity;
+        var manager = activity.getFragmentManager();
+        var transaction = manager.beginTransaction();
+        if (!backstackEntry.fragment) {
+            backstackEntry.fragment = this.createFragment(backstackEntry, backstackEntry.fragmentTag);
+            fragment_transitions_1._updateTransitions(backstackEntry);
         }
+        var transitionReversed = fragment_transitions_1._reverseTransitions(backstackEntry, this._currentEntry);
+        if (!transitionReversed) {
+            transaction.setCustomAnimations(-30, -40, -10, -20);
+        }
+        transaction.replace(this.containerViewId, backstackEntry.fragment, backstackEntry.fragmentTag);
+        transaction.commit();
+    };
+    Frame.prototype._removeBackstackEntries = function (removed) {
+        destroyPages(removed, true);
     };
     Frame.prototype.createNativeView = function () {
         var root = new org.nativescript.widgets.ContentLayout(this._context);
@@ -194,6 +202,16 @@ var Frame = (function (_super) {
             return this._android.showActionBar;
         }
         return true;
+    };
+    Frame.prototype._saveFragmentsState = function () {
+        this.backStack.forEach(function (entry) {
+            var view = entry.resolvedPage.nativeViewProtected;
+            if (!entry.viewSavedState && view) {
+                var viewState = new android.util.SparseArray();
+                view.saveHierarchyState(viewState);
+                entry.viewSavedState = viewState;
+            }
+        });
     };
     Frame.prototype._processNavigationContext = function (navigationContext) {
         var _this = this;
@@ -246,18 +264,31 @@ var Frame = (function (_super) {
     return Frame;
 }(frame_common_1.FrameBase));
 exports.Frame = Frame;
-function removeFragments(manager, ft) {
+function removeEntry(entry, page, frame, entryUnused) {
+    if (entry.fragment) {
+        if (entryUnused) {
+            fragment_transitions_1._clearEntry(entry);
+        }
+        else {
+            fragment_transitions_1._clearFragment(entry.fragment);
+        }
+    }
+    entry.fragment = null;
+    if (entryUnused) {
+        entry.viewSavedState = null;
+    }
+    if (frame) {
+        frame._removeView(page);
+    }
+}
+function destroyPages(backStack, entryUnused) {
     if (frame_common_1.traceEnabled()) {
         frame_common_1.traceWrite("CLEAR HISTORY", frame_common_1.traceCategories.Navigation);
     }
-    for (var i = manager.getBackStackEntryCount() - 1; i >= 0; i--) {
-        var fragment = manager.findFragmentByTag(manager.getBackStackEntryAt(i).getName());
-        ft.detach(fragment);
-        var page = fragment[CALLBACKS].entry.resolvedPage;
-        if (page.frame) {
-            page.frame._removeView(page);
-        }
-    }
+    backStack.forEach(function (entry) {
+        var page = entry.resolvedPage;
+        removeEntry(entry, page, page.frame, entryUnused);
+    });
 }
 var framesCounter = 0;
 var framesCache = new Array();
@@ -379,7 +410,8 @@ function findPageForFragment(fragment, frame) {
         var callbacks = fragment[CALLBACKS];
         callbacks.frame = frame;
         callbacks.entry = entry;
-        fragment_transitions_1._updateAnimationFragment(fragment);
+        entry.fragment = fragment;
+        fragment_transitions_1._updateTransitions(entry);
     }
     else {
         throw new Error("Could not find a page for " + fragmentTag + ".");
@@ -472,9 +504,6 @@ var FragmentCallbacksImplementation = (function () {
         var entry = this.entry;
         var page = entry.resolvedPage;
         try {
-            if (savedInstanceState && savedInstanceState.getBoolean(HIDDEN, false)) {
-                fragment.getFragmentManager().beginTransaction().hide(fragment).commit();
-            }
             var frame = this.frame;
             if (page.parent === frame) {
                 if (frame.isLoaded && !page.isLoaded) {
@@ -490,6 +519,11 @@ var FragmentCallbacksImplementation = (function () {
             label.setText(ex.message + ", " + ex.stackTrace);
             return label;
         }
+        var savedState = entry.viewSavedState;
+        if (savedState) {
+            page.nativeViewProtected.restoreHierarchyState(savedState);
+            entry.viewSavedState = null;
+        }
         return page.nativeViewProtected;
     };
     FragmentCallbacksImplementation.prototype.onSaveInstanceState = function (fragment, outState, superFunc) {
@@ -497,26 +531,18 @@ var FragmentCallbacksImplementation = (function () {
             frame_common_1.traceWrite(fragment + ".onSaveInstanceState(" + outState + ")", frame_common_1.traceCategories.NativeLifecycle);
         }
         superFunc.call(fragment, outState);
-        if (fragment.isHidden()) {
-            outState.putBoolean(HIDDEN, true);
-        }
     };
     FragmentCallbacksImplementation.prototype.onDestroyView = function (fragment, superFunc) {
-        var entry = this.entry;
-        var page = entry.resolvedPage;
         if (frame_common_1.traceEnabled()) {
             frame_common_1.traceWrite(fragment + ".onDestroyView()", frame_common_1.traceCategories.NativeLifecycle);
         }
         superFunc.call(fragment);
     };
     FragmentCallbacksImplementation.prototype.onDestroy = function (fragment, superFunc) {
-        var entry = this.entry;
-        var page = entry.resolvedPage;
-        superFunc.call(fragment);
-        var frame = page.frame;
-        if (frame && !frame.isCurrent(entry)) {
-            frame._removeView(page);
+        if (frame_common_1.traceEnabled()) {
+            frame_common_1.traceWrite(fragment + ".onDestroy()", frame_common_1.traceCategories.NativeLifecycle);
         }
+        superFunc.call(fragment);
     };
     FragmentCallbacksImplementation.prototype.toStringOverride = function (fragment, superFunc) {
         return fragment.getTag() + "<" + (this.entry ? this.entry.resolvedPage : "") + ">";
@@ -593,13 +619,15 @@ var ActivityCallbacksImplementation = (function () {
     ActivityCallbacksImplementation.prototype.notifyLaunch = function (intent, savedInstanceState) {
         var launchArgs = { eventName: frame_common_1.application.launchEvent, object: frame_common_1.application.android, android: intent, savedInstanceState: savedInstanceState };
         frame_common_1.application.notify(launchArgs);
+        frame_common_1.application.notify({ eventName: "loadAppCss", object: this, cssFile: frame_common_1.application.getCssFileName() });
         return launchArgs.root;
     };
     ActivityCallbacksImplementation.prototype.onSaveInstanceState = function (activity, outState, superFunc) {
         superFunc.call(activity, outState);
-        var view = this._rootView;
-        if (view instanceof Frame) {
-            outState.putInt(INTENT_EXTRA, view.android.frameId);
+        var frame = this._rootView;
+        if (frame instanceof Frame) {
+            outState.putInt(INTENT_EXTRA, frame.android.frameId);
+            frame._saveFragmentsState();
         }
     };
     ActivityCallbacksImplementation.prototype.onStart = function (activity, superFunc) {
@@ -633,6 +661,9 @@ var ActivityCallbacksImplementation = (function () {
         }
         var exitArgs = { eventName: frame_common_1.application.exitEvent, object: frame_common_1.application.android, android: activity };
         frame_common_1.application.notify(exitArgs);
+        if (rootView instanceof Frame) {
+            destroyPages(rootView.backStack, false);
+        }
     };
     ActivityCallbacksImplementation.prototype.onBackPressed = function (activity, superFunc) {
         if (frame_common_1.traceEnabled()) {

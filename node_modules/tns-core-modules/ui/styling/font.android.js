@@ -38,7 +38,7 @@ var Font = (function (_super) {
     };
     Font.default = new Font(undefined, undefined, "normal", "normal");
     return Font;
-}(font_common_1.FontBase));
+}(font_common_1.Font));
 exports.Font = Font;
 function loadFontFromFile(fontFamily) {
     appAssets = appAssets || application.android.context.getAssets();

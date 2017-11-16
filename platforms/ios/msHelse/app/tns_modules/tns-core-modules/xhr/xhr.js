@@ -18,6 +18,7 @@ var XMLHttpRequest = (function () {
         this.textTypes = [
             'text/plain',
             'application/xml',
+            'application/rss+xml',
             'text/html',
             'text/xml'
         ];

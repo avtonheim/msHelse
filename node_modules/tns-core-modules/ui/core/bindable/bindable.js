@@ -270,22 +270,22 @@ var Binding = (function () {
         try {
             var exp_1 = polymerExpressions.PolymerExpressions.getExpression(expression);
             if (exp_1) {
-                var context = this.source && this.source.get && this.source.get() || global;
+                var context_1 = this.source && this.source.get && this.source.get() || global;
                 var model = {};
                 var addedProps = [];
                 var resources = application.getResources();
                 for (var prop in resources) {
-                    if (resources.hasOwnProperty(prop) && !context.hasOwnProperty(prop)) {
-                        context[prop] = resources[prop];
+                    if (resources.hasOwnProperty(prop) && !context_1.hasOwnProperty(prop)) {
+                        context_1[prop] = resources[prop];
                         addedProps.push(prop);
                     }
                 }
-                this.prepareContextForExpression(context, expression, addedProps);
-                model[contextKey] = context;
+                this.prepareContextForExpression(context_1, expression, addedProps);
+                model[contextKey] = context_1;
                 var result = exp_1.getValue(model, isBackConvert, changedModel ? changedModel : model);
                 var addedPropsLength = addedProps.length;
                 for (var i = 0; i < addedPropsLength; i++) {
-                    delete context[addedProps[i]];
+                    delete context_1[addedProps[i]];
                 }
                 addedProps.length = 0;
                 return result;

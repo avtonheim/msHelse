@@ -52,7 +52,7 @@ var DatePicker = (function (_super) {
         var picker = new android.widget.DatePicker(this._context);
         picker.setCalendarViewShown(false);
         var listener = new DateChangedListener(this);
-        picker.init(this.year, this.month, this.day, listener);
+        picker.init(this.year, this.month - 1, this.day, listener);
         picker.listener = listener;
         return picker;
     };

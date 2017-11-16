@@ -179,7 +179,9 @@ var View = (function (_super) {
             return;
         }
         var background = this.style.backgroundInternal;
-        var backgroundDependsOnSize = background.image || !background.hasUniformBorder();
+        var backgroundDependsOnSize = background.image
+            || !background.hasUniformBorder()
+            || background.hasBorderRadius();
         if (this._nativeBackgroundState === "invalid" || (this._nativeBackgroundState === "drawn" && backgroundDependsOnSize)) {
             this._redrawNativeBackground(background);
         }

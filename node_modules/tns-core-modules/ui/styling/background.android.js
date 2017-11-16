@@ -6,7 +6,7 @@ var utils_1 = require("../../utils/utils");
 var css_value_1 = require("../../css-value");
 var file_system_1 = require("../../file-system");
 var application = require("../../application");
-var profiling_1 = require("tns-core-modules/profiling");
+var profiling_1 = require("../../profiling");
 __export(require("./background-common"));
 var ad;
 (function (ad) {

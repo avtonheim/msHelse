@@ -7,6 +7,7 @@ var stack_layout_1 = require("../layouts/stack-layout");
 var proxy_view_container_1 = require("../proxy-view-container");
 var utils_1 = require("../../utils/utils");
 var profiling_1 = require("../../profiling");
+var platform_1 = require("../../platform");
 __export(require("./list-view-common"));
 var ITEMLOADING = list_view_common_1.ListViewBase.itemLoadingEvent;
 var LOADMOREITEMS = list_view_common_1.ListViewBase.loadMoreItemsEvent;
@@ -186,6 +187,9 @@ var ListView = (function (_super) {
         _this._ios.estimatedRowHeight = DEFAULT_HEIGHT;
         _this._ios.rowHeight = UITableViewAutomaticDimension;
         _this._ios.dataSource = _this._dataSource = DataSource.initWithOwner(new WeakRef(_this));
+        if (parseInt(platform_1.device.sdkVersion) >= 11) {
+            _this._ios.contentInsetAdjustmentBehavior = 2;
+        }
         _this._delegate = UITableViewDelegateImpl.initWithOwner(new WeakRef(_this));
         _this._heights = new Array();
         _this._map = new Map();

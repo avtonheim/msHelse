@@ -76,9 +76,11 @@ function initializeEditTextListeners() {
                     owner.dismissSoftInput();
                 }
                 owner._onReturnPress();
+                return true;
             }
             if (actionId === android.view.inputmethod.EditorInfo.IME_ACTION_NEXT) {
                 owner._onReturnPress();
+                return true;
             }
             return false;
         };
@@ -339,9 +341,9 @@ var EditableTextBase = (function (_super) {
             var filters = this.nativeViewProtected.getFilters();
             var newFilters = [];
             for (var i = 0; i < filters.length; i++) {
-                var filter_1 = filters[i];
-                if (!(filter_1 instanceof android.text.InputFilter.LengthFilter)) {
-                    newFilters.push(filter_1);
+                var filter = filters[i];
+                if (!(filter instanceof android.text.InputFilter.LengthFilter)) {
+                    newFilters.push(filter);
                 }
             }
             newFilters.push(lengthFilter);

@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var profiling_1 = require("../../profiling");
 var frame_common_1 = require("./frame-common");
 var fragment_transitions_1 = require("./fragment.transitions");
-var uiUtils = require("tns-core-modules/ui/utils");
+var uiUtils = require("../../ui/utils");
 var utils = require("../../utils/utils");
 __export(require("./frame-common"));
 var ENTRY = "_entry";
@@ -58,6 +58,7 @@ var Frame = (function (_super) {
         }
         var clearHistory = backstackEntry.entry.clearHistory;
         if (clearHistory) {
+            this._clearBackStack();
             navDepth = -1;
         }
         navDepth++;

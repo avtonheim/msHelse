@@ -1,7 +1,4 @@
 Object.defineProperty(exports, "__esModule", { value: true });
-var properties_1 = require("../ui/core/properties");
-var style_properties_1 = require("../ui/styling/style-properties");
-var color_1 = require("../color");
 var registeredDomNodes = {};
 var ELEMENT_NODE_TYPE = 1;
 var ROOT_NODE_TYPE = 9;
@@ -16,6 +13,12 @@ var propertyBlacklist = [
     "effectiveBorderLeftWidth",
     "effectiveMinWidth",
     "effectiveMinHeight",
+    "effectiveWidth",
+    "effectiveHeight",
+    "effectiveMarginLeft",
+    "effectiveMarginTop",
+    "effectiveMarginRight",
+    "effectiveMarginBottom",
     "nodeName",
     "nodeType",
     "decodeWidth",
@@ -26,21 +29,29 @@ var propertyBlacklist = [
     "bindingContext",
     "nativeView"
 ];
+function lazy(action) {
+    var _value;
+    return function () { return _value || (_value = action()); };
+}
+var percentLengthToStringLazy = lazy(function () { return require("../ui/styling/style-properties").PercentLength.convertToString; });
+var getSetPropertiesLazy = lazy(function () { return require("../ui/core/properties").getSetProperties; });
+var getComputedCssValuesLazy = lazy(function () { return require("../ui/core/properties").getComputedCssValues; });
+function registerInspectorEvents(inspector) {
+    inspectorFrontendInstance = inspector;
+}
+exports.registerInspectorEvents = registerInspectorEvents;
+var inspectorFrontendInstance;
 function notifyInspector(callback) {
-    var ins = global.__inspector;
-    if (ins) {
-        callback(ins);
+    if (inspectorFrontendInstance) {
+        callback(inspectorFrontendInstance);
     }
 }
 function valueToString(value) {
     if (typeof value === "undefined" || value === null) {
         return "";
     }
-    else if (value instanceof color_1.Color) {
-        return value.toString();
-    }
     else if (typeof value === "object" && value.unit) {
-        return style_properties_1.PercentLength.convertToString(value);
+        return percentLengthToStringLazy()(value);
     }
     else {
         return value + "";
@@ -84,7 +95,7 @@ var DOMNode = (function () {
     DOMNode.prototype.loadAttributes = function () {
         var _this = this;
         this.attributes = [];
-        properties_1.getSetProperties(this.viewRef.get())
+        getSetPropertiesLazy()(this.viewRef.get())
             .filter(propertyFilter)
             .forEach(function (pair) { return _this.attributes.push(pair[0], pair[1] + ""); });
     };
@@ -119,7 +130,7 @@ var DOMNode = (function () {
             });
             var index = !!previousChild ? previousChild._domId : 0;
             childView.ensureDomNode();
-            ins.childNodeInserted(_this.nodeId, index, childView.domNode.toJSON());
+            ins.childNodeInserted(_this.nodeId, index, childView.domNode);
         });
     };
     DOMNode.prototype.onChildRemoved = function (view) {
@@ -147,7 +158,7 @@ var DOMNode = (function () {
         if (!view) {
             return [];
         }
-        var result = properties_1.getComputedCssValues(view)
+        var result = getComputedCssValuesLazy()(view)
             .filter(function (pair) { return pair[0][0] !== "_"; })
             .map(function (pair) {
             return {
@@ -160,9 +171,6 @@ var DOMNode = (function () {
     DOMNode.prototype.dispose = function () {
         unregisterNode(this);
         this.viewRef.clear();
-    };
-    DOMNode.prototype.toJSON = function () {
-        return JSON.stringify(this.toObject());
     };
     DOMNode.prototype.toObject = function () {
         return {

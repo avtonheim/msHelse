@@ -55,6 +55,10 @@ function getCssFileName() {
     return cssFile;
 }
 exports.getCssFileName = getCssFileName;
+function loadAppCss() {
+    events.notify({ eventName: "loadAppCss", object: app, cssFile: getCssFileName() });
+}
+exports.loadAppCss = loadAppCss;
 function addCss(cssText) {
     events.notify({ eventName: "cssChanged", object: app, cssText: cssText });
 }

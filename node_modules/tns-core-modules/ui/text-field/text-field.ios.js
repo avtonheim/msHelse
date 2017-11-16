@@ -147,14 +147,7 @@ var TextField = (function (_super) {
         return this.nativeViewProtected.placeholder;
     };
     TextField.prototype[text_field_common_1.hintProperty.setNative] = function (value) {
-        var stringValue;
-        if (value === null || value === void 0) {
-            stringValue = "";
-        }
-        else {
-            stringValue = value + "";
-        }
-        this.nativeViewProtected.placeholder = stringValue;
+        this._updateAttributedPlaceholder();
     };
     TextField.prototype[text_field_common_1.secureProperty.getDefault] = function () {
         return this.nativeViewProtected.secureTextEntry;
@@ -183,17 +176,25 @@ var TextField = (function (_super) {
         return null;
     };
     TextField.prototype[text_field_common_1.placeholderColorProperty.setNative] = function (value) {
-        var nativeView = this.nativeViewProtected;
-        var colorAttibutes = NSMutableDictionary.new();
-        colorAttibutes.setValueForKey(value instanceof text_field_common_1.Color ? value.ios : value, NSForegroundColorAttributeName);
-        var stringValue;
-        if (nativeView.placeholder === null || nativeView.placeholder === void 0) {
-            stringValue = " ";
+        this._updateAttributedPlaceholder();
+    };
+    TextField.prototype._updateAttributedPlaceholder = function () {
+        var stringValue = this.hint;
+        if (stringValue === null || stringValue === void 0) {
+            stringValue = "";
         }
         else {
-            stringValue = nativeView.placeholder + "";
+            stringValue = stringValue + "";
         }
-        nativeView.attributedPlaceholder = NSAttributedString.alloc().initWithStringAttributes(stringValue, colorAttibutes);
+        if (stringValue === "") {
+            stringValue = " ";
+        }
+        var attributes = {};
+        if (this.style.placeholderColor) {
+            attributes[NSForegroundColorAttributeName] = this.style.placeholderColor.ios;
+        }
+        var attributedPlaceholder = NSAttributedString.alloc().initWithStringAttributes(stringValue, attributes);
+        this.nativeViewProtected.attributedPlaceholder = attributedPlaceholder;
     };
     TextField.prototype[text_field_common_1.paddingTopProperty.getDefault] = function () {
         return zeroLength;

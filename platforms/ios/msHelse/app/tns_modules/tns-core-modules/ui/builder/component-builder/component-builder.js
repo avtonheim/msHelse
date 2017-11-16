@@ -3,7 +3,7 @@ var bindable_1 = require("../../core/bindable");
 var file_system_1 = require("../../../file-system");
 var binding_builder_1 = require("../binding-builder");
 var file_name_resolver_1 = require("../../../file-system/file-name-resolver");
-var profiling_1 = require("tns-core-modules/profiling");
+var profiling_1 = require("../../../profiling");
 var platform = require("../../../platform");
 var UI_PATH = "ui/";
 var MODULES = {
@@ -103,9 +103,6 @@ var applyComponentCss = profiling_1.profile("applyComponentCss", function (insta
                 cssApplied = true;
             }
         }
-        if (!cssApplied) {
-            instance._refreshCss();
-        }
     }
 });
 var applyComponentAttributes = profiling_1.profile("applyComponentAttributes", function (instance, instanceModule, moduleExports, attributes) {
@@ -173,13 +170,7 @@ function setPropertyValue(instance, instanceModule, exports, propertyName, prope
         instance[propertyName] = exports[propertyValue];
     }
     else {
-        var attrHandled = false;
-        if (!attrHandled && instance._applyXmlAttribute) {
-            attrHandled = instance._applyXmlAttribute(propertyName, propertyValue);
-        }
-        if (!attrHandled) {
-            instance[propertyName] = propertyValue;
-        }
+        instance[propertyName] = propertyValue;
     }
 }
 exports.setPropertyValue = setPropertyValue;

@@ -16,26 +16,6 @@ var ImageAsset = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(ImageAsset.prototype, "ios", {
-        get: function () {
-            return this._ios;
-        },
-        set: function (value) {
-            this._ios = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ImageAsset.prototype, "android", {
-        get: function () {
-            return this._android;
-        },
-        set: function (value) {
-            this._android = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(ImageAsset.prototype, "nativeImage", {
         get: function () {
             return this._nativeImage;

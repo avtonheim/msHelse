@@ -68,7 +68,6 @@ var View = (function (_super) {
             this.touchListenerIsSet = false;
             this.nativeViewProtected.setClickable(this._isClickable);
         }
-        this._cancelAllAnimations();
         _super.prototype.onUnloaded.call(this);
     };
     View.prototype.hasGestureObservers = function () {
@@ -389,7 +388,12 @@ var View = (function (_super) {
         if (drawable) {
             var constantState = drawable.getConstantState();
             if (constantState) {
-                return constantState.newDrawable(nativeView.getResources());
+                try {
+                    return constantState.newDrawable(nativeView.getResources());
+                }
+                catch (e) {
+                    return drawable;
+                }
             }
             else {
                 return drawable;

@@ -544,7 +544,9 @@ var CssAnimationProperty = (function () {
             CssAnimationProperty.properties[options.cssName] = this;
         }
         this._valueConverter = options.valueConverter;
-        var cssName = "css:" + (options.cssName || propertyName);
+        var cssLocalName = (options.cssName || propertyName);
+        this.cssLocalName = cssLocalName;
+        var cssName = "css:" + cssLocalName;
         this.cssName = cssName;
         var keyframeName = "keyframe:" + propertyName;
         this.keyframe = keyframeName;
@@ -706,18 +708,23 @@ var InheritedCssProperty = (function (_super) {
                     return;
                 }
             }
+            var oldValue = key in this ? this[key] : defaultValue;
             var view = this.view;
             var value;
+            var unsetNativeValue = false;
             if (reset) {
                 var parent_2 = view.parent;
                 var style = parent_2 ? parent_2.style : null;
                 if (style && style[sourceKey] > 0) {
                     value = style[propertyName];
                     this[sourceKey] = 1;
+                    this[key] = value;
                 }
                 else {
                     value = defaultValue;
                     delete this[sourceKey];
+                    delete this[key];
+                    unsetNativeValue = true;
                 }
             }
             else {
@@ -728,42 +735,28 @@ var InheritedCssProperty = (function (_super) {
                 else {
                     value = boxedValue;
                 }
+                this[key] = value;
             }
-            var oldValue = key in this ? this[key] : defaultValue;
             var changed = equalityComparer ? !equalityComparer(oldValue, value) : oldValue !== value;
             if (changed) {
                 var view_1 = this.view;
-                if (reset) {
-                    delete this[key];
-                    if (valueChanged) {
-                        valueChanged(this, oldValue, value);
-                    }
-                    if (view_1[setNative]) {
-                        if (view_1._suspendNativeUpdatesCount) {
-                            if (view_1._suspendedUpdates) {
-                                view_1._suspendedUpdates[propertyName] = property;
-                            }
+                if (valueChanged) {
+                    valueChanged(this, oldValue, value);
+                }
+                if (view_1[setNative]) {
+                    if (view_1._suspendNativeUpdatesCount) {
+                        if (view_1._suspendedUpdates) {
+                            view_1._suspendedUpdates[propertyName] = property;
                         }
-                        else {
+                    }
+                    else {
+                        if (unsetNativeValue) {
                             if (defaultValueKey in this) {
                                 view_1[setNative](this[defaultValueKey]);
                                 delete this[defaultValueKey];
                             }
                             else {
                                 view_1[setNative](defaultValue);
-                            }
-                        }
-                    }
-                }
-                else {
-                    this[key] = value;
-                    if (valueChanged) {
-                        valueChanged(this, oldValue, value);
-                    }
-                    if (view_1[setNative]) {
-                        if (view_1._suspendNativeUpdatesCount) {
-                            if (view_1._suspendedUpdates) {
-                                view_1._suspendedUpdates[propertyName] = property;
                             }
                         }
                         else {
@@ -846,6 +839,17 @@ var ShorthandProperty = (function () {
             get: options.getter,
             set: setLocalValue
         };
+        this.propertyBagDescriptor = {
+            enumerable: false,
+            configurable: true,
+            set: function (value) {
+                var _this = this;
+                converter(value).forEach(function (_a) {
+                    var property = _a[0], value = _a[1];
+                    _this[property.cssLocalName] = value;
+                });
+            }
+        };
         cssSymbolPropertyMap[key] = this;
     }
     ShorthandProperty.prototype.register = function (cls) {
@@ -858,6 +862,7 @@ var ShorthandProperty = (function () {
         if (this.cssLocalName !== this.cssName) {
             Object.defineProperty(cls.prototype, this.cssLocalName, this.localValueDescriptor);
         }
+        Object.defineProperty(cls.prototype.PropertyBag, this.cssLocalName, this.propertyBagDescriptor);
     };
     return ShorthandProperty;
 }());
@@ -1111,6 +1116,10 @@ function getComputedCssValues(view) {
         var prop = cssPropertyNames_1[_i];
         result.push([prop, style[prop]]);
     }
+    result.push(["top", "auto"]);
+    result.push(["left", "auto"]);
+    result.push(["bottom", "auto"]);
+    result.push(["right", "auto"]);
     return result;
 }
 exports.getComputedCssValues = getComputedCssValues;

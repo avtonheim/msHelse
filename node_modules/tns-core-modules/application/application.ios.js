@@ -114,6 +114,7 @@ var IOSApplication = (function () {
             ios: notification.userInfo && notification.userInfo.objectForKey("UIApplicationLaunchOptionsLocalNotificationKey") || null
         };
         application_common_1.notify(args);
+        application_common_1.notify({ eventName: "loadAppCss", object: this, cssFile: application_common_1.getCssFileName() });
         var rootView = createRootView(args.root);
         this._window.content = rootView;
         if (rootView instanceof frame_1.Frame) {

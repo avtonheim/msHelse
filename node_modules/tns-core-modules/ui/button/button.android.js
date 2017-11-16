@@ -21,7 +21,10 @@ function initializeClickListener() {
             return global.__native(_this);
         }
         ClickListenerImpl.prototype.onClick = function (v) {
-            this.owner._emit(button_common_1.ButtonBase.tapEvent);
+            var owner = this.owner;
+            if (owner) {
+                owner._emit(button_common_1.ButtonBase.tapEvent);
+            }
         };
         ClickListenerImpl = __decorate([
             Interfaces([android.view.View.OnClickListener])

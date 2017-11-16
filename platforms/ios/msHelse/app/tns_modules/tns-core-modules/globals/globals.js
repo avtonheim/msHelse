@@ -1,20 +1,23 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./decorators");
-global.__extends = global.__extends || function (d, b) {
-    for (var p in b) {
-        if (b.hasOwnProperty(p)) {
-            d[p] = b[p];
+if (!global.__extends) {
+    global.__extends = function (d, b) {
+        for (var p in b) {
+            if (b.hasOwnProperty(p)) {
+                d[p] = b[p];
+            }
         }
-    }
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+}
 global.moduleMerge = function (sourceExports, destExports) {
     for (var key in sourceExports) {
         destExports[key] = sourceExports[key];
     }
 };
 var modules = new Map();
+global.moduleResolvers = [global.require];
 global.registerModule = function (name, loader) {
     modules.set(name, loader);
 };
@@ -26,10 +29,18 @@ global.loadModule = function (name) {
     if (loader) {
         return loader();
     }
-    else {
-        var result_1 = global.require(name);
-        modules.set(name, function () { return result_1; });
-        return result_1;
+    var _loop_1 = function (resolver) {
+        var result = resolver(name);
+        if (result) {
+            modules.set(name, function () { return result; });
+            return { value: result };
+        }
+    };
+    for (var _i = 0, _a = global.moduleResolvers; _i < _a.length; _i++) {
+        var resolver = _a[_i];
+        var state_1 = _loop_1(resolver);
+        if (typeof state_1 === "object")
+            return state_1.value;
     }
 };
 global.zonedCallback = function (callback) {
@@ -52,10 +63,6 @@ function registerOnGlobalContext(name, module) {
     Object.defineProperty(global, name, {
         get: function () {
             var m = global.loadModule(module);
-            if (!__tnsGlobalMergedModules.has(module)) {
-                __tnsGlobalMergedModules.set(module, true);
-                global.moduleMerge(m, global);
-            }
             var resolvedValue = m[name];
             Object.defineProperty(this, name, { value: resolvedValue, configurable: true, writable: true });
             return resolvedValue;
@@ -80,6 +87,8 @@ function install() {
                 alert: dialogs.alert,
                 confirm: dialogs.confirm,
                 prompt: dialogs.prompt,
+                login: dialogs.login,
+                action: dialogs.action,
                 XMLHttpRequest: xhr.XMLHttpRequest,
                 FormData: xhr.FormData,
                 fetch: fetch.fetch,
@@ -99,9 +108,14 @@ function install() {
         registerOnGlobalContext("alert", "ui/dialogs");
         registerOnGlobalContext("confirm", "ui/dialogs");
         registerOnGlobalContext("prompt", "ui/dialogs");
+        registerOnGlobalContext("login", "ui/dialogs");
+        registerOnGlobalContext("action", "ui/dialogs");
         registerOnGlobalContext("XMLHttpRequest", "xhr");
         registerOnGlobalContext("FormData", "xhr");
         registerOnGlobalContext("fetch", "fetch");
+        registerOnGlobalContext("Headers", "fetch");
+        registerOnGlobalContext("Request", "fetch");
+        registerOnGlobalContext("Response", "fetch");
         if (global.android) {
             var consoleModule_1 = require("console");
             global.console = new consoleModule_1.Console();

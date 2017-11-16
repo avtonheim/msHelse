@@ -34,7 +34,13 @@ var FragmentClass = (function (_super) {
         this._callbacks.onDestroy(this, _super.prototype.onDestroy);
     };
     FragmentClass.prototype.toString = function () {
-        return this._callbacks.toStringOverride(this, _super.prototype.toString);
+        var callbacks = this._callbacks;
+        if (callbacks) {
+            return callbacks.toStringOverride(this, _super.prototype.toString);
+        }
+        else {
+            _super.prototype.toString.call(this);
+        }
     };
     FragmentClass = __decorate([
         JavaProxy("com.tns.FragmentClass")
