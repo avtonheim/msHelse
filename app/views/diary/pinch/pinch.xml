@@ -7,13 +7,20 @@
            <ActionItem text="Neste" tap="navSymptom" ios.position="right"/>
            </ActionBar>
      </Page.actionBar>
-    <StackLayout id="rogBiff">
+    <StackLayout class="diaryComp">
       <Progress value="{{ someProperty }}" />
-      <GridLayout id="panTouch" rows="*" columns="*" width="auto" height="auto">
-          <StackLayout id="overText">
-            <Label class="title" text="Korleis har du det?"/>
-            <Label text="(Sveip på skjermen og trykk 'Neste')"/>
+          <StackLayout style="margin-top:20px; margin-bottom: 50px;">
+            <Label class="titleMain" style="font-size: 35pt;" text="Korleis har du det?" textWrap="true"/>
+            <Label text="Klikk på valgt knapp for å registrere."/>
           </StackLayout>
-      </GridLayout>
+          <StackLayout class="btnRegister" style="background-color: #F55D5D;" tap="navSymptom">
+            <Label text="Elendig"/>
+          </StackLayout>
+          <StackLayout class="btnRegister" style="background-color: #F5E35D;" tap="navSymptom">
+            <Label text="Middels"/>
+          </StackLayout>
+          <StackLayout class="btnRegister" style="background-color: #0DA52A;" tap="navSymptom">
+            <Label text="Bra"/>
+          </StackLayout>
   </StackLayout>
 </Page>

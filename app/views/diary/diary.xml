@@ -7,16 +7,14 @@
          </ActionBar>
      </Page.actionBar>
     <StackLayout id="diary">
-      <Progress value="{{ someProperty }}" />
       <StackLayout class="content">
-        <Label class="title" text="Velkommen til dagboka di!"/>
-        <Label text="I dagboka vil du bli spurt om fire ting:" textWrap="true"/>
+        <Image class="mainComp" src="~/images/dagbok_ny.png" height="400px" width="400px"/>
+        <Label class="titleMain" text="Dagbok"/>
+        <Label text="I dagboka vil du bli spurt om tre ting:" textWrap="true"/>
+        <Label text="Dagsform"/>
+        <Label text="Symptom"/>
+        <Label text="Dialog"/>
       </StackLayout>
-        <GridLayout rows="*" columns="*" height="400">
-          <StackLayout row="0" col="0">
-            <Image src="~/images/standebilete.png" />
-          </StackLayout>
-        </GridLayout>
         <StackLayout>
           <Button class="startEndBtn" text="Start registrering" tap="onNavPinch"/>
         </StackLayout>

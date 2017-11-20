@@ -1,19 +1,12 @@
-#overText{
-  text-align: center;
-  color: white;
-  margin-top: 35%;
-}
-#overText .title{
-  font-size: 35pt;
-}
 
 .nxtBtn{
   color: white;
 }
-
-#rogBiff{
-    background-image: ~/images/huecolor.png;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+.btnRegister{
+  width: 100%;
+  height: 300px;
+}
+.btnRegister Label{
+  color: white;
+  font-size: 30pt;
 }

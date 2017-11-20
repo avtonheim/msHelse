@@ -11,12 +11,12 @@ function tapDiary(){
 exports.tapDiary = tapDiary;
 
 function tapVisual(){
-  frameModule.topmost().navigate('views/visualisation/visualisation');
+  frameModule.topmost().navigate('views/visualisationmain/visualisationmain');
 }
 exports.tapVisual = tapVisual;
 
 function tapTodo(){
-  frameModule.topmost().navigate('views/lists/lists');
+  frameModule.topmost().navigate('views/listmain/listmain');
 }
 exports.tapTodo = tapTodo;
 

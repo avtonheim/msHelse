@@ -7,21 +7,28 @@
          </ActionBar>
      </Page.actionBar>
 <StackLayout class="content">
-  <Label class="title" text="Velkommen til mHealth"/>
-  <Label class="textJustify" textWrap="true" text="For å navigere til andre sider kan du klikke på ein av knappane nedanfor"/>
-  <GridLayout rows="*,*" columns="*,*" width="300" height="300" style="margin-top: 200px;">
-    <StackLayout row="0" col="0" class="tile">
-      <Image src="~/images/trening.png" tap="onTap" />
+
+    <StackLayout orientation="horizontal" horizontalAlignment="center" class="homeBox" id="diary" tap="tapDiary">
+      <Image src="~/images/dagbok_ny.png" height="200px" width="200px"/>
+      <Label text="Min MS Dagbok"/>
     </StackLayout>
-    <StackLayout row="0" col="1" class="tile">
-      <Image src="~/images/dabok.png" tap="tapDiary" />
+
+    <StackLayout orientation="horizontal" horizontalAlignment="center" class="homeBox" id="visual" tap="tapVisual">
+          <Image src="~/images/analyse_ny.png" height="150px" width="150px"/>
+          <Label text="Analyse av dagsform"/>
     </StackLayout>
-    <StackLayout row="1" col="0" class="tile">
-      <Image src="~/images/analyse.png" tap="tapVisual" />
+
+  <GridLayout columns="*,*" row="*">
+    <StackLayout col="0" row="0" class="smallBox" tap="onTap">
+      <Image src="~/images/ovelse_ny.png" height="150px" width="150px"/>
+      <Label text="Start ei øving!" textWrap="true"/>
     </StackLayout>
-    <StackLayout row="1" col="1" class="tile">
-      <Image src="~/images/gjorema¯l.png" tap="tapTodo" />
+
+    <StackLayout col="1" row="0" class="smallBox" tap="tapTodo">
+      <Image src="~/images/gjoremal_ny.png" height="150px" width="150px"/>
+      <Label text="Planlegg noko kjekt!" textWrap="true"/>
     </StackLayout>
   </GridLayout>
+
 </StackLayout>
 </Page>

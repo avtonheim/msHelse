@@ -8,15 +8,14 @@
      </Page.actionBar>
   <StackLayout>
     <StackLayout class="content">
-    <Image class="mainComp" src="~/images/ovelse_ny.png" height="400px" width="400px"/>
-    <Label class="titleMain" text="Øvingar"/>
-    <Label text="Her vil du finne ulike øvelser for trening"/>
+    <Image class="mainComp" src="~/images/gjoremal_ny.png" height="400px" width="400px"/>
+    <Label class="titleMain" text="Gjøremål"/>
     </StackLayout>
-    <StackLayout class="navButton">
-      <Label text="Mindfullness"/>
+    <StackLayout class="navButton" style="background-color:#DE8282;" tap="navList">
+      <Label text="Planlegg noko kjekt!"/>
     </StackLayout>
-    <StackLayout class="navButton">
-      <Label text="Gå tur"/>
+    <StackLayout class="navButton" style="background-color:#DE8282;" tap="navList">
+      <Label text="Sjå fullførte mål"/>
     </StackLayout>
   </StackLayout>
 </Page>
