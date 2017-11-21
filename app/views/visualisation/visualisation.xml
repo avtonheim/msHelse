@@ -1,37 +1,33 @@
-<Page loaded="onLoaded">
-  <Page.actionBar>
+<Page
+  xmlns="http://schemas.nativescript.org/tns.xsd"
+  xmlns:chart="nativescript-pro-ui/chart"
+  class="page" loaded="pageLoaded">
+    <Page.actionBar>
          <ActionBar class="action-bar">
            <StackLayout>
               <Image src="~/images/tittel.png" class="iconTitle" ios.position="center"></Image>
            </StackLayout>
          </ActionBar>
      </Page.actionBar>
-     <StackLayout>
-       <GridLayout class="graph" rows="*" columns="*" width="auto" height="200">
-       <Label class="title" text="Visualisering av dagbok"/>
-     </GridLayout>
-      <GridLayout rows="*,*" columns="*,*" width="auto" height="300">
-        <StackLayout class="tile" row="0" col="0">
-          <Label text="Korleis har du det?"/>
-        </StackLayout>
-        <StackLayout class="tile" row="0" col="1">
-
-          <ListView>
-          <ListView.itemTemplate>
-              <StackLayout>
-                  <Label text="{{ amount }}"/>
-              </StackLayout>
-          </ListView.itemTemplate>
-          </ListView>
-          <Label text="Symptoms" tap="{{ showAmountFatigue }}"/>
-          <Label text="console" tap="{{ select }}"/>
-        </StackLayout>
-        <StackLayout class="tile" row="1" col="0">
-          <Label text="Tekst"/>
-        </StackLayout>
-        <StackLayout class="tile" row="1" col="1">
-          <Label text="Fullførte gjøremål"/>
-        </StackLayout>
-      </GridLayout>
-    </StackLayout>
+  <StackLayout class="p-20">
+    <Label class="h1" text="Graf over dagbok"></Label>
+    <Label class="body" textWrap="true" text="Dette er ein oversikt over dine symptom og dagsform."></Label>
+    <Label class="h2" text="Symptom" style="margin-top: 20px;"></Label>
+    <chart:RadCartesianChart class="graphBox" height="300">
+      <chart:RadCartesianChart.series seriesName="items">
+        <chart:BarSeries
+          items="{{ Symptoms }}"
+          categoryProperty="type"
+          valueProperty="count"
+          showLabels="false">
+          <chart:BarSeries.horizontalAxis>
+            <chart:LinearAxis labelFitMode="Rotate" />
+          </chart:BarSeries.horizontalAxis>
+          <chart:BarSeries.verticalAxis>
+            <chart:CategoricalAxis />
+          </chart:BarSeries.verticalAxis>
+        </chart:BarSeries>
+      </chart:RadCartesianChart.series>
+    </chart:RadCartesianChart>
+  </StackLayout>
 </Page>
