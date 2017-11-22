@@ -1,0 +1,20 @@
+  <StackLayout loaded="pageLoaded"
+    xmlns="http://schemas.nativescript.org/tns.xsd"
+    xmlns:chart="nativescript-pro-ui/chart">
+    <chart:RadCartesianChart class="graphBox" height="250">
+      <chart:RadCartesianChart.series>
+        <chart:BarSeries
+          items="{{ Symptoms }}"
+          categoryProperty="type"
+          valueProperty="count"
+          showLabels="false">
+          <chart:BarSeries.horizontalAxis>
+            <chart:LinearAxis labelFitMode="Rotate" />
+          </chart:BarSeries.horizontalAxis>
+          <chart:BarSeries.verticalAxis>
+            <chart:CategoricalAxis />
+          </chart:BarSeries.verticalAxis>
+        </chart:BarSeries>
+      </chart:RadCartesianChart.series>
+    </chart:RadCartesianChart>
+  </StackLayout>

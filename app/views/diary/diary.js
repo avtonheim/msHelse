@@ -6,7 +6,7 @@ function onLoaded(args){
 exports.onLoaded = onLoaded;
 
 
-function onNavPinch(){
-  frameModule.topmost().navigate('views/diary/pinch/pinch');
+function onNavMood(){
+  frameModule.topmost().navigate('views/diary/mood/mood');
 }
-exports.onNavPinch = onNavPinch;
+exports.onNavMood = onNavMood;

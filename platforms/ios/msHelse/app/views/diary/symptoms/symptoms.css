@@ -4,3 +4,19 @@ GridLayout button{
   background-color: gray;
   margin: 20px;
 }
+.symptomCont{
+  background-color: #82DBDE;
+  border-radius: 15px;
+  height: 140px;
+  width: 90%;
+  margin-top: 20px,
+}
+.symptomCont Label{
+  color: white;
+  font-weight: bold;
+  font-size: 14pt;
+  margin-top: 5px;
+}
+.eventBtn{
+  background-color: #82DBDE;
+}

@@ -7,13 +7,10 @@ var Dialogs = require("ui/dialogs");
 
 function createViewModel(database) {
     var viewModel = new Observable();
-    viewModel.textItem = "";
-
 
     viewModel.insert = function() {
-          database.execSQL("INSERT INTO text (textItem) VALUES (?)", [this.textItem]).then(id => {
-            Dialogs.alert("Lagret!")
-              console.log("INSERT RESULT", id);
+          database.execSQL("INSERT INTO dialouge (content, timestamp) VALUES (?, datetime())", [this.textItem]).then(id => {
+              console.log("INSERT RESULT", this.textItem);
           }, error => {
               console.log("INSERT ERROR", error);
           });
@@ -21,7 +18,7 @@ function createViewModel(database) {
 
 
       viewModel.select = function() {
-            database.all("SELECT * FROM text").then(rows => {
+            database.all("SELECT * FROM dialouge").then(rows => {
                 for(var row in rows) {
                     console.log("RESULT", rows[row]);
                 }

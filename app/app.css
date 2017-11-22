@@ -37,6 +37,7 @@ components that have the btn class name.
 /*Title in each component*/
 .titleMain{
   font-size: 50pt;
+  margin-top: 20px;
 }
 /*Image in each component*/
 .mainComp{
@@ -53,7 +54,7 @@ components that have the btn class name.
 }
 /*Start and end button in diary component*/
 .startEndBtn{
-  margin-top: 20%;
+  margin-top: 20px;
   width: 500px;
   height: 100px;
   border-radius: 15px;
@@ -98,4 +99,9 @@ components that have the btn class name.
 }
 .diaryComp{
   text-align: center;
+}
+.graphBox{
+  background-color: #82DBDE;
+  border-radius: 15px;
+  width: 100%;
 }

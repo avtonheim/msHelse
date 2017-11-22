@@ -13,7 +13,7 @@
     <Label text="Her vil du finne ulike øvelser for trening"/>
     </StackLayout>
     <StackLayout class="navButton">
-      <Label text="Mindfullness"/>
+      <Label text="Mindfullness" tap="MindfullnessTap"/>
     </StackLayout>
     <StackLayout class="navButton">
       <Label text="Gå tur"/>

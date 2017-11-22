@@ -10,13 +10,13 @@
       <StackLayout class="content">
         <Image class="mainComp" src="~/images/dagbok_ny.png" height="400px" width="400px"/>
         <Label class="titleMain" text="Dagbok"/>
-        <Label text="I dagboka vil du bli spurt om tre ting:" textWrap="true"/>
-        <Label text="Dagsform"/>
-        <Label text="Symptom"/>
-        <Label text="Dialog"/>
+        <Label class="body" text="I dagboka vil du bli spurt om tre ting:" textWrap="true"/>
+        <Label class="body" text="Dagsform"/>
+        <Label class="body" text="Symptom"/>
+        <Label class="body" text="Dialog"/>
       </StackLayout>
         <StackLayout>
-          <Button class="startEndBtn" text="Start registrering" tap="onNavPinch"/>
+          <Button class="startEndBtn" text="Start registrering" tap="onNavMood"/>
         </StackLayout>
   </StackLayout>
 

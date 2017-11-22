@@ -1,18 +1,21 @@
-var frameModule = require("ui/frame");
-var Observable = require("data/observable").Observable;
+var builder = require('ui/builder');
+var fs = require('file-system');
 
-var pageSymptom = new Observable();
-pageSymptom.Symptoms = [
-  { type: "Fatigue", count: 20 },
-  { type: "Svimmel", count: 10 },
-  { type: "Dårleg syn",count: 0 },
-  { type: "Spasme", count: 5 },
-  { type: "Vannlatning", count: 14 },
-  { type: "Hovudverk", count: 4 },
-  { type: "Søvn", count: 9 }
-];
-
-exports.pageLoaded = function(args) {
+exports.onLoad = function(args) {
   var page = args.object;
-  page.bindingContext = pageSymptom;
+  var stackSymptom = page.getViewById('symptomGraph');
+  var stackMood = page.getViewById('moodGraph');
+
+  // Load our JS for the component
+  var path = fs.knownFolders.currentApp().path;
+  var componentSymptomJS = require(path + '/views/graphs/symptomgraph.js');
+  var componentMoodJS = require(path + '/views/graphs/moodgraph.js');
+
+  // Actually have the builder build the Component using the XML & JS.
+  var componentSymptomXML = builder.load(path + '/views/graphs/symptomgraph.xml', componentSymptomJS);
+  var componentMoodXML = builder.load(path + '/views/graphs/moodgraph.xml', componentMoodJS);
+
+  // And add our component to the visual tree
+  stackSymptom.addChild(componentSymptomXML);
+  stackMood.addChild(componentMoodXML);
 };

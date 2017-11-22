@@ -7,7 +7,7 @@ function onLoaded(args){
   var page = args.object;
   page.bindingContext = { someProperty : 50};
   (new Sqlite("my.db")).then(db => {
-         db.execSQL("CREATE TABLE IF NOT EXISTS symptom (id INTEGER PRIMARY KEY AUTOINCREMENT, symptomItem TEXT)").then(id => {
+         db.execSQL("CREATE TABLE IF NOT EXISTS symptoms (id INTEGER PRIMARY KEY AUTOINCREMENT, symptom TEXT, timestamp INT)").then(id => {
              page.bindingContext = createViewModel(db);
               console.log("Database Saved!");
          }, error => {

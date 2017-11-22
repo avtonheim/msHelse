@@ -1,23 +1,25 @@
 <Page loaded="onLoaded">
   <Page.actionBar>
-         <Image src="images/ikon.png" class="action-image"></Image>
          <ActionBar title="mHelse" class="action-bar">
-           <StackLayout>
+           <StackLayout orientation="horizontal">
               <Image src="~/images/tittel.png" class="iconTitle" ios.position="center"></Image>
-           </StackLayout>
+            </StackLayout>
+             <ActionItem text="Fullfør" tap="finishDiary" ios.position="right"/>
          </ActionBar>
      </Page.actionBar>
      <StackLayout>
-       <Progress value="{{ someProperty }}" />
-    <StackLayout class="content">
-      <Label text="Generelt" style="font-weight: bold;"/>
-      <Label text="Legg inn dine eigne notat som du syns bør vere med!" textWrap="true"/>
-        <TextView id="subject" hint="Er det noko anna du vil legge til? Endring i symptom, humør eller likande?" text="{{ textItem }}" textWrap="true"/>
-        <StackLayout>
-          <Button text="Lagre" tap="{{ insert }}"/>
-          <Button text="console.log" tap="{{ select }}"/>
-        </StackLayout>
-      <Button class="startEndBtn" text="Fullfør dagboka" tap="finishDiary"/>
+       <Progress value="{{ someProperty }}"/>
+       <StackLayout class="p-20">
+           <StackLayout class="question" horizontalAlignment="left">
+             <Label text="Kva har vore bra med dagen?"></Label>
+           </StackLayout>
+          <StackLayout class="response" horizontalAlignment="right">
+              <TextView id="subject" hint="Klikk for å legge til tekst" text="{{ textItem }}" textWrap="true" autocorrect="true"/>
+          </StackLayout>
+          <StackLayout>
+            <Button text="console.log" tap="{{ select }}"/>
+            <Button text="Lagre" tap="{{ insert }}"/>
+          </StackLayout>
+      </StackLayout>
     </StackLayout>
-  </StackLayout>
 </Page>
