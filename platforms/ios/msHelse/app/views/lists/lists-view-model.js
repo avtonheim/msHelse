@@ -1,7 +1,7 @@
 var Observable = require("data/observable").Observable;
 var ObservableArray = require("data/observable-array").ObservableArray;
 var Sqlite = require("nativescript-sqlite");
-var Dialogs = require("ui/dialogs");
+var Dialogs = require("ui/dialogs");  
 
 //Read more of SQLITE in nativescript
 //https://developer.telerik.com/products/nativescript/going-off-the-grid-with-nativescript/
@@ -30,16 +30,6 @@ function createViewModel(database) {
             console.log("SELECT ERROR", error);
         });
     }
-
-    //Deleting whole table
-    viewModel.delete = function() {
-      new Sqlite("my.db", function(err, db) {
-        database.execSQL("DROP TABLE IF EXISTS lists", [], function(err) {
-            Dialogs.alert("Alle gjøremål er sletta");
-            viewModel.set('lists', []);
-        });
-    });
-}
 
 
     viewModel.select();

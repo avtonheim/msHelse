@@ -18,6 +18,9 @@
     <Label class="body" textWrap="true" text="Dette er ein oversikt over dei siste 7 dagane."></Label>
     <StackLayout id="moodGraph">
     </StackLayout>
+    <StackLayout>
+      <Label text="this is where all will happen"/>
+    </StackLayout>
 </StackLayout>
 </ScrollView>
 </Page>

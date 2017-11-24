@@ -1,11 +1,13 @@
 var Observable = require("data/observable").Observable;
 var Sqlite = require("nativescript-sqlite");
+var ObservableArray = require("data/observable-array").ObservableArray;
 
 //Read more of SQLITE in nativescript
 //https://developer.telerik.com/products/nativescript/going-off-the-grid-with-nativescript/
 
 function createViewModel(database) {
     var viewModel = new Observable();
+    viewModel.Symptoms = new ObservableArray([]);
 
     viewModel.insert = function(args) {
           var btnText = args.object.text;
@@ -14,19 +16,22 @@ function createViewModel(database) {
           new Sqlite("my.db", function(err, db) {
               db.execSQL("INSERT INTO symptoms (symptom, timestamp) VALUES (?, datetime())", [btnText], function(err, id) {
                   console.log("The new record id is: " + btnText);
+
               });
           });
       }
 
       viewModel.select = function() {
-            database.all("SELECT * FROM symptoms").then(rows => {
+        this.Symptoms = new ObservableArray([]);
+            database.all("SELECT symptom, count(symptom) FROM symptoms group by symptom").then(rows => {
                 for(var row in rows) {
-                 console.log("Result", rows[row]);
+                 this.Symptoms.push({type: rows[row][0], count: 7});
                 }
             }, error => {
                 console.log("SELECT ERROR", error);
             });
         }
+    viewModel.select();
     return viewModel;
 }
 exports.createViewModel = createViewModel;

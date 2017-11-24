@@ -1,17 +1,18 @@
 var frameModule = require("ui/frame");
+var createViewModel = require("../diary/symptoms/symptoms-view-model").createViewModel;
 var Observable = require("data/observable").Observable;
-
-var pageSymptom = new Observable();
-pageSymptom.Symptoms = [
-  { type: "Fatigue", count: 20 },
-  { type: "Svimmel", count: 10 },
-  { type: "Spasme", count: 5 },
-  { type: "Vannlatning", count: 14 },
-  { type: "Hovudverk", count: 4 },
-  { type: "Søvn", count: 9 }
-];
+var Sqlite = require("nativescript-sqlite");
 
 exports.pageLoaded = function(args) {
   var page = args.object;
-  page.bindingContext = pageSymptom;
+  (new Sqlite("my.db")).then(db => {
+         db.execSQL("CREATE TABLE IF NOT EXISTS symptoms (id INTEGER PRIMARY KEY AUTOINCREMENT, symptom TEXT, timestamp INT)").then(id => {
+             page.bindingContext = createViewModel(db);
+              console.log("Database Saved!");
+         }, error => {
+             console.log("CREATE TABLE ERROR", error);
+         });
+     }, error => {
+         console.log("OPEN DB ERROR", error);
+     });
 };
