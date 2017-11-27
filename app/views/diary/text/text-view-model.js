@@ -1,4 +1,5 @@
 var Observable = require("data/observable").Observable;
+var ObservableArray = require("data/observable-array").ObservableArray;
 var Sqlite = require("nativescript-sqlite");
 var Dialogs = require("ui/dialogs");
 
@@ -7,6 +8,7 @@ var Dialogs = require("ui/dialogs");
 
 function createViewModel(database) {
     var viewModel = new Observable();
+    viewModel.Texts = new ObservableArray([]);
 
     viewModel.insert = function() {
           database.execSQL("INSERT INTO dialouge (content, timestamp) VALUES (?, datetime())", [this.textItem]).then(id => {
@@ -16,18 +18,19 @@ function createViewModel(database) {
           });
       }
 
-
-      viewModel.select = function() {
-            database.all("SELECT * FROM dialouge").then(rows => {
-                for(var row in rows) {
-                    console.log("RESULT", rows[row]);
-                }
-            }, error => {
-                console.log("SELECT ERROR", error);
-            });
-        }
+        viewModel.select = function() {
+          this.Texts = new ObservableArray([]);
+              database.all("SELECT id, timestamp FROM dialouge").then(rows => {
+                  for(var row in rows) {
+                    this.Texts.push({id: rows[row][0], date: rows[row][1]});
+                  }
+              }, error => {
+                  console.log("SELECT ERROR", error);
+              });
+          }
 
     viewModel.select();
+
 
     return viewModel;
 }

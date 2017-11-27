@@ -1,16 +1,33 @@
 <StackLayout loaded="onPageLoaded"
-    xmlns:chart="nativescript-pro-ui/chart"
-    xmlns="http://www.nativescript.org/tns.xsd">
-    <chart:RadCartesianChart class="graphBox" height="250">
+    xmlns="http://www.nativescript.org/tns.xsd"
+    xmlns:chart="nativescript-pro-ui/chart">
+      <chart:RadCartesianChart class="graphBox" height="400">
         <chart:RadCartesianChart.series>
-            <chart:LineSeries items="{{ moodGraph }}" categoryProperty="Dag" valueProperty="Dagsform">
-                <chart:LineSeries.horizontalAxis>
-                    <chart:CategoricalAxis/>
-                </chart:LineSeries.horizontalAxis>
-                <chart:LineSeries.verticalAxis>
-                    <chart:LinearAxis/>
-                </chart:LineSeries.verticalAxis>
-            </chart:LineSeries>
-        </chart:RadCartesianChart.series>
-    </chart:RadCartesianChart>
+              <chart:SplineAreaSeries lineColor="white" seriesName="Dagsform"
+                items="{{ Mood }}"
+                categoryProperty="dagsform"
+                valueProperty="antall"
+                showLabels="true">
+                <chart:SplineAreaSeries.labelStyle>
+                  <chart:PointLabelStyle margin="10" fontStyle="Bold" textSize="20" textColor="White" />
+                </chart:SplineAreaSeries.labelStyle>
+                  <chart:SplineAreaSeries.horizontalAxis>
+                      <chart:CategoricalAxis/>
+                  </chart:SplineAreaSeries.horizontalAxis>
+                  <chart:SplineAreaSeries.verticalAxis>
+                      <chart:LinearAxis />
+                  </chart:SplineAreaSeries.verticalAxis>
+              </chart:SplineAreaSeries>
+              <!--styling-->
+              <chart:RadCartesianChart.palettes>
+                <chart:Palette seriesName="Dagsform">
+                  <chart:Palette.entries>
+                  <chart:PaletteEntry strokeColor="white" fillColor="#8060B3FC"/>
+
+                </chart:Palette.entries>
+              </chart:Palette>
+            </chart:RadCartesianChart.palettes>
+            </chart:RadCartesianChart.series>
+          </chart:RadCartesianChart>
+
 </StackLayout>

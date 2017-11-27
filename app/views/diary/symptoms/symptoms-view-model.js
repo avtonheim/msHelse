@@ -25,7 +25,7 @@ function createViewModel(database) {
         this.Symptoms = new ObservableArray([]);
             database.all("SELECT symptom, count(symptom) FROM symptoms group by symptom").then(rows => {
                 for(var row in rows) {
-                 this.Symptoms.push({type: rows[row][0], count: 7});
+                 this.Symptoms.push({type: rows[row][0], count: rows[row][1]});
                 }
             }, error => {
                 console.log("SELECT ERROR", error);

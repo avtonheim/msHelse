@@ -12,7 +12,6 @@
           <StackLayout style="margin-top:20px; margin-bottom: 50px;">
             <Label class="titleMain" style="font-size: 35pt;" text="Korleis har du det?" textWrap="true"/>
             <Label text="Klikk på valgt knapp for å registrere."/>
-            <Button text="Console.log" tap="{{ select }}"></Button>
           </StackLayout>
           <Button class="btnRegister" style="background-color: #F55D5D; color: white; font-size: 20pt;" text="Elendig" tap="{{ insert }}">
           </Button>

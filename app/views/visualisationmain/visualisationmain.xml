@@ -17,7 +17,7 @@
     <StackLayout class="navButton" style="background-color:#82DBDE;" tap="tapGraph">
       <Label text="Sjå graf over dagbok"/>
     </StackLayout>
-    <StackLayout class="navButton" style="background-color:#82DBDE;">
+    <StackLayout class="navButton" style="background-color:#82DBDE;" tap="tapText">
       <Label text="Oversikt over tekst"/>
     </StackLayout>
   </StackLayout>

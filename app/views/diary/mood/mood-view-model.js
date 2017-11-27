@@ -1,4 +1,5 @@
 var Observable = require("data/observable").Observable;
+var ObservableArray = require("data/observable-array").ObservableArray;
 var Sqlite = require("nativescript-sqlite");
 
 //Read more of SQLITE in nativescript
@@ -6,6 +7,7 @@ var Sqlite = require("nativescript-sqlite");
 
 function createViewModel(database) {
     var viewModel = new Observable();
+    viewModel.Mood = new ObservableArray([]);
 
     // insert a new record
     viewModel.insert = function(args) {
@@ -20,14 +22,18 @@ function createViewModel(database) {
     }
 
     viewModel.select = function() {
-          database.all("SELECT * FROM mood").then(rows => {
+      this.Mood = new ObservableArray([]);
+          database.all("SELECT moodState, count(moodState) FROM mood group by moodState").then(rows => {
               for(var row in rows) {
-               console.log("Result", rows[row]);
-              }
+               this.Mood.push({dagsform: rows[row][0], antall: rows[row][1]});
+             }
           }, error => {
               console.log("SELECT ERROR", error);
           });
       }
+
+
+  viewModel.select();
   return viewModel;
 }
 exports.createViewModel = createViewModel;
