@@ -5,17 +5,18 @@
         <chart:RadCartesianChart.series>
               <chart:SplineAreaSeries lineColor="white" seriesName="Dagsform"
                 items="{{ Mood }}"
-                categoryProperty="dagsform"
-                valueProperty="antall"
+                categoryProperty="dato"
+                valueProperty="dagsform"
                 showLabels="true">
                 <chart:SplineAreaSeries.labelStyle>
                   <chart:PointLabelStyle margin="10" fontStyle="Bold" textSize="20" textColor="White" />
                 </chart:SplineAreaSeries.labelStyle>
                   <chart:SplineAreaSeries.horizontalAxis>
+
                       <chart:CategoricalAxis/>
                   </chart:SplineAreaSeries.horizontalAxis>
                   <chart:SplineAreaSeries.verticalAxis>
-                      <chart:LinearAxis />
+                      <chart:LinearAxis/>
                   </chart:SplineAreaSeries.verticalAxis>
               </chart:SplineAreaSeries>
               <!--styling-->

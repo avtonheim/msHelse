@@ -8,7 +8,7 @@ var page = args.object;
 page.bindingContext = { someProperty : 30};
 
 (new Sqlite("my.db")).then(db => {
-       db.execSQL("CREATE TABLE IF NOT EXISTS mood (id INTEGER PRIMARY KEY AUTOINCREMENT, moodState TEXT, timestamp INT)").then(id => {
+       db.execSQL("CREATE TABLE IF NOT EXISTS mood (id INTEGER PRIMARY KEY AUTOINCREMENT, moodState INT, timestamp INT)").then(id => {
            page.bindingContext = createViewModel(db);
             console.log("Database Saved!");
        }, error => {

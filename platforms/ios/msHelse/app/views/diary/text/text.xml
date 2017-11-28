@@ -4,21 +4,17 @@
            <StackLayout orientation="horizontal">
               <Image src="~/images/tittel.png" class="iconTitle" ios.position="center"></Image>
             </StackLayout>
-             <ActionItem text="Fullfør" tap="finishDiary" ios.position="right"/>
+             <ActionItem text="Fullfør" tap="{{ insert }}" ios.position="right"/>
          </ActionBar>
      </Page.actionBar>
      <StackLayout>
        <Progress value="{{ someProperty }}"/>
        <StackLayout class="p-20">
            <StackLayout class="question" horizontalAlignment="left">
-             <Label text="Kva har vore bra med dagen?"></Label>
+             <Label text="Kva har du gjort i dag?"></Label>
            </StackLayout>
           <StackLayout class="response" horizontalAlignment="right">
               <TextView id="subject" hint="Klikk for å legge til tekst" text="{{ textItem }}" textWrap="true" autocorrect="true"/>
-          </StackLayout>
-          <StackLayout>
-            <Button text="console.log" tap="{{ select }}"/>
-            <Button text="Lagre" tap="{{ insert }}"/>
           </StackLayout>
       </StackLayout>
     </StackLayout>

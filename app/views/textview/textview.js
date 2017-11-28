@@ -1,13 +1,13 @@
-var createViewModel = require("./textview-view-model").createViewModel;
+var createViewModel = require("../diary/text/text-view-model").createViewModel;
 var Sqlite = require("nativescript-sqlite");
 var frameModule = require('ui/frame');
 
 function onLoad(args){
   var page = args.object;
   (new Sqlite("my.db")).then(db => {
-         db.execSQL("CREATE TABLE IF NOT EXISTS dialouge (id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT, timestamp INT").then(id => {
-             page.bindingContext = createViewModel(db, page.navigationContext.id);
-              console.log("Database Saved!");
+         db.execSQL("CREATE TABLE IF NOT EXISTS dialouge (id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT, question TEXT, timestamp INT)").then(id => {
+             page.bindingContext = createViewModel(db);
+             console.log("Databse saved!");
          }, error => {
              console.log("CREATE TABLE ERROR", error);
          });

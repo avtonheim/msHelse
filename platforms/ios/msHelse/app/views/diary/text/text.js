@@ -2,6 +2,7 @@ var FrameModule = require("ui/frame");
 var createViewModel = require("./text-view-model").createViewModel;
 var Sqlite = require("nativescript-sqlite");
 
+
 function onLoaded(args){
 var page = args.object;
 page.bindingContext = {someProperty : 100};
@@ -16,8 +17,3 @@ page.bindingContext = {someProperty : 100};
        console.log("OPEN DB ERROR", error);
    });
 } exports.onLoaded = onLoaded;
-
-function finishDiary(){
-  FrameModule.topmost().navigate('views/home-page/home-page');
-}
-exports.finishDiary = finishDiary;

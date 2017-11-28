@@ -10,11 +10,19 @@
    <StackLayout class="p-20">
      <Label class="h1" text="Oversikt over tekst"></Label>
      <Label class="body" textWrap="true" text="Dette er ein oversikt over tekst."></Label>
-       <ListView items="{{ Texts }}" itemTap="textView">
-         <ListView.itemTemplate>
-             <Label class="textDay" text="{{ date }}"/>
-         </ListView.itemTemplate>
-       </ListView>
+     <StackLayout class="navButton">
+       <Label text="I går"></Label>
+     </StackLayout>
+     <StackLayout class="navButton">
+       <Label text="Dei 7 siste dagane"></Label>
+     </StackLayout>
+     <StackLayout class="navButton">
+       <Label text="Den siste månaden"></Label>
+     </StackLayout>
+     <StackLayout class="navButton" onTap="textView">
+       <Label text="Alt"></Label>
+     </StackLayout>
+
      </StackLayout>
 </ScrollView>
 </Page>

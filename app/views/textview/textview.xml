@@ -6,24 +6,21 @@
          </StackLayout>
        </ActionBar>
    </Page.actionBar>
-      <StackLayout class="p-20">
-     <Label class="h1" text="Denne veka"></Label>
-     <Label class="body" textWrap="true" text="Dette er ein oversikt over denne veka (dato)."></Label>
-
-     <StackLayout>
-         <StackLayout class="question" horizontalAlignment="left">
-           <Label text="Kva har vore bra med dagen?"></Label>
-         </StackLayout>
-         <StackLayout>
-              <ListView items="{{ specificText }}" style="height: 900px;">
-                <ListView.itemTemplate>
-                  <StackLayout class="response" horizontalAlignment="right">
-                    <Label height="200px" text="{{ content }}" textWrap="true"/>
-                    <Label text="{{ date }}"/>
-                  </StackLayout>
-                </ListView.itemTemplate>
-              </ListView>
+      <StackLayout>
+        <StackLayout class="p-20">
+           <Label class="h1" text="{{ 'Oversikt' + ' DAY' }}"></Label>
+           <Label class="body" textWrap="true" text="Dette er ein oversikt over denne veka (dato)."></Label>
         </StackLayout>
+     <StackLayout>
+           <ListView items="{{ Texts }}" style="height: 100%;">
+            <ListView.itemTemplate>
+              <StackLayout>
+                 <Label class="timeDay" text="{{ timestamp }}"></Label>
+                 <Label class="question" horizontalAlignment="left" text="Kva har du gjort i dag?"></Label>
+                 <Label class="response" horizontalAlignment="right" text="{{ content }}" textWrap="true"></Label>
+              </StackLayout>
+             </ListView.itemTemplate>
+           </ListView>
       </StackLayout>
 </StackLayout>
 </Page>
