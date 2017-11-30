@@ -9,14 +9,24 @@ GridLayout button{
   border-radius: 15px;
   height: 140px;
   width: 90%;
-  margin-top: 20px,
+  margin-top: 30px,
 }
 .symptomCont Label{
   color: white;
+  text-align: left;
   font-weight: bold;
-  font-size: 14pt;
-  margin-top: 5px;
+  font-size: 17pt;
+  margin-top: 15px;
+  margin-left: 20px;
 }
 .eventBtn{
-  background-color: #82DBDE;
+  height: 50px;
+  background-color: white;
+  border-radius: 15px;
+  color: black;
+}
+#inputSelf{
+  color: white;
+  margin-top:10%;
+  margin-bottom:15%;
 }

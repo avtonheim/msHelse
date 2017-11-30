@@ -14,7 +14,7 @@
             <Label text="Klikk på valgt knapp for å registrere."/>
               <!--  <Button text="Delete" tap="{{ deleteTable }}"></Button>-->
             <Button text="selectall" tap="{{ selectall }}"></Button>
-            <Button text="selectdays" tap="{{ selectdays }}"></Button>
+            <Button text="selectdays" tap="{{ selectName }}"></Button>
           </StackLayout>
           <Button class="btnRegister" style="background-color: #F55D5D; color: white; font-size: 20pt;" value="0" text="Elendig" tap="{{ insert }}">
           </Button>

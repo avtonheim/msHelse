@@ -8,15 +8,14 @@
                 categoryProperty="dato"
                 valueProperty="dagsform"
                 showLabels="true">
-                <chart:SplineAreaSeries.labelStyle>
-                  <chart:PointLabelStyle margin="10" fontStyle="Bold" textSize="20" textColor="White" />
+              <chart:SplineAreaSeries.labelStyle>
+                  <chart:PointLabelStyle margin="15" fontStyle="Bold" textSize="20" textColor="White" />
                 </chart:SplineAreaSeries.labelStyle>
                   <chart:SplineAreaSeries.horizontalAxis>
-
                       <chart:CategoricalAxis/>
                   </chart:SplineAreaSeries.horizontalAxis>
                   <chart:SplineAreaSeries.verticalAxis>
-                      <chart:LinearAxis/>
+                      <chart:LinearAxis allowZoom="true" minimum="0" majorStep="5" maximum="11"/>
                   </chart:SplineAreaSeries.verticalAxis>
               </chart:SplineAreaSeries>
               <!--styling-->
