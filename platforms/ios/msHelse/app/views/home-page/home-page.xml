@@ -18,7 +18,7 @@
           <Image src="~/images/analyse_ny.png" height="100px" width="100px"/>
           <Label text="Graf over symptom"/>
           </StackLayout>
-          <StackLayout id="symptom">
+          <StackLayout id="mood">
           </StackLayout>
     </StackLayout>
 

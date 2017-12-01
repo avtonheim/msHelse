@@ -12,7 +12,7 @@
                   <chart:PointLabelStyle margin="15" fontStyle="Bold" textSize="20" textColor="White" />
                 </chart:SplineAreaSeries.labelStyle>
                   <chart:SplineAreaSeries.horizontalAxis>
-                      <chart:CategoricalAxis/>
+                    <chart:categoricalAxis labelFitMode="rotate"/>
                   </chart:SplineAreaSeries.horizontalAxis>
                   <chart:SplineAreaSeries.verticalAxis>
                       <chart:LinearAxis allowZoom="true" minimum="0" majorStep="5" maximum="11"/>

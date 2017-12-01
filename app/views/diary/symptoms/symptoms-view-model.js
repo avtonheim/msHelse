@@ -14,16 +14,15 @@ function createViewModel(database) {
           var btn = args.object;
           btn.backgroundColor = "#3489db";
           new Sqlite("my.db", function(err, db) {
-              db.execSQL("INSERT INTO symptoms (symptom, timestamp) VALUES (?, datetime())", [btnText], function(err, id) {
+              db.execSQL("INSERT INTO symptoms (symptom, timestamp) VALUES (?, date())", [btnText], function(err, id) {
                   console.log("The new record id is: " + btnText);
-
               });
           });
       }
 
       viewModel.select = function() {
         this.Symptoms = new ObservableArray([]);
-            database.all("SELECT symptom, count(symptom) FROM symptoms group by symptom").then(rows => {
+            database.all("SELECT symptom, count(symptom), timestamp FROM symptoms WHERE timestamp > (SELECT date('now','-7 day')) group by symptom").then(rows => {
                 for(var row in rows) {
                  this.Symptoms.push({type: rows[row][0], count: rows[row][1]});
                 }

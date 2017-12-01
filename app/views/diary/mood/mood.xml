@@ -7,14 +7,13 @@
            <ActionItem text="Neste" tap="navSymptom" ios.position="right"/>
            </ActionBar>
      </Page.actionBar>
+     <StackLayout>
+       <Progress value="{{ someProperty }}" />
+     </StackLayout>
     <StackLayout class="diaryComp">
-      <Progress value="{{ someProperty }}" />
-          <StackLayout style="margin-top:20px; margin-bottom: 50px;">
+          <StackLayout style="margin-bottom: 70px;">
             <Label class="titleMain" style="font-size: 35pt;" text="Korleis har du det?" textWrap="true"/>
             <Label text="Klikk på valgt knapp for å registrere."/>
-              <!--  <Button text="Delete" tap="{{ deleteTable }}"></Button>-->
-            <Button text="selectall" tap="{{ selectall }}"></Button>
-            <Button text="selectdays" tap="{{ selectName }}"></Button>
           </StackLayout>
           <Button class="btnRegister" style="background-color: #F55D5D; color: white; font-size: 20pt;" value="0" text="Elendig" tap="{{ insert }}">
           </Button>
@@ -22,5 +21,5 @@
           </Button>
           <Button class="btnRegister" style="background-color: #0DA52A; color: white; font-size: 20pt;" value="10" text="Bra" tap="{{ insert }}">
           </Button>
-  </StackLayout>
+    </StackLayout>
 </Page>

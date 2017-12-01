@@ -1,7 +1,7 @@
   <StackLayout loaded="pageLoaded"
     xmlns="http://schemas.nativescript.org/tns.xsd"
     xmlns:chart="nativescript-pro-ui/chart">
-    <chart:RadCartesianChart class="graphBox" height="350">
+<chart:RadCartesianChart class="graphBox" height="350">
       <chart:RadCartesianChart.series>
         <chart:BarSeries seriesName="Symptoms"
           items="{{ Symptoms }}"
@@ -23,10 +23,11 @@
           <chart:Palette seriesName="Symptoms">
             <chart:Palette.entries>
             <chart:PaletteEntry strokeColor="#8060B3FC" fillColor="#8060B3FC"/>
-
           </chart:Palette.entries>
         </chart:Palette>
       </chart:RadCartesianChart.palettes>
       </chart:RadCartesianChart.series>
     </chart:RadCartesianChart>
   </StackLayout>
+
+<!--http://docs.telerik.com/devtools/nativescript-ui/Controls/NativeScript/Chart/Series/range-bar-->
