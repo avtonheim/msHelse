@@ -2,7 +2,7 @@
   <Page.actionBar>
          <ActionBar class="action-bar">
            <StackLayout>
-              <Image src="~/images/tittel.png" class="iconTitle" ios.position="center"></Image>
+              <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
            </StackLayout>
          </ActionBar>
      </Page.actionBar>
@@ -13,7 +13,7 @@
     <Label text="Her vil du finne ulike øvelser for trening"/>
     </StackLayout>
     <StackLayout class="navButton">
-      <Label text="Mindfullness" tap="MindfullnessTap"/>
+      <Label text="Pusteøving" tap="MindfullnessTap"/>
     </StackLayout>
     <StackLayout class="navButton">
       <Label text="Gå tur"/>

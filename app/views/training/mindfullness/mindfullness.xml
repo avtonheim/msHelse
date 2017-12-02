@@ -7,7 +7,7 @@
          </ActionBar>
      </Page.actionBar>
     <StackLayout class="content">
-    <Label class="titleMain" text="Mindfullness" style="font-size: 35pt;"/>
+    <Label class="titleMain" text="Pusteøving" style="font-size: 35pt;"/>
     <Button class="navButton" style="width:320px; height: 100px; background-color: #DD7893;" text="Stopp øving" tap="stopMind"> </Button>
 
     <StackLayout id="sunFlower">

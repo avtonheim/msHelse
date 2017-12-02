@@ -2,7 +2,7 @@
   <Page.actionBar>
          <ActionBar class="action-bar">
            <StackLayout>
-              <Image src="~/images/tittel.png" class="iconTitle" ios.position="center"></Image>
+              <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
            </StackLayout>
          </ActionBar>
      </Page.actionBar>
@@ -16,7 +16,7 @@
     <StackLayout class="homeBox" id="visual" tap="tapVisual">
           <StackLayout orientation="horizontal" horizontalAlignment="center">
           <Image src="~/images/analyse_ny.png" height="100px" width="100px"/>
-          <Label text="Graf over symptom"/>
+          <Label text="Graf over dagsform"/>
           </StackLayout>
           <StackLayout id="mood">
           </StackLayout>

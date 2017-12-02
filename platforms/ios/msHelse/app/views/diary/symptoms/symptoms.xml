@@ -2,7 +2,7 @@
   <Page.actionBar>
          <ActionBar title="mHelse" class="action-bar">
            <StackLayout>
-              <Image src="~/images/tittel.png" class="iconTitle" ios.position="center"></Image>
+              <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
            </StackLayout>
            <ActionItem text="Neste" tap="onNavText" ios.position="right"/>
          </ActionBar>
@@ -12,13 +12,13 @@
        <Progress value="{{ someProperty }}"/>
       <Label class="titleMain" style="font-size: 35pt;" text="Kva har prega dagen?"/>
       <Label class="body" text="Sveip på grafen for å registrere" textWrap="true"/>
-      <Button text="console.log" tap="{{ select }}"></Button>
+    <!--<Button text="console.log" tap="{{ select }}"></Button>-->
 
       <StackLayout class="symptomCont" style="height: 200px;">
         <TextField id="inputSelf" hint="Klikk for å legge til eit anna symptom"/>
         <GridLayout columns="*,*" rows="*">
-          <Button class="eventBtn" col="0" row="0" text="Morgon" tap="{{ insert }}"></Button>
-          <Button class="eventBtn" col="1" row="0" text="Kveld" tap="{{ insert }}"></Button>
+          <Button class="eventBtn" col="0" row="0" text="Morgon"></Button>
+          <Button class="eventBtn" col="1" row="0" text="Kveld"></Button>
         </GridLayout>
       </StackLayout>
 

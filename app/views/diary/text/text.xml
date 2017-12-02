@@ -2,7 +2,7 @@
   <Page.actionBar>
          <ActionBar title="mHelse" class="action-bar">
            <StackLayout orientation="horizontal">
-              <Image src="~/images/tittel.png" class="iconTitle" ios.position="center"></Image>
+              <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
             </StackLayout>
              <ActionItem text="Fullfør" tap="{{ insert }}" ios.position="right"/>
          </ActionBar>

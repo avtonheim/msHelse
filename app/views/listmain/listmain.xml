@@ -2,7 +2,7 @@
   <Page.actionBar>
          <ActionBar class="action-bar">
            <StackLayout>
-              <Image src="~/images/tittel.png" class="iconTitle" ios.position="center"></Image>
+              <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
            </StackLayout>
          </ActionBar>
      </Page.actionBar>
