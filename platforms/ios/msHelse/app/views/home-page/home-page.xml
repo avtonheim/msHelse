@@ -15,7 +15,7 @@
 
     <StackLayout class="homeBox" id="visual" tap="tapVisual">
           <StackLayout orientation="horizontal" horizontalAlignment="center">
-          <Image src="~/images/analyse_ny.png" height="100px" width="100px"/>
+          <Image src="~/images/analyse_ny.png" height="70px" width="70px"/>
           <Label text="Graf over dagsform"/>
           </StackLayout>
           <StackLayout id="mood">
@@ -24,12 +24,12 @@
 
   <GridLayout columns="*,*" row="*">
     <StackLayout col="0" row="0" class="smallBox" tap="onTap">
-      <Image src="~/images/ovelse_ny.png" height="150px" width="150px"/>
+      <Image src="~/images/ovelse_ny.png" height="100px" width="100px"/>
       <Label text="Start ei øving!" textWrap="true"/>
     </StackLayout>
 
     <StackLayout col="1" row="0" class="smallBox" tap="tapTodo">
-      <Image src="~/images/gjoremal_ny.png" height="150px" width="150px"/>
+      <Image src="~/images/gjoremal_ny.png" height="100px" width="100px"/>
       <Label text="Planlegg noko kjekt!" textWrap="true"/>
     </StackLayout>
   </GridLayout>

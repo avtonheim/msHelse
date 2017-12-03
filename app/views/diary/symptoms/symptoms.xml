@@ -7,7 +7,7 @@
            <ActionItem text="Neste" tap="onNavText" ios.position="right"/>
          </ActionBar>
      </Page.actionBar>
-
+  <ScrollView>
     <StackLayout class="diaryComp">
        <Progress value="{{ someProperty }}"/>
       <Label class="titleMain" style="font-size: 35pt;" text="Kva har prega dagen?"/>
@@ -52,4 +52,5 @@
       </StackLayout>
 
     </StackLayout>
+  </ScrollView>
 </Page>

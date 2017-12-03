@@ -13,10 +13,10 @@ Page{
 }
 .smallBox{
   width: 45%;
-  height: 210px;
+  height: 180px;
   background-color: #2AC0FF;
   border-radius: 15px;
-  margin-top: -100px;
+  margin-top: 10px;
   color: white;
 }
 .smallBox Label{
@@ -29,12 +29,12 @@ Page{
   margin: 15px;
 }
 #diary{
-  margin-top: 150px;
+  margin-top: 70px;
   height: 200px;
   background-color: #2AC0FF;
 }
 #visual{
-  height: 450px;
+  height: 430px;
   background-color: #82DBDE;
 }
 .graphBox{

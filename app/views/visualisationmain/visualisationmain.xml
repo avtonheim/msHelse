@@ -6,6 +6,7 @@
            </StackLayout>
          </ActionBar>
      </Page.actionBar>
+<ScrollView>
   <StackLayout>
     <StackLayout class="content">
     <Image class="mainComp" src="~/images/analyse_ny.png" height="400px" width="400px"/>
@@ -21,4 +22,5 @@
       <Label text="Oversikt over tekst"/>
     </StackLayout>
   </StackLayout>
+  </ScrollView>
 </Page>

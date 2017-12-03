@@ -11,7 +11,7 @@
        <Progress value="{{ someProperty }}" />
      </StackLayout>
     <StackLayout class="diaryComp">
-          <StackLayout style="margin-bottom: 70px;">
+          <StackLayout>
             <Label class="titleMain" style="font-size: 35pt;" text="Korleis har du det?" textWrap="true"/>
             <Label text="Klikk på valgt knapp for å registrere."/>
           </StackLayout>
