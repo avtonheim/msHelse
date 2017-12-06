@@ -4,9 +4,13 @@
            <StackLayout>
               <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
            </StackLayout>
+           <ActionBar.actionItems>
+               <ActionItem text="Informasjon" tap="tapInfo" ios.position="right" />
+           </ActionBar.actionItems>
          </ActionBar>
      </Page.actionBar>
-<StackLayout class="content">
+     <ScrollView>
+       <StackLayout class="content">
 
     <StackLayout orientation="horizontal" horizontalAlignment="center" class="homeBox" id="diary" tap="tapDiary">
       <Label text="Min MS Dagbok"/>
@@ -35,4 +39,5 @@
   </GridLayout>
 
 </StackLayout>
+</ScrollView>
 </Page>

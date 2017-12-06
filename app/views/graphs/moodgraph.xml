@@ -4,6 +4,9 @@
       <chart:RadCartesianChart class="graphBox" height="400">
         <chart:RadCartesianChart.series>
               <chart:SplineAreaSeries lineColor="white" seriesName="Dagsform"
+                selectionMode="DataPoint"
+                outerRadiusFactor="0.8"
+                expandRadius="0.2"
                 items="{{ Mood }}"
                 categoryProperty="dato"
                 valueProperty="dagsform"
@@ -15,7 +18,7 @@
                     <chart:categoricalAxis labelFitMode="rotate"/>
                   </chart:SplineAreaSeries.horizontalAxis>
                   <chart:SplineAreaSeries.verticalAxis>
-                      <chart:LinearAxis allowZoom="true" minimum="0" majorStep="5" maximum="11"/>
+                      <chart:LinearAxis minimum="0" majorStep="5" maximum="11"/>
                   </chart:SplineAreaSeries.verticalAxis>
               </chart:SplineAreaSeries>
               <!--styling-->

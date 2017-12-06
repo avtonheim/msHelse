@@ -17,6 +17,9 @@ exports.onLoaded = function(args){
   stackLayout.addChild(component);
 }
 
+function tapInfo(){
+  frameModule.topmost().navigate('views/information/information');
+} exports.tapInfo = tapInfo;
 
 function onTap(){
   frameModule.topmost().navigate('views/training/training');
