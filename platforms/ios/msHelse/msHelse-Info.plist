@@ -37,7 +37,6 @@
     <key>UISupportedInterfaceOrientations~ipad</key>
     <array>
       <string>UIInterfaceOrientationPortrait</string>
-      <string>UIInterfaceOrientationPortraitUpsideDown</string>
     </array>
     <key>CFBundleIdentifier</key>
     <string>org.nativescript.mHealth</string>

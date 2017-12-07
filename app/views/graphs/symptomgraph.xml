@@ -10,7 +10,7 @@
           items="{{ Symptoms }}"
           categoryProperty="type"
           valueProperty="count"
-          stackMode="stack100"
+          stackMode="stack"
           showLabels="true">
           <chart:BarSeries.labelStyle>
             <chart:PointLabelStyle margin="10" fontStyle="Bold" textSize="20" textColor="White" />
