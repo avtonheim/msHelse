@@ -18,6 +18,8 @@
 		75CEBB2CFCBB4CA3A6E4A92D /* TelerikAppFeedback.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 91032524CBD14501BA76C42E /* TelerikAppFeedback.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EA44298178F94DC0A3481F97 /* TelerikUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA11C26369E45E4BB5DCDAD /* TelerikUI.framework */; };
 		73432CF54EF14E609F40CEA5 /* TelerikUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA11C26369E45E4BB5DCDAD /* TelerikUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		35F5111B3F8044DDAFE55192 /* LocalNotificationsPlugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F596763B47F9498095831AD9 /* LocalNotificationsPlugin.framework */; };
+		82B768039F134BA8B15EBB9C /* LocalNotificationsPlugin.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F596763B47F9498095831AD9 /* LocalNotificationsPlugin.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -30,6 +32,7 @@
 				FDFDB3771E754575ACDF0408 /* TNSWidgets.framework in Embed Frameworks */,
 				75CEBB2CFCBB4CA3A6E4A92D /* TelerikAppFeedback.framework in Embed Frameworks */,
 				73432CF54EF14E609F40CEA5 /* TelerikUI.framework in Embed Frameworks */,
+				82B768039F134BA8B15EBB9C /* LocalNotificationsPlugin.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -53,6 +56,7 @@
 		953F9BE3C2B5447382AB4D4D /* TNSWidgets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TNSWidgets.framework; path = "$(SRCROOT)/../../node_modules/tns-core-modules-widgets/platforms/ios/TNSWidgets.framework"; sourceTree = "<group>"; };
 		91032524CBD14501BA76C42E /* TelerikAppFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TelerikAppFeedback.framework; path = "$(SRCROOT)/../../node_modules/nativescript-pro-ui/platforms/ios/TelerikAppFeedback.framework"; sourceTree = "<group>"; };
 		3FA11C26369E45E4BB5DCDAD /* TelerikUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TelerikUI.framework; path = "$(SRCROOT)/../../node_modules/nativescript-pro-ui/platforms/ios/TelerikUI.framework"; sourceTree = "<group>"; };
+		F596763B47F9498095831AD9 /* LocalNotificationsPlugin.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalNotificationsPlugin.framework; path = "$(SRCROOT)/../../node_modules/nativescript-local-notifications/platforms/ios/LocalNotificationsPlugin.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +67,7 @@
 				B34D8194571D4845A0790437 /* TNSWidgets.framework in Frameworks */,
 				E85510C7FD3949849B98C77A /* TelerikAppFeedback.framework in Frameworks */,
 				EA44298178F94DC0A3481F97 /* TelerikUI.framework in Frameworks */,
+				35F5111B3F8044DDAFE55192 /* LocalNotificationsPlugin.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +99,7 @@
 				953F9BE3C2B5447382AB4D4D /* TNSWidgets.framework */,
 				91032524CBD14501BA76C42E /* TelerikAppFeedback.framework */,
 				3FA11C26369E45E4BB5DCDAD /* TelerikUI.framework */,
+				F596763B47F9498095831AD9 /* LocalNotificationsPlugin.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -372,6 +378,7 @@
 					"\"$(SRCROOT)/../../node_modules/tns-core-modules-widgets/platforms/ios\"",
 					"\"$(SRCROOT)/../../node_modules/nativescript-pro-ui/platforms/ios\"",
 					"\"$(SRCROOT)/../../node_modules/nativescript-pro-ui/platforms/ios\"",
+					"\"$(SRCROOT)/../../node_modules/nativescript-local-notifications/platforms/ios\"",
 				);
 			};
 			name = Debug;
@@ -398,6 +405,7 @@
 					"\"$(SRCROOT)/../../node_modules/tns-core-modules-widgets/platforms/ios\"",
 					"\"$(SRCROOT)/../../node_modules/nativescript-pro-ui/platforms/ios\"",
 					"\"$(SRCROOT)/../../node_modules/nativescript-pro-ui/platforms/ios\"",
+					"\"$(SRCROOT)/../../node_modules/nativescript-local-notifications/platforms/ios\"",
 				);
 			};
 			name = Release;
