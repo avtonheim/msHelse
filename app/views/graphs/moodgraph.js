@@ -5,7 +5,7 @@ var Sqlite = require("nativescript-sqlite");
 
 function onPageLoaded(args){
     var page = args.object;
-    (new Sqlite("my.db")).then(db => {
+    (new Sqlite("populated.db")).then(db => {
            db.execSQL("CREATE TABLE IF NOT EXISTS mood (id INTEGER PRIMARY KEY AUTOINCREMENT, moodState TEXT, timestamp INT)").then(id => {
                 page.bindingContext = createViewModel(db);
                 console.log("Database Saved!");

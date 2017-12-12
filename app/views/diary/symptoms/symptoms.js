@@ -6,8 +6,11 @@ var Observable = require('data/Observable');
 function onLoaded(args){
   var page = args.object;
   page.bindingContext = { someProperty : 50};
-  (new Sqlite("my.db")).then(db => {
-         db.execSQL("CREATE TABLE IF NOT EXISTS symptoms (id INTEGER PRIMARY KEY AUTOINCREMENT, symptom TEXT, timestamp INT)").then(id => {
+  if (!Sqlite.exists("populated.db")) {
+      Sqlite.copyDatabase("populated.db");
+  }
+  (new Sqlite("populated.db")).then(db => {
+         db.execSQL("CREATE TABLE IF NOT EXISTS symptoms (id INTEGER PRIMARY KEY AUTOINCREMENT, symptom TEXT, morning INT, evening INT, timestamp INT)").then(id => {
              page.bindingContext = createViewModel(db);
               console.log("Database Saved!");
          }, error => {
@@ -28,3 +31,17 @@ function onNavText(){
   frameModule.topmost().navigate('views/diary/text/text');
 }
 exports.onNavText = onNavText;
+
+function onsole(args){
+  var symptomType = args.object.context;
+  var eventVal = args.object.value; //day or night
+  var eventTime = args.object.text;
+  var morgonVal = 0;
+  var kveldVal = 0;
+    if(eventTime == "Kveld"){
+      var kveldVal = 1;
+  } if(eventTime == "Morgon"){
+      var morgonVal = 1;
+  }
+  console.log("Morgon: " + morgonVal + " " + "Kveld: " + kveldVal);
+} exports.onsole = onsole;

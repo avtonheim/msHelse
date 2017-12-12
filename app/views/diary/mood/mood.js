@@ -7,8 +7,11 @@ function onLoaded(args){
 var page = args.object;
 page.bindingContext = { someProperty : 30};
 
-(new Sqlite("my.db")).then(db => {
-       db.execSQL("CREATE TABLE IF NOT EXISTS mood (id INTEGER PRIMARY KEY AUTOINCREMENT, moodVal INT, timestamp INT)").then(id => {
+if (!Sqlite.exists("populated.db")) {
+        Sqlite.copyDatabase("populated.db");
+    }
+(new Sqlite("populated.db")).then(db => {
+       db.execSQL("CREATE TABLE IF NOT EXISTS mood (id INTEGER PRIMARY KEY AUTOINCREMENT, moodState INT, timestamp INT)").then(id => {
            page.bindingContext = createViewModel(db);
             console.log("Database Saved!");
        }, error => {
