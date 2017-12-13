@@ -8,8 +8,8 @@
    </Page.actionBar>
       <StackLayout>
         <StackLayout class="p-20">
-           <Label class="h1" text="{{ 'Oversikt' + ' DAY' }}"></Label>
-           <Label class="body" textWrap="true" text="Dette er ein oversikt over denne veka (dato)."></Label>
+           <Label class="h1" text="Oversikt over alt"></Label>
+           <Label class="body" textWrap="true" text="Dette er ein totaloversikt"></Label>
         </StackLayout>
      <StackLayout>
            <ListView items="{{ Texts }}" style="height: 100%;">

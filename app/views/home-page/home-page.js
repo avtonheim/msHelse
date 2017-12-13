@@ -1,7 +1,7 @@
 var frameModule = require('ui/frame');
 var builder = require('ui/builder');
 var fs = require('file-system');
-var createViewModel = require("./home-page-view-model").createViewModel;
+//var createViewModel = require("./home-page-view-model").createViewModel;
 var LocalNotifications = require("nativescript-local-notifications");
 
 exports.onLoaded = function(args){
@@ -18,11 +18,12 @@ exports.onLoaded = function(args){
   // And add our component to the visual tree
   stackLayout.addChild(component);
 
+/*
   LocalNotifications.requestPermission().then((granted) => {
         if(granted) {
             page.bindingContext = createViewModel();
         }
-    })
+    })*/
 }
 
 

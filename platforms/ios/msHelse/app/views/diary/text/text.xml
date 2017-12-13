@@ -1,4 +1,4 @@
-<Page loaded="onLoaded">
+<Page navigatingTo="onNavigatingTo">
   <Page.actionBar>
          <ActionBar title="mHelse" class="action-bar">
            <StackLayout orientation="horizontal">
@@ -9,6 +9,7 @@
      </Page.actionBar>
      <StackLayout>
        <Progress value="{{ someProperty }}"/>
+       <Button text="console.log" tap="{{ selectEverything }}"></Button>
        <StackLayout class="p-20">
            <StackLayout class="question" horizontalAlignment="left">
              <Label text="Kva har du gjort i dag?"></Label>

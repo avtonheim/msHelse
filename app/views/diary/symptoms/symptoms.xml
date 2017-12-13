@@ -1,4 +1,4 @@
-<Page loaded="onLoaded">
+<Page navigatingTo="onNavigatingTo">
   <Page.actionBar>
          <ActionBar title="mHelse" class="action-bar">
            <StackLayout>
@@ -11,8 +11,8 @@
     <StackLayout class="diaryComp">
        <Progress value="{{ someProperty }}"/>
       <Label class="titleMain" style="font-size: 35pt;" text="Kva har prega dagen?"/>
-      <Label class="body" text="Sveip på grafen for å registrere" textWrap="true"/>
-    <!--<Button text="console.log" tap="{{ select }}"></Button>-->
+      <Label class="body" text="Trykk på dei kvite knappane for å registrere" textWrap="true"/>
+      <Button text="console.log" tap="{{ selectEverything }}"></Button>
 
       <StackLayout class="symptomCont" style="height: 200px;">
         <TextField id="inputSelf" hint="Klikk for å legge til eit anna symptom"/>
@@ -25,8 +25,8 @@
       <StackLayout class="symptomCont">
         <Label text="Vannlatning" tap="{{ insert }}"/>
         <GridLayout columns="*,*" rows="*">
-          <Button class="eventBtn" col="0" row="0" value="1" context="Vannlatning" text="Morgon" tap="onsole"></Button>
-          <Button class="eventBtn" col="1" row="0" value="1" context="Vannlatning" text="Kveld" tap="onsole"></Button>
+          <Button class="eventBtn" col="0" row="0" value="1" context="Vannlatning" text="Morgon" tap="{{ insert }}"></Button>
+          <Button class="eventBtn" col="1" row="0" value="1" context="Vannlatning" text="Kveld" tap="{{ insert }}"></Button>
         </GridLayout>
       </StackLayout>
       <StackLayout class="symptomCont">

@@ -31,6 +31,9 @@
               </chart:Palette>
             </chart:RadCartesianChart.palettes>
             </chart:RadCartesianChart.series>
+            <chart:RadCartesianChart.trackball>
+              <chart:Trackball/>
+            </chart:RadCartesianChart.trackball>
           </chart:RadCartesianChart>
 
 </StackLayout>

@@ -11,7 +11,7 @@
      </Page.actionBar>
      <ScrollView>
        <StackLayout class="content">
-         
+
     <StackLayout orientation="horizontal" horizontalAlignment="center" class="homeBox" id="diary" tap="tapDiary">
       <Label text="Min MS Dagbok"/>
       <Image src="~/images/dagbok_ny.png" height="150px" width="150px"/>

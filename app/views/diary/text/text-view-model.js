@@ -20,6 +20,17 @@ function createViewModel(database) {
           });
       }
 
+      viewModel.selectEverything = function() {
+            database.all("SELECT * FROM dialouge").then(rows => {
+                for(var row in rows) {
+                  console.log(rows[row]);
+                }
+            }, error => {
+                console.log("SELECT ERROR", error);
+            });
+        }
+
+
         viewModel.selectAll = function() {
           this.Texts = new ObservableArray([]);
               database.all("SELECT content, timestamp FROM dialouge").then(rows => {

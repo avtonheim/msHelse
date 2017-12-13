@@ -23,10 +23,8 @@ function createViewModel(database) {
     }
 
     viewModel.selectEverything = function() {
-    //  this.Mood = new ObservableArray([]);
-          database.all("SELECT moodState, timestamp FROM mood group by timestamp").then(rows => {
+          database.all("SELECT * FROM mood group by timestamp").then(rows => {
               for(var row in rows) {
-               //this.Mood.push({dagsform: rows[row][0], dato: rows[row][1]});
                console.log("Dette er alt  " + rows[row]);
              }
           }, error => {
@@ -47,17 +45,10 @@ function createViewModel(database) {
                 console.log("SELECT ERROR", error);
             });
         }
-/*
-        // delete a table
-viewModel.deleteTable = function() {
-  database.all("DROP TABLE IF EXISTS mood", [], function(err) {
-      console.log("TABLE DROPPED");
-  });
-}
-*/
+
 
   viewModel.selectall();
-  //viewModel.selectEverything();
+
   return viewModel;
 }
 exports.createViewModel = createViewModel;

@@ -2,38 +2,50 @@
     xmlns="http://schemas.nativescript.org/tns.xsd"
     xmlns:chart="nativescript-pro-ui/chart">
 <chart:RadCartesianChart class="graphBox" height="350">
-      <chart:RadCartesianChart.series>
-        <chart:BarSeries seriesName="Symptoms"
-          selectionMode="DataPointMultiple"
-          outerRadiusFactor="0.8"
-          expandRadius="0.2"
-          items="{{ Symptoms }}"
-          categoryProperty="type"
-          valueProperty="count"
-          stackMode="stack"
-          showLabels="true">
-          <chart:BarSeries.labelStyle>
-            <chart:PointLabelStyle margin="10" fontStyle="Bold" textSize="20" textColor="White" />
-          </chart:BarSeries.labelStyle>
-          <chart:BarSeries.horizontalAxis>
-            <chart:LinearAxis majorStep="1" labelFitMode="Rotate"/>
-          </chart:BarSeries.horizontalAxis>
-          <chart:BarSeries.verticalAxis>
-            <chart:CategoricalAxis/>
-          </chart:BarSeries.verticalAxis>
-        </chart:BarSeries>
+    <chart:RadCartesianChart.series>
 
-        <!--Use a new graph over this graph to show morning/evening events-->
-        <!--styling-->
+
+            <chart:BarSeries seriesName="Antall" selectionMode="DataPointMultiple" outerRadiusFactor="0.8" expandRadius="0.2" legendTitle="Antall" items="{{ Symptoms }}" stackMode="Stack" categoryProperty="type" valueProperty="count"/>
+
+            <chart:BarSeries seriesName="Morgon" legendTitle="Morgon" items="{{ Symptoms }}" stackMode="Stack100" categoryProperty="type" valueProperty="morning"/>
+
+            <chart:BarSeries seriesName="Kveld" legendTitle="Kveld" items="{{ Symptoms }}" stackMode="Stack100" categoryProperty="type" valueProperty="evening"/>
+
+
         <chart:RadCartesianChart.palettes>
-          <chart:Palette seriesName="Symptoms">
+          <chart:Palette seriesName="Antall">
             <chart:Palette.entries>
-            <chart:PaletteEntry strokeColor="#8060B3FC" fillColor="#8060B3FC"/>
+            <chart:PaletteEntry strokeColor="#8060B3FC" fillColor="#4AA5FA"/>
           </chart:Palette.entries>
         </chart:Palette>
+
+        <chart:Palette seriesName="Morgon">
+          <chart:Palette.entries>
+          <chart:PaletteEntry strokeColor="#8060B3FC" fillColor="#8060B3FC"/>
+        </chart:Palette.entries>
+      </chart:Palette>
+
+      <chart:Palette seriesName="Kveld">
+        <chart:Palette.entries>
+        <chart:PaletteEntry strokeColor="#8060B3FC" fillColor="#8060B3FC"/>
+      </chart:Palette.entries>
+    </chart:Palette>
       </chart:RadCartesianChart.palettes>
-      </chart:RadCartesianChart.series>
-    </chart:RadCartesianChart>
+
+    </chart:RadCartesianChart.series>
+    <chart:RadCartesianChart.horizontalAxis>
+        <chart:CategoricalAxis labelFitMode="Rotate"/>
+    </chart:RadCartesianChart.horizontalAxis>
+    <chart:RadCartesianChart.verticalAxis>
+        <chart:LinearAxis maximum="6" majorStep="1"/>
+    </chart:RadCartesianChart.verticalAxis>
+    <chart:RadCartesianChart.trackball>
+      <chart:Trackball/>
+    </chart:RadCartesianChart.trackball>
+    <chart:RadCartesianChart.legend>
+    <chart:RadLegendView position="Middle" title="Forklaring" height="150" width="150" enableSelection="true"/>
+</chart:RadCartesianChart.legend>
+  </chart:RadCartesianChart>
   </StackLayout>
 
 <!--http://docs.telerik.com/devtools/nativescript-ui/Controls/NativeScript/Chart/Series/range-bar-->

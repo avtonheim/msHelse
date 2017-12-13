@@ -3,10 +3,9 @@ var Sqlite = require("nativescript-sqlite");
 var labelModule = require("ui/label");
 var frameModule = require('ui/frame');
 
-function onLoaded(args){
+function onNavigatingTo(args){
 var page = args.object;
-page.bindingContext = { someProperty : 30};
-
+//page.bindingContext = { someProperty : 30};
 if (!Sqlite.exists("populated.db")) {
         Sqlite.copyDatabase("populated.db");
     }
@@ -21,7 +20,7 @@ if (!Sqlite.exists("populated.db")) {
        console.log("OPEN DB ERROR", error);
    });
 
-} exports.onLoaded = onLoaded;
+} exports.onNavigatingTo = onNavigatingTo;
 
 
 function navSymptom(){

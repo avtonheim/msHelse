@@ -13,17 +13,16 @@ function createViewModel(database) {
           var symptomType = args.object.context;
           var eventVal = args.object.value; //day or night
           var eventTime = args.object.text;
+          var morgonVal = 0;
+          var kveldVal = 0;
             if(eventTime == "Kveld"){
               var kveldVal = 1;
           } if(eventTime == "Morgon"){
               var morgonVal = 1;
-          } else {
-              var morgonVal = 0;
-              var kveldVal = 0;
           }
           var btn = args.object;
           btn.backgroundColor = "#3489db";
-              database.execSQL("INSERT INTO symptoms (symptom, morning, evening timestamp) VALUES (?, ?, ? date())", [symptomType, morgonVal, kveldVal]).then(id => {
+              database.execSQL("INSERT INTO symptoms (symptom, morning, evening, timestamp) VALUES (?, ?, ?, date())", [symptomType, morgonVal, kveldVal]).then(id => {
                   console.log("The new record id is: " + symptomType + " " + morgonVal + " " + kveldVal);
               }, error => {
               console.log("INSERT ERROR", error);
@@ -33,10 +32,8 @@ function createViewModel(database) {
 
 
       viewModel.selectEverything = function() {
-        //this.Symptoms = new ObservableArray([]);
-            database.all("SELECT symptom, morning, evening, timestamp FROM symptoms group by timestamp").then(rows => {
+            database.all("SELECT * FROM symptoms group by symptom").then(rows => {
                 for(var row in rows) {
-                // this.Symptoms.push({type: rows[row][0], count: rows[row][1]});
                  console.log("Dette er alt " + rows[row]);
                 }
             }, error => {
@@ -44,18 +41,20 @@ function createViewModel(database) {
             });
         }
 
+//
+
       viewModel.select = function() {
         this.Symptoms = new ObservableArray([]);
-            database.all("SELECT symptom, count(symptom), timestamp FROM symptoms WHERE timestamp > (SELECT date('now','-7 day')) group by symptom").then(rows => {
+            database.all("SELECT symptom, count(symptom), morning, evening, timestamp FROM symptoms group by symptom").then(rows => {
                 for(var row in rows) {
-                 this.Symptoms.push({type: rows[row][0], count: rows[row][1]});
+                 this.Symptoms.push({type: rows[row][0], count: rows[row][1], morning: rows[row][2], evening: rows[row][3], timestamp: rows[row][4]});
                  console.log(rows[row]);
                 }
             }, error => {
                 console.log("SELECT ERROR", error);
             });
         }
-    viewModel.selectEverything();
+
     viewModel.select();
 
     return viewModel;
