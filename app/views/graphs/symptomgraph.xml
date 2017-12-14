@@ -5,11 +5,11 @@
     <chart:RadCartesianChart.series>
 
 
-            <chart:BarSeries seriesName="Antall" selectionMode="DataPointMultiple" outerRadiusFactor="0.8" expandRadius="0.2" legendTitle="Antall" items="{{ Symptoms }}" stackMode="Stack" categoryProperty="type" valueProperty="count"/>
+            <chart:BarSeries seriesName="Antall" selectionMode="DataPointMultiple" outerRadiusFactor="0.8" expandRadius="0.2" legendTitle="Antall" items="{{ Symptoms}}" stackMode="Stack" categoryProperty="type" valueProperty="count"/>
 
-            <chart:BarSeries seriesName="Morgon" legendTitle="Morgon" items="{{ Symptoms }}" stackMode="Stack100" categoryProperty="type" valueProperty="morning"/>
+            <chart:BarSeries seriesName="Morgon" legendTitle="Morgon" items="{{ Symptoms }}" stackMode="Stack" categoryProperty="type" valueProperty="morncount"/>
 
-            <chart:BarSeries seriesName="Kveld" legendTitle="Kveld" items="{{ Symptoms }}" stackMode="Stack100" categoryProperty="type" valueProperty="evening"/>
+            <chart:BarSeries seriesName="Kveld" legendTitle="Kveld" items="{{ Symptoms }}" stackMode="Stack" categoryProperty="type" valueProperty="evncount"/>
 
 
         <chart:RadCartesianChart.palettes>
@@ -37,7 +37,7 @@
         <chart:CategoricalAxis labelFitMode="Rotate"/>
     </chart:RadCartesianChart.horizontalAxis>
     <chart:RadCartesianChart.verticalAxis>
-        <chart:LinearAxis maximum="6" majorStep="1"/>
+        <chart:LinearAxis maximum="10" majorStep="1"/>
     </chart:RadCartesianChart.verticalAxis>
     <chart:RadCartesianChart.trackball>
       <chart:Trackball/>
