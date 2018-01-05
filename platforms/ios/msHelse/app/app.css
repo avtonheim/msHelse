@@ -101,8 +101,6 @@ components that have the btn class name.
   text-align: center;
 }
 .graphBox{
-  background-color: #82DBDE;
-  border-radius: 15px;
   width: 100%;
 }
 .question{
@@ -123,10 +121,20 @@ components that have the btn class name.
   width: 580px;
   height: auto;
 }
-
 #subject{
   color: white;
   font-size: 16pt;
   background-color: #80CEBF;
   height: 200px;
+}
+.textInBox{
+  color: white;
+  font-size: 14pt;
+  font-weight: bold;
+  text-align: center;
+}
+.textExpl{
+  color: white;
+  font-size: 18pt;
+  padding: 20px;
 }

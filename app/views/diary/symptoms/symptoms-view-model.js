@@ -34,7 +34,7 @@ function createViewModel(database) {
       viewModel.selectEverything = function() {
             database.all("SELECT * FROM symptoms group by symptom").then(rows => {
                 for(var row in rows) {
-                 //console.log("Dette er alt " + rows[row]);
+
                 }
             }, error => {
                 console.log("SELECT ERROR", error);
@@ -43,9 +43,9 @@ function createViewModel(database) {
 
         viewModel.selectMorn = function() {
           this.Symptoms = new ObservableArray([]);
-              database.all("SELECT symptom, count(symptom), count(morning), count(evening) timestamp FROM symptoms group by symptom").then(rows => {
+              database.all("SELECT *, count(symptom) FROM symptoms group by symptom").then(rows => {
                   for(var row in rows) {
-                   this.Symptoms.push({type: rows[row][0], count: rows[row][1], morncount: rows[row][2], evncount: rows[row][3], timestamp: rows[row][4]});
+                   this.Symptoms.push({id: rows[row][0], type: rows[row][1], morncount: rows[row][2], evncount: rows[row][3], timestamp: rows[row][4], count: rows[row][5]});
                    console.log("Morgon" + rows[row]);
                   }
               }, error => {

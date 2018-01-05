@@ -8,6 +8,7 @@ var Sqlite = require("nativescript-sqlite");
 function createViewModel(database) {
     var viewModel = new Observable();
     viewModel.Mood = new ObservableArray([]);
+    viewModel.SelectMoodWeekly = new ObservableArray([]);
 
     // insert a new record
     viewModel.insert = function(args) {
@@ -22,6 +23,7 @@ function createViewModel(database) {
         });
     }
 
+    /*Testing purposes*/
     viewModel.selectEverything = function() {
           database.all("SELECT * FROM mood group by timestamp").then(rows => {
               for(var row in rows) {
@@ -32,12 +34,27 @@ function createViewModel(database) {
           });
       }
 
+      /*Selecting average mood last 7 days*/
+      viewModel.selectAverage = function() {
+        this.SelectMoodWeekly = new ObservableArray([]);
+            database.all("SELECT avg(moodState) FROM mood").then(rows => {
+                for(var row in rows) {
+                this.SelectMoodWeekly.push({average: rows[row][0]});
+                 console.log("gjennomsnittet er " + rows[row]);
+
+               }
+            }, error => {
+                console.log("SELECT ERROR", error);
+            });
+        }
+
+
       //For the mood graph
       viewModel.selectall = function() {
         this.Mood = new ObservableArray([]);
-            database.all("SELECT moodState, timestamp FROM mood WHERE timestamp > (SELECT date('now','-5 day')) group by timestamp").then(rows => {
+            database.all("SELECT * FROM mood WHERE id > 6 group by timestamp").then(rows => {
                 for(var row in rows) {
-                 this.Mood.push({dagsform: rows[row][0], dato: rows[row][1]});
+                 this.Mood.push({id: rows[row][0], dagsform: rows[row][1], dato: rows[row][2]});
                  console.log( "Dette er dei 7 siste dagane  " +rows[row]);
 
                }
@@ -48,6 +65,7 @@ function createViewModel(database) {
 
 
   viewModel.selectall();
+  viewModel.selectAverage();
 
   return viewModel;
 }

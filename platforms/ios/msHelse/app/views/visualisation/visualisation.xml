@@ -10,13 +10,21 @@
    <StackLayout class="p-20" >
      <Label class="h1" text="Graf over dagbok"></Label>
      <Label class="body" textWrap="true" text="Dette er ein oversikt over dine symptom og dagsform."></Label>
-     <Label class="h2" text="Symptom"></Label>
-     <Label class="body" textWrap="true" text="Dette er ein oversikt over dei siste 7 dagane."></Label>
-     <StackLayout id="symptomGraph">
+
+     <StackLayout class="graphContainer">
+       <Label class="h2" text="Symptom"></Label>
+       <Label class="textExpl" textWrap="true" text="Denne veka ha symptom xx vore mest framtredande med xx om morgonen og xx om kvelden."></Label>
+       <Label class="textInBox" textWrap="true" text="Dei siste 7 dagane."></Label>
+       <StackLayout id="symptomGraph">
+      </StackLayout>
     </StackLayout>
-    <Label class="h2" text="Dagsform"></Label>
-    <Label class="body" textWrap="true" text="Dette er ein oversikt over dei siste 7 dagane."></Label>
-    <StackLayout id="moodGraph">
+
+     <StackLayout class="graphContainer">
+      <Label class="h2" text="Dagsform"></Label>
+      <Label class="textExpl" text="{{ 'I den siste veka har du hatt det ' + average + ' i gjennomsnitt.'}}" textWrap="true"></Label>
+      <Label class="textInBox" textWrap="true" text="Dei siste 7 dagane."></Label>
+      <StackLayout id="moodGraph">
+      </StackLayout>
     </StackLayout>
 </StackLayout>
 </ScrollView>

@@ -13,7 +13,7 @@
     <Label class="titleMain" text="Analyse"/>
     </StackLayout>
     <StackLayout class="navButton" style="background-color:#82DBDE;">
-      <Label text="Generer rapport til konsultasjon"/>
+      <Label text="Generer rapport til konsultasjon" tap="tapReport"/>
     </StackLayout>
     <StackLayout class="navButton" style="background-color:#82DBDE;" tap="tapGraph">
       <Label text="Sjå graf over dagbok"/>
