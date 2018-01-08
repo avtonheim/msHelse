@@ -5,7 +5,8 @@
   padding: 10px;
 }
 .graphBox{
-  background-color: #EBA0A0
+  background-color: #EBA0A0;
+  height: 250px;
 }
 .h2{
   margin-top: 40px;

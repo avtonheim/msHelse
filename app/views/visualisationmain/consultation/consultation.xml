@@ -20,7 +20,14 @@
     </StackLayout>
     <StackLayout class="graphContainer">
       <Label class="h2" text="Dagsform"></Label>
-      <Label class="textExpl" text="Sidan sist konsultasjon har du hatt det xx i gjennomsnitt. Månad XX var din beste månad." textWrap="true"></Label>
+
+      <ListView style="height: 250px;" isUserInteractionEnabled="false" items="{{ SelectMoodMonth }}">
+          <ListView.itemTemplate>
+              <StackLayout class="graphBox">
+                  <Label class="textExpl" text="{{'Sidan sist konsultasjon har du hatt det ' + average + ' i gjennomsnitt. 0 betyr elendig, 5 betyr middels og 10 betyr bra. '}}"  textWrap="true"/>
+              </StackLayout>
+          </ListView.itemTemplate>
+      </ListView>
       <Label class="textInBox" textWrap="true" text="Dei siste 6 månadane."></Label>
       <StackLayout id="moodGraph">
       </StackLayout>

@@ -8,7 +8,9 @@ var Sqlite = require("nativescript-sqlite");
 function createViewModel(database) {
     var viewModel = new Observable();
     viewModel.Mood = new ObservableArray([]);
+    viewModel.MoodAnalysis = new ObservableArray([]);
     viewModel.SelectMoodWeekly = new ObservableArray([]);
+    viewModel.SelectMoodMonth = new ObservableArray([]);
 
     // insert a new record
     viewModel.insert = function(args) {
@@ -37,22 +39,33 @@ function createViewModel(database) {
       /*Selecting average mood last 7 days*/
       viewModel.selectAverage = function() {
         this.SelectMoodWeekly = new ObservableArray([]);
-            database.all("SELECT avg(moodState) FROM mood").then(rows => {
+            database.all("SELECT avg(moodState) FROM mood WHERE id < 8").then(rows => {
                 for(var row in rows) {
                 this.SelectMoodWeekly.push({average: rows[row][0]});
-                 console.log("gjennomsnittet er " + rows[row]);
-
+                 console.log("gjennomsnittet er veke " + rows[row]);
                }
             }, error => {
                 console.log("SELECT ERROR", error);
             });
         }
 
+        /*Selecting average mood last 6 months*/
+        viewModel.selectAverageMonth = function() {
+          this.SelectMoodMonth = new ObservableArray([]);
+              database.all("SELECT round(avg(moodState)) FROM mood").then(rows => {
+                  for(var row in rows) {
+                  this.SelectMoodMonth.push({average: rows[row][0]});
+                   console.log("gjennomsnittet er månad " + rows[row]);
+                 }
+              }, error => {
+                  console.log("SELECT ERROR", error);
+              });
+          }
 
-      //For the mood graph
+      //For the mood graph patient
       viewModel.selectall = function() {
         this.Mood = new ObservableArray([]);
-            database.all("SELECT * FROM mood WHERE id > 6 group by timestamp").then(rows => {
+            database.all("SELECT * FROM mood WHERE id < 8").then(rows => {
                 for(var row in rows) {
                  this.Mood.push({id: rows[row][0], dagsform: rows[row][1], dato: rows[row][2]});
                  console.log( "Dette er dei 7 siste dagane  " +rows[row]);
@@ -63,9 +76,25 @@ function createViewModel(database) {
             });
         }
 
+        //For the mood graph doctor
+        viewModel.selectallAnalysis = function() {
+          this.MoodAnalysis = new ObservableArray([]);
+              database.all("SELECT round(avg(moodState)), strftime('%m-%Y', timestamp) as 'month-year' FROM mood group by strftime('%m-%Y', timestamp)").then(rows => {
+                  for(var row in rows) {
+                   this.MoodAnalysis.push({gjennomsnitt: rows[row][0], dato: rows[row][1]});
+                   console.log( "Dette er den siste månaden  " +rows[row]);
+
+                 }
+              }, error => {
+                  console.log("SELECT ERROR", error);
+              });
+          }
+
 
   viewModel.selectall();
+  viewModel.selectallAnalysis();
   viewModel.selectAverage();
+  viewModel.selectAverageMonth();
 
   return viewModel;
 }

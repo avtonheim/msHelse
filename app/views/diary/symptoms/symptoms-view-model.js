@@ -8,6 +8,8 @@ var ObservableArray = require("data/observable-array").ObservableArray;
 function createViewModel(database) {
     var viewModel = new Observable();
     viewModel.Symptoms = new ObservableArray([]);
+    viewModel.SymptomsConsultation = new ObservableArray([]);
+
 
     viewModel.insert = function(args) {
           var symptomType = args.object.context;
@@ -30,7 +32,6 @@ function createViewModel(database) {
       }
 
 
-
       viewModel.selectEverything = function() {
             database.all("SELECT * FROM symptoms group by symptom").then(rows => {
                 for(var row in rows) {
@@ -41,7 +42,7 @@ function createViewModel(database) {
             });
         }
 
-        viewModel.selectMorn = function() {
+        viewModel.selectPatientOverview = function() {
           this.Symptoms = new ObservableArray([]);
               database.all("SELECT *, count(symptom) FROM symptoms group by symptom").then(rows => {
                   for(var row in rows) {
@@ -53,9 +54,31 @@ function createViewModel(database) {
               });
           }
 
+          viewModel.selectProminentSymptom = function() {
+                database.all("SELECT * FROM symptoms group by symptom").then(rows => {
+                    for(var row in rows) {
+
+                    }
+                }, error => {
+                    console.log("SELECT ERROR", error);
+                });
+            }
+
+          viewModel.selectDoctorConsultation = function() {
+            this.SymptomsConsultation = new ObservableArray([]);
+                database.all("SELECT *, count(symptom) FROM symptoms group by symptom").then(rows => {
+                    for(var row in rows) {
+                     this.SymptomsConsultation.push({id: rows[row][0], type: rows[row][1], morncount: rows[row][2], evncount: rows[row][3], timestamp: rows[row][4], count: rows[row][5]});
+                     console.log("Morgon" + rows[row]);
+                    }
+                }, error => {
+                    console.log("SELECT ERROR", error);
+                });
+            }
 
 
-    viewModel.selectMorn();
+    viewModel.selectPatientOverview();
+    viewModel.selectDoctorConsultation();
     return viewModel;
 }
 exports.createViewModel = createViewModel;

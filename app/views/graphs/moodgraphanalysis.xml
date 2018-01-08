@@ -7,9 +7,9 @@
                 selectionMode="DataPoint"
                 outerRadiusFactor="0.8"
                 expandRadius="0.2"
-                items="{{ Mood }}"
+                items="{{ MoodAnalysis }}"
                 categoryProperty="dato"
-                valueProperty="dagsform"
+                valueProperty="gjennomsnitt"
                 showLabels="true">
               <chart:SplineAreaSeries.labelStyle>
                   <chart:PointLabelStyle margin="5" fontStyle="Bold" fillColor="#60B3FC" textSize="19" textColor="White" />
