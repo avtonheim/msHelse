@@ -1,0 +1,11 @@
+
+<StackLayout loaded="onLoad">
+<ListView style="height: 300px;" isUserInteractionEnabled="false" items="{{ SymptomProminent }}">
+    <ListView.itemTemplate>
+        <StackLayout class="graphBox" style="background-color: #EBA0A0">
+            <Label class="textExpl" text="{{'Sidan sist konsultasjon har symptom ' + symptom + ' vore mest framtredande.'}}"  textWrap="true"/>
+            <Label class="textExpl" text="{{'Symptomet har hatt ' + symptomnummorning + ' tilfelle om morgonen og ' + symptomnumevening + ' tilfelle om kvelden.'}}"  textWrap="true"/>
+        </StackLayout>
+    </ListView.itemTemplate>
+</ListView>
+</StackLayout>

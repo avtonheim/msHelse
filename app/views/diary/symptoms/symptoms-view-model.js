@@ -9,6 +9,8 @@ function createViewModel(database) {
     var viewModel = new Observable();
     viewModel.Symptoms = new ObservableArray([]);
     viewModel.SymptomsConsultation = new ObservableArray([]);
+    viewModel.SymptomProminent = new ObservableArray([]);
+    viewModel.SymptomProminentWeek = new ObservableArray([]);
 
 
     viewModel.insert = function(args) {
@@ -32,31 +34,35 @@ function createViewModel(database) {
       }
 
 
-      viewModel.selectEverything = function() {
-            database.all("SELECT * FROM symptoms group by symptom").then(rows => {
-                for(var row in rows) {
-
-                }
-            }, error => {
-                console.log("SELECT ERROR", error);
-            });
-        }
-
         viewModel.selectPatientOverview = function() {
           this.Symptoms = new ObservableArray([]);
-              database.all("SELECT *, count(symptom) FROM symptoms group by symptom").then(rows => {
+              database.all("SELECT *, count(symptom) FROM symptoms WHERE id < 8 group by symptom").then(rows => {
                   for(var row in rows) {
                    this.Symptoms.push({id: rows[row][0], type: rows[row][1], morncount: rows[row][2], evncount: rows[row][3], timestamp: rows[row][4], count: rows[row][5]});
-                   console.log("Morgon" + rows[row]);
+
                   }
               }, error => {
                   console.log("SELECT ERROR", error);
               });
           }
 
-          viewModel.selectProminentSymptom = function() {
-                database.all("SELECT * FROM symptoms group by symptom").then(rows => {
+          viewModel.selectProminentSymptomWeek = function() {
+              this.SymptomProminentWeek = new ObservableArray([]);
+                database.all("SELECT symptom, count(symptom), count(morning), count(evening) FROM symptoms WHERE id < 8").then(rows => {
                     for(var row in rows) {
+                      this.SymptomProminentWeek.push({symptom: rows[row][0], symptomNum: rows[row][1], symptomnummorning: rows[row][2], symptomnumevening: rows[row][3]});
+                      console.log(rows[row]);
+                    }
+                }, error => {
+                    console.log("SELECT ERROR", error);
+                });
+            }
+
+          viewModel.selectProminentSymptom = function() {
+              this.SymptomProminent = new ObservableArray([]);
+                database.all("SELECT symptom, count(symptom), count(morning), count(evening) FROM symptoms group by symptom order by symptom asc limit 1").then(rows => {
+                    for(var row in rows) {
+                      this.SymptomProminent.push({symptom: rows[row][0], symptomNum: rows[row][1], symptomnummorning: rows[row][2], symptomnumevening: rows[row][3]});
 
                     }
                 }, error => {
@@ -69,7 +75,7 @@ function createViewModel(database) {
                 database.all("SELECT *, count(symptom) FROM symptoms group by symptom").then(rows => {
                     for(var row in rows) {
                      this.SymptomsConsultation.push({id: rows[row][0], type: rows[row][1], morncount: rows[row][2], evncount: rows[row][3], timestamp: rows[row][4], count: rows[row][5]});
-                     console.log("Morgon" + rows[row]);
+
                     }
                 }, error => {
                     console.log("SELECT ERROR", error);
@@ -79,6 +85,8 @@ function createViewModel(database) {
 
     viewModel.selectPatientOverview();
     viewModel.selectDoctorConsultation();
+    viewModel.selectProminentSymptom();
+    viewModel.selectProminentSymptomWeek();
     return viewModel;
 }
 exports.createViewModel = createViewModel;

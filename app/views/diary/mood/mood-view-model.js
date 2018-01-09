@@ -29,7 +29,7 @@ function createViewModel(database) {
     viewModel.selectEverything = function() {
           database.all("SELECT * FROM mood group by timestamp").then(rows => {
               for(var row in rows) {
-               console.log("Dette er alt  " + rows[row]);
+
              }
           }, error => {
               console.log("SELECT ERROR", error);
@@ -42,7 +42,7 @@ function createViewModel(database) {
             database.all("SELECT avg(moodState) FROM mood WHERE id < 8").then(rows => {
                 for(var row in rows) {
                 this.SelectMoodWeekly.push({average: rows[row][0]});
-                 console.log("gjennomsnittet er veke " + rows[row]);
+
                }
             }, error => {
                 console.log("SELECT ERROR", error);
@@ -55,7 +55,7 @@ function createViewModel(database) {
               database.all("SELECT round(avg(moodState)) FROM mood").then(rows => {
                   for(var row in rows) {
                   this.SelectMoodMonth.push({average: rows[row][0]});
-                   console.log("gjennomsnittet er månad " + rows[row]);
+
                  }
               }, error => {
                   console.log("SELECT ERROR", error);
@@ -68,7 +68,6 @@ function createViewModel(database) {
             database.all("SELECT * FROM mood WHERE id < 8").then(rows => {
                 for(var row in rows) {
                  this.Mood.push({id: rows[row][0], dagsform: rows[row][1], dato: rows[row][2]});
-                 console.log( "Dette er dei 7 siste dagane  " +rows[row]);
 
                }
             }, error => {
@@ -82,8 +81,7 @@ function createViewModel(database) {
               database.all("SELECT round(avg(moodState)), strftime('%m-%Y', timestamp) as 'month-year' FROM mood group by strftime('%m-%Y', timestamp)").then(rows => {
                   for(var row in rows) {
                    this.MoodAnalysis.push({gjennomsnitt: rows[row][0], dato: rows[row][1]});
-                   console.log( "Dette er den siste månaden  " +rows[row]);
-
+                
                  }
               }, error => {
                   console.log("SELECT ERROR", error);

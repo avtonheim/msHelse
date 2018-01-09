@@ -1,4 +1,4 @@
-<Page loaded="onLoad">
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:lv="nativescript-pro-ui/listview" loaded="onLoad">
   <Page.actionBar>
        <ActionBar class="action-bar">
          <StackLayout>
@@ -10,24 +10,22 @@
    <StackLayout class="p-20" >
      <Label class="h1" text="Konsultasjon"></Label>
      <Label class="body" textWrap="true" text="Dette er ein større oversikt over data om sjukdomen. Denne funksjonen skal støtte konsultasjonen mellom lege og pasient."></Label>
+
     <StackLayout class="graphContainer">
        <Label class="h2" text="Symptom"></Label>
-       <Label class="textExpl" textWrap="true" text="Sidan sist konsultasjon har symptom XX vore mest framtredande."></Label>
-       <Label class="textExpl" textWrap="true" text="Symptomet hadde XX tilfelle om morgonen og XX tilfelle om kvelden."></Label>
+       <StackLayout id="symptomText">
+       </StackLayout>
+
        <Label class="textInBox" textWrap="true" text="Dei siste 6 månadane."></Label>
+
        <StackLayout id="symptomGraph">
       </StackLayout>
     </StackLayout>
     <StackLayout class="graphContainer">
       <Label class="h2" text="Dagsform"></Label>
+      <StackLayout id="moodText">
+      </StackLayout>
 
-      <ListView style="height: 250px;" isUserInteractionEnabled="false" items="{{ SelectMoodMonth }}">
-          <ListView.itemTemplate>
-              <StackLayout class="graphBox">
-                  <Label class="textExpl" text="{{'Sidan sist konsultasjon har du hatt det ' + average + ' i gjennomsnitt. 0 betyr elendig, 5 betyr middels og 10 betyr bra. '}}"  textWrap="true"/>
-              </StackLayout>
-          </ListView.itemTemplate>
-      </ListView>
       <Label class="textInBox" textWrap="true" text="Dei siste 6 månadane."></Label>
       <StackLayout id="moodGraph">
       </StackLayout>

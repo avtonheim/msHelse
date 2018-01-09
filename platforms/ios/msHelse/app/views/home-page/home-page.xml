@@ -10,7 +10,7 @@
          </ActionBar>
      </Page.actionBar>
      <ScrollView>
-       <StackLayout class="content">
+  <StackLayout class="content">
 
     <StackLayout orientation="horizontal" horizontalAlignment="center" class="homeBox" id="diary" tap="tapDiary">
       <Label text="Min MS Dagbok"/>

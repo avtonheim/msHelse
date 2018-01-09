@@ -9,7 +9,7 @@ function onPageLoaded(args){
             Sqlite.copyDatabase("populated.db");
         }
     (new Sqlite("populated.db")).then(db => {
-           db.execSQL("CREATE TABLE IF NOT EXISTS mood (id INTEGER PRIMARY KEY AUTOINCREMENT, moodState TEXT, timestamp INT)").then(id => {
+           db.execSQL("CREATE TABLE IF NOT EXISTS mood (id INTEGER PRIMARY KEY AUTOINCREMENT, moodState INT, timestamp INT)").then(id => {
                 page.bindingContext = createViewModel(db);
                 console.log("Database Saved!");
            }, error => {
