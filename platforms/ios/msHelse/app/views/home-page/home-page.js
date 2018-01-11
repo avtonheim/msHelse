@@ -15,6 +15,10 @@ function onLoaded(args){
   // And add our component to the visual tree
   stackLayout.addChild(component);
 
+  //Controlling the native back-button
+  var controller = frameModule.topmost().ios.controller;
+  var navigationItem = controller.visibleViewController.navigationItem;
+  navigationItem.setHidesBackButtonAnimated(true, false);
 
 } exports.onLoaded = onLoaded;
 

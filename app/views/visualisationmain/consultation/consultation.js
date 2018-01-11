@@ -12,13 +12,13 @@ exports.onLoad = function(args) {
 
   // Load our JS for the component
   var path = fs.knownFolders.currentApp().path;
-  var componentSymptomJS = require(path + '/views/graphs/symptomgraph.js');
+  var componentSymptomJS = require(path + '/views/graphs/symptomgraphanalysis.js');
   var componentMoodJS = require(path + '/views/graphs/moodgraphanalysis.js');
   var componentSymptomTextJS = require(path + '/views/visualisationmain/consultationcards/symptomcard.js');
   var componentMoodTextJS = require(path + '/views/visualisationmain/consultationcards/moodcard.js');
 
   // Actually have the builder build the Component using the XML & JS.
-  var componentSymptomXML = builder.load(path + '/views/graphs/symptomgraph.xml', componentSymptomJS);
+  var componentSymptomXML = builder.load(path + '/views/graphs/symptomgraphanalysis.xml', componentSymptomJS);
   var componentMoodXML = builder.load(path + '/views/graphs/moodgraphanalysis.xml', componentMoodJS);
   var componentMoodXML = builder.load(path + '/views/graphs/moodgraphanalysis.xml', componentMoodJS);
   var componentSymptomTextXML = builder.load(path + '/views/visualisationmain/consultationcards/symptomcard.xml', componentSymptomTextJS);

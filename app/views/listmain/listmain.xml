@@ -4,6 +4,7 @@
            <StackLayout>
               <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
            </StackLayout>
+           <ActionItem text="Tilbake" tap="tapHome" ios.position="left"/>
          </ActionBar>
      </Page.actionBar>
   <StackLayout>

@@ -1,4 +1,4 @@
-var FrameModule = require("ui/frame");
+var frameModule = require("ui/frame");
 var createViewModel = require("./text-view-model").createViewModel;
 var Sqlite = require("nativescript-sqlite");
 
@@ -6,6 +6,10 @@ var Sqlite = require("nativescript-sqlite");
 function onNavigatingTo(args){
 var page = args.object;
 //page.bindingContext = {someProperty : 100};
+//Controlling the native back-button
+var controller = frameModule.topmost().ios.controller;
+var navigationItem = controller.visibleViewController.navigationItem;
+navigationItem.setHidesBackButtonAnimated(true, false);
 if (!Sqlite.exists("populated.db")) {
         Sqlite.copyDatabase("populated.db");
     }

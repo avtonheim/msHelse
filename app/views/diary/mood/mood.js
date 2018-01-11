@@ -5,7 +5,11 @@ var frameModule = require('ui/frame');
 
 function onNavigatingTo(args){
 var page = args.object;
-//page.bindingContext = { someProperty : 30};
+//Controlling the native back-button
+var controller = frameModule.topmost().ios.controller;
+var navigationItem = controller.visibleViewController.navigationItem;
+navigationItem.setHidesBackButtonAnimated(true, false);
+page.bindingContext = { someProperty : 30};
 if (!Sqlite.exists("populated.db")) {
         Sqlite.copyDatabase("populated.db");
     }

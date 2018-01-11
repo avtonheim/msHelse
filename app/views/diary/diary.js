@@ -2,6 +2,11 @@ var frameModule = require('ui/frame');
 
 function onLoaded(args){
   var page = args.object;
+
+  //Controlling the native back-button
+  var controller = frameModule.topmost().ios.controller;
+  var navigationItem = controller.visibleViewController.navigationItem;
+  navigationItem.setHidesBackButtonAnimated(true, false);
 }
 exports.onLoaded = onLoaded;
 

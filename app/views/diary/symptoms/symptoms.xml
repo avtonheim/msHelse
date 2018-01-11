@@ -12,9 +12,8 @@
        <Progress value="{{ someProperty }}"/>
       <Label class="titleMain" style="font-size: 35pt;" text="Kva har prega dagen?"/>
       <Label class="body" text="Trykk på dei kvite knappane for å registrere" textWrap="true"/>
-      <Button text="console.log" tap="{{ selectEverything }}"></Button>
 
-      <StackLayout class="symptomCont" style="height: 200px;">
+      <StackLayout class="symptomCont" style="height: 200px; margin-top: 50px;">
         <TextField id="inputSelf" hint="Klikk for å legge til eit anna symptom"/>
         <GridLayout columns="*,*" rows="*">
           <Button class="eventBtn" col="0" row="0" value="1" text="Morgon"></Button>
@@ -23,7 +22,7 @@
       </StackLayout>
 
       <StackLayout class="symptomCont">
-        <Label text="Vannlatning" tap="{{ insert }}"/>
+        <Label text="Vannlatning"/>
         <GridLayout columns="*,*" rows="*">
           <Button class="eventBtn" col="0" row="0" value="1" context="Vannlatning" text="Morgon" tap="{{ insert }}"></Button>
           <Button class="eventBtn" col="1" row="0" value="1" context="Vannlatning" text="Kveld" tap="{{ insert }}"></Button>
@@ -37,14 +36,14 @@
         </GridLayout>
       </StackLayout>
       <StackLayout class="symptomCont">
-        <Label text="Hukommelse" tap="{{ insert }}"/>
+        <Label text="Ereksjonsproblem"/>
         <GridLayout columns="*,*" rows="*">
           <Button class="eventBtn" col="0" row="0" value="1" context="Hukommelse" text="Morgon" text="Morgon" tap="{{ insert }}"></Button>
           <Button class="eventBtn" col="1" row="0" value="1" context="Hukommelse" text="Kveld" text="Kveld" tap="{{ insert }}"></Button>
         </GridLayout>
       </StackLayout>
       <StackLayout class="symptomCont">
-        <Label text="Fatigue" tap="{{ insert }}"/>
+        <Label text="Fatigue"/>
         <GridLayout columns="*,*" rows="*">
           <Button class="eventBtn" col="0" row="0" value="1" context="Fatigue" text="Morgon" tap="{{ insert }}"></Button>
           <Button class="eventBtn" col="1" row="0" value="1" context="Fatigue" text="Kveld" tap="{{ insert }}"></Button>

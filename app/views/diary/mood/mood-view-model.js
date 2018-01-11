@@ -1,6 +1,7 @@
 var Observable = require("data/observable").Observable;
 var ObservableArray = require("data/observable-array").ObservableArray;
 var Sqlite = require("nativescript-sqlite");
+var frameModule = require('ui/frame');
 
 //Read more of SQLITE in nativescript
 //https://developer.telerik.com/products/nativescript/going-off-the-grid-with-nativescript/
@@ -19,6 +20,7 @@ function createViewModel(database) {
       var moodObj = args.object;
       moodObj.style.color = "black";
             database.execSQL("INSERT OR REPLACE INTO mood (moodState, timestamp) VALUES (?, date())", [moodVal]).then(id => {
+                frameModule.topmost().navigate('views/diary/symptoms/symptoms');
                 console.log("The new record id is: " + moodText + moodVal);
             }, error => {
             console.log("INSERT ERROR", error);
@@ -81,7 +83,7 @@ function createViewModel(database) {
               database.all("SELECT round(avg(moodState)), strftime('%m-%Y', timestamp) as 'month-year' FROM mood group by strftime('%m-%Y', timestamp)").then(rows => {
                   for(var row in rows) {
                    this.MoodAnalysis.push({gjennomsnitt: rows[row][0], dato: rows[row][1]});
-                
+
                  }
               }, error => {
                   console.log("SELECT ERROR", error);

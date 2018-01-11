@@ -14,11 +14,11 @@ function createViewModel(database) {
 
 
     viewModel.insert = function(args) {
-          var symptomType = args.object.context;
+          var symptomType = args.object.context; // Problem with adding the same context twice in one session. Should be able to register both morning and evening to register only one context
           var eventVal = args.object.value; //day or night
-          var eventTime = args.object.text;
-          var morgonVal = 0;
-          var kveldVal = 0;
+          var eventTime = args.object.text; //testing purposes
+          var morgonVal = null;
+          var kveldVal = null;
             if(eventTime == "Kveld"){
               var kveldVal = 1;
           } if(eventTime == "Morgon"){
@@ -33,13 +33,11 @@ function createViewModel(database) {
           });
       }
 
-
         viewModel.selectPatientOverview = function() {
           this.Symptoms = new ObservableArray([]);
-              database.all("SELECT *, count(symptom) FROM symptoms WHERE id < 8 group by symptom").then(rows => {
+              database.all("SELECT symptom, count(morning), count(evening), count(symptom) FROM symptoms WHERE id < 8 group by symptom order by count(symptom) desc").then(rows => {
                   for(var row in rows) {
-                   this.Symptoms.push({id: rows[row][0], type: rows[row][1], morncount: rows[row][2], evncount: rows[row][3], timestamp: rows[row][4], count: rows[row][5]});
-
+                   this.Symptoms.push({type: rows[row][0], morncount: rows[row][1], evncount: rows[row][2], count: rows[row][3]});
                   }
               }, error => {
                   console.log("SELECT ERROR", error);
@@ -48,7 +46,7 @@ function createViewModel(database) {
 
           viewModel.selectProminentSymptomWeek = function() {
               this.SymptomProminentWeek = new ObservableArray([]);
-                database.all("SELECT symptom, count(symptom), count(morning), count(evening) FROM symptoms WHERE id < 8").then(rows => {
+                database.all("SELECT symptom, count(symptom), count(morning), count(evening) FROM symptoms WHERE id < 8 group by symptom order by count(symptom) desc limit 1").then(rows => {
                     for(var row in rows) {
                       this.SymptomProminentWeek.push({symptom: rows[row][0], symptomNum: rows[row][1], symptomnummorning: rows[row][2], symptomnumevening: rows[row][3]});
                       console.log(rows[row]);
@@ -60,7 +58,7 @@ function createViewModel(database) {
 
           viewModel.selectProminentSymptom = function() {
               this.SymptomProminent = new ObservableArray([]);
-                database.all("SELECT symptom, count(symptom), count(morning), count(evening) FROM symptoms group by symptom order by symptom asc limit 1").then(rows => {
+                database.all("SELECT symptom, count(symptom), count(morning), count(evening) FROM symptoms group by symptom order by count(symptom) desc limit 1").then(rows => {
                     for(var row in rows) {
                       this.SymptomProminent.push({symptom: rows[row][0], symptomNum: rows[row][1], symptomnummorning: rows[row][2], symptomnumevening: rows[row][3]});
 
@@ -72,10 +70,9 @@ function createViewModel(database) {
 
           viewModel.selectDoctorConsultation = function() {
             this.SymptomsConsultation = new ObservableArray([]);
-                database.all("SELECT *, count(symptom) FROM symptoms group by symptom").then(rows => {
+                database.all("SELECT symptom, count(symptom), count(morning), count(evening) FROM symptoms group by symptom order by count(symptom) desc").then(rows => {
                     for(var row in rows) {
-                     this.SymptomsConsultation.push({id: rows[row][0], type: rows[row][1], morncount: rows[row][2], evncount: rows[row][3], timestamp: rows[row][4], count: rows[row][5]});
-
+                     this.SymptomsConsultation.push({type: rows[row][0], count: rows[row][1], morncount: rows[row][2], evncount: rows[row][3]});
                     }
                 }, error => {
                     console.log("SELECT ERROR", error);
