@@ -4,15 +4,21 @@
            <StackLayout>
               <Image src="~/images/tittel.png" class="iconTitle" ios.position="center"></Image>
            </StackLayout>
+           <ActionBar.actionItems>
+               <ActionItem id="stopBtn" text="Stopp øving" tap="stopMind" ios.position="right" />
+           </ActionBar.actionItems>
          </ActionBar>
      </Page.actionBar>
     <StackLayout class="content">
-    <Label class="titleMain" text="Pusteøving" style="font-size: 35pt;"/>
-    <Button class="navButton" style="width:320px; height: 100px; background-color: #DD7893;" text="Stopp øving" tap="stopMind"> </Button>
-
+    <StackLayout>
+      <Label class="titleMain" text="Pusteøving"/>
+      <Label class="body" text="Dette er ein pusteøving for å senke stress." textWrap="true"/>
+      <Label class="body" text="Øvinga går ut på at du skal finne fokus og avslapping." textWrap="true"/>
+      <Label class="body" text="Øvinga tar 1 minutt." textWrap="true"/>
+    </StackLayout>
     <StackLayout id="sunFlower">
         <Image id="view" src="~/images/sunflower.png" tap="startMind"></Image>
     </StackLayout>
-    <Label style="margin-top: 40px; font-size: 13pt; font-style: italic; " text="Klikk på blomsten for å starte"/>
+     <Label id="msg" class="explainingMsg" text="{{messageToUser}}" textWrap="true"/>
     </StackLayout>
 </Page>

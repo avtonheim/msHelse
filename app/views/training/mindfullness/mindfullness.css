@@ -7,3 +7,19 @@
   height: 300px;
   width: 300px;
 }
+.explainingMsg{
+  margin-top: 100px;
+  font-size: 13pt;
+  font-style: italic;
+  color: black;
+}
+#stopBtn{
+  color: white;
+}
+.titleMain{
+  font-size: 35pt;
+}
+#msg{
+  margin-top: 190px;
+  width: 300px;
+}
