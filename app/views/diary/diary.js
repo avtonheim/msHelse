@@ -15,3 +15,8 @@ function onNavMood(){
   frameModule.topmost().navigate('views/diary/mood/mood');
 }
 exports.onNavMood = onNavMood;
+
+function tapHome(){
+  frameModule.topmost().navigate('views/home-page/home-page');
+}
+exports.tapHome = tapHome;
