@@ -5,11 +5,21 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		858B842D18CA22B800AB12DE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 858B833A18CA111C00AB12DE /* InfoPlist.strings */; };
 		CD45EE7C18DC2D5800FB50C0 /* app in Resources */ = {isa = PBXBuildFile; fileRef = CD45EE7A18DC2D5800FB50C0 /* app */; };
 		CD62955D1BB2678900AE3A93 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CD62955C1BB2678900AE3A93 /* main.m */; };
+		153E817F7DE44AA692D8A81A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E57B7B5FE19544D3B44A10D2 /* Assets.xcassets */; };
+		19B3336D22A94597B1F0D97D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C09C9F57BA2F461BAC4AAC1F /* LaunchScreen.storyboard */; };
+		55A926C585314F9F82B1394E /* build.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A6C79B1F17BB413DA3109227 /* build.xcconfig */; };
+		E33FBD4FFDBD46A381798D90 /* LocalNotificationsPlugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F84EDCB33C746BDA369CFBD /* LocalNotificationsPlugin.framework */; };
+		BED9EE4FDB0F438F9EAA05F4 /* LocalNotificationsPlugin.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0F84EDCB33C746BDA369CFBD /* LocalNotificationsPlugin.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D1FDDCE5A8B24BD6B32E468E /* TelerikAppFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46024C676DBF451C906D0BA9 /* TelerikAppFeedback.framework */; };
+		7E86778D31EF418DA7B1A2A7 /* TelerikAppFeedback.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 46024C676DBF451C906D0BA9 /* TelerikAppFeedback.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9B33D8A5C8DE469AB7182926 /* TelerikUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85E4B27E808443928770E810 /* TelerikUI.framework */; };
+		9873395C777B4D38A8BE8F5B /* TelerikUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 85E4B27E808443928770E810 /* TelerikUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		97C6B198D44E4513B9676414 /* TNSWidgets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54BE7E6178DE403B8B5703A9 /* TNSWidgets.framework */; };
+		AD764F2DF13F45CA9AD767BB /* TNSWidgets.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 54BE7E6178DE403B8B5703A9 /* TNSWidgets.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -19,6 +29,10 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				BED9EE4FDB0F438F9EAA05F4 /* LocalNotificationsPlugin.framework in Embed Frameworks */,
+				7E86778D31EF418DA7B1A2A7 /* TelerikAppFeedback.framework in Embed Frameworks */,
+				9873395C777B4D38A8BE8F5B /* TelerikUI.framework in Embed Frameworks */,
+				AD764F2DF13F45CA9AD767BB /* TNSWidgets.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -36,6 +50,13 @@
 		CDD59A261BB43B5D00EC2671 /* build-debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "build-debug.xcconfig"; sourceTree = "<group>"; };
 		CDD59A271BB43B5D00EC2671 /* build-release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "build-release.xcconfig"; sourceTree = "<group>"; };
 		CDF4743E1BA4855C0087EA85 /* build.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = build.xcconfig; sourceTree = "<group>"; };
+		E57B7B5FE19544D3B44A10D2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = unknown; name = Assets.xcassets; path = "msHelse/Resources/Assets.xcassets"; sourceTree = "<group>"; fileEncoding = 4; };
+		C09C9F57BA2F461BAC4AAC1F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = unknown; name = LaunchScreen.storyboard; path = "msHelse/Resources/LaunchScreen.storyboard"; sourceTree = "<group>"; fileEncoding = 4; };
+		A6C79B1F17BB413DA3109227 /* build.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = unknown; name = build.xcconfig; path = "msHelse/Resources/build.xcconfig"; sourceTree = "<group>"; fileEncoding = 4; };
+		0F84EDCB33C746BDA369CFBD /* LocalNotificationsPlugin.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalNotificationsPlugin.framework; path = "$(SRCROOT)/../../node_modules/nativescript-local-notifications/platforms/ios/LocalNotificationsPlugin.framework"; sourceTree = "<group>"; };
+		46024C676DBF451C906D0BA9 /* TelerikAppFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TelerikAppFeedback.framework; path = "$(SRCROOT)/../../node_modules/nativescript-pro-ui/platforms/ios/TelerikAppFeedback.framework"; sourceTree = "<group>"; };
+		85E4B27E808443928770E810 /* TelerikUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TelerikUI.framework; path = "$(SRCROOT)/../../node_modules/nativescript-pro-ui/platforms/ios/TelerikUI.framework"; sourceTree = "<group>"; };
+		54BE7E6178DE403B8B5703A9 /* TNSWidgets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TNSWidgets.framework; path = "$(SRCROOT)/../../node_modules/tns-core-modules-widgets/platforms/ios/TNSWidgets.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +64,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E33FBD4FFDBD46A381798D90 /* LocalNotificationsPlugin.framework in Frameworks */,
+				D1FDDCE5A8B24BD6B32E468E /* TelerikAppFeedback.framework in Frameworks */,
+				9B33D8A5C8DE469AB7182926 /* TelerikUI.framework in Frameworks */,
+				97C6B198D44E4513B9676414 /* TNSWidgets.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +96,10 @@
 		858B833018CA111C00AB12DE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0F84EDCB33C746BDA369CFBD /* LocalNotificationsPlugin.framework */,
+				46024C676DBF451C906D0BA9 /* TelerikAppFeedback.framework */,
+				85E4B27E808443928770E810 /* TelerikUI.framework */,
+				54BE7E6178DE403B8B5703A9 /* TNSWidgets.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -101,6 +130,9 @@
 		E070579D1B39A9D000214BF1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E57B7B5FE19544D3B44A10D2 /* Assets.xcassets */,
+				C09C9F57BA2F461BAC4AAC1F /* LaunchScreen.storyboard */,
+				A6C79B1F17BB413DA3109227 /* build.xcconfig */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -136,7 +168,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = TNS;
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 500;
 				ORGANIZATIONNAME = Telerik;
 			};
 			buildConfigurationList = 858B832918CA111C00AB12DE /* Build configuration list for PBXProject "msHelse" */;
@@ -163,6 +195,9 @@
 			files = (
 				CD45EE7C18DC2D5800FB50C0 /* app in Resources */,
 				858B842D18CA22B800AB12DE /* InfoPlist.strings in Resources */,
+				153E817F7DE44AA692D8A81A /* Assets.xcassets in Resources */,
+				19B3336D22A94597B1F0D97D /* LaunchScreen.storyboard in Resources */,
+				55A926C585314F9F82B1394E /* build.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,6 +365,13 @@
 				PRODUCT_NAME = msHelse;
 				VALID_ARCHS = "armv7 arm64";
 				WRAPPER_EXTENSION = app;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../node_modules/nativescript-local-notifications/platforms/ios\"",
+					"\"$(SRCROOT)/../../node_modules/nativescript-pro-ui/platforms/ios\"",
+					"\"$(SRCROOT)/../../node_modules/nativescript-pro-ui/platforms/ios\"",
+					"\"$(SRCROOT)/../../node_modules/tns-core-modules-widgets/platforms/ios\"",
+				);
 			};
 			name = Debug;
 		};
@@ -348,6 +390,13 @@
 				PRODUCT_NAME = msHelse;
 				VALID_ARCHS = "armv7 arm64";
 				WRAPPER_EXTENSION = app;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../node_modules/nativescript-local-notifications/platforms/ios\"",
+					"\"$(SRCROOT)/../../node_modules/nativescript-pro-ui/platforms/ios\"",
+					"\"$(SRCROOT)/../../node_modules/nativescript-pro-ui/platforms/ios\"",
+					"\"$(SRCROOT)/../../node_modules/tns-core-modules-widgets/platforms/ios\"",
+				);
 			};
 			name = Release;
 		};
