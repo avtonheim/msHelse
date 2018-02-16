@@ -11,10 +11,19 @@
        <Progress value="{{ someProperty }}"/>
        <StackLayout class="p-20">
            <StackLayout class="question" horizontalAlignment="left">
-             <Label text="Kva har du gjort i dag?"></Label>
+             <Label text="Kva kjekke ting har du gjort sidan sist registrering?" textWrap="true"></Label>
            </StackLayout>
           <StackLayout class="response" horizontalAlignment="right">
               <TextView id="subject" hint="Klikk for å legge til tekst" text="{{ textItem }}" textWrap="true" autocorrect="true"/>
+          </StackLayout>
+          <StackLayout style="margin-top: 150px;" class="question" horizontalAlignment="left">
+            <Label text="Har du hatt MS attakk denne perioden?" textWrap="true"></Label>
+          </StackLayout>
+          <StackLayout id="attack">
+              <GridLayout columns="*,*" row="*">
+                <Button tap="selected" class="answerBtn" col="0" row="0" text="Ja"></Button>
+                <Button tap="selected" class="answerBtn" col="1" row="0" text="Nei"></Button>
+              </GridLayout>
           </StackLayout>
       </StackLayout>
     </StackLayout>

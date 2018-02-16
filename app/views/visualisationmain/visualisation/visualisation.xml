@@ -17,7 +17,7 @@
        <StackLayout id="symptomTextVisual">
        </StackLayout>
 
-       <Label class="textInBox" textWrap="true" text="Dei siste 7 dagane."></Label>
+       <Label class="textInBox" textWrap="true" text="DATO (alt)."></Label>
        <StackLayout id="symptomGraph">
       </StackLayout>
     </StackLayout>

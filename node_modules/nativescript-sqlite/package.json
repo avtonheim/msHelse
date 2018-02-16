@@ -14,19 +14,19 @@
     ]
   ],
   "_from": "nativescript-sqlite@>=1.1.11 <2.0.0",
-  "_id": "nativescript-sqlite@1.1.11",
+  "_id": "nativescript-sqlite@1.2.0",
   "_inCache": true,
   "_location": "/nativescript-sqlite",
-  "_nodeVersion": "6.9.4",
+  "_nodeVersion": "8.7.0",
   "_npmOperationalInternal": {
     "host": "s3://npm-registry-packages",
-    "tmp": "tmp/nativescript-sqlite-1.1.11.tgz_1507706551705_0.11120612313970923"
+    "tmp": "tmp/nativescript-sqlite-1.2.0.tgz_1512537645357_0.3817754697520286"
   },
   "_npmUser": {
     "name": "nathanaela",
     "email": "nathan@master-technology.com"
   },
-  "_npmVersion": "5.0.4",
+  "_npmVersion": "5.0.3",
   "_phantomChildren": {},
   "_requested": {
     "raw": "nativescript-sqlite@^1.1.11",
@@ -40,8 +40,8 @@
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/nativescript-sqlite/-/nativescript-sqlite-1.1.11.tgz",
-  "_shasum": "c265a3f4e228d94b07fd9b9ac6306ae52508e749",
+  "_resolved": "https://registry.npmjs.org/nativescript-sqlite/-/nativescript-sqlite-1.2.0.tgz",
+  "_shasum": "9210417c5f251ed48bf5984f317a311d263bd34b",
   "_shrinkwrap": null,
   "_spec": "nativescript-sqlite@^1.1.11",
   "_where": "/Users/aleksandernygardtonheim/msHelse",
@@ -57,11 +57,10 @@
   "devDependencies": {},
   "directories": {},
   "dist": {
-    "integrity": "sha512-umgv6Y1e+WldHLCbC9kjhVa9VE1O0e0oPLtJveXidzpiIJAWT9x+NYcFQsBFcPBdzmy6HKqrINvT5DhVYs+DOA==",
-    "shasum": "c265a3f4e228d94b07fd9b9ac6306ae52508e749",
-    "tarball": "https://registry.npmjs.org/nativescript-sqlite/-/nativescript-sqlite-1.1.11.tgz"
+    "integrity": "sha512-pYDyl35/P32f3j/7AWy2gyCHLyzfaZJepMuZ01oP9DU294UnGQCBQWTg1sDN2ZPIREDcFkjpZYhThWB3kTFA8w==",
+    "shasum": "9210417c5f251ed48bf5984f317a311d263bd34b",
+    "tarball": "https://registry.npmjs.org/nativescript-sqlite/-/nativescript-sqlite-1.2.0.tgz"
   },
-  "gitHead": "6b860dc0d22a938ff31db724e2f81c4eb3ac9bec",
   "homepage": "https://github.com/nathanaela/nativescript-sqlite",
   "keywords": [
     "NativeScript",
@@ -71,7 +70,8 @@
     "DB",
     "iOS",
     "Android",
-    "JavaScript"
+    "JavaScript",
+    "encryption"
   ],
   "license": {
     "type": "MIT",
@@ -104,5 +104,5 @@
     "type": "git",
     "url": "git+https://github.com/nathanaela/nativescript-sqlite.git"
   },
-  "version": "1.1.11"
+  "version": "1.2.0"
 }

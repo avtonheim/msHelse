@@ -2,8 +2,8 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-var style_properties_1 = require("../../styling/style-properties");
 var view_base_1 = require("../view-base");
+var style_properties_1 = require("../../styling/style-properties");
 var gestures_1 = require("../../gestures");
 __export(require("../../styling/style-properties"));
 __export(require("../view-base"));
@@ -277,6 +277,16 @@ var ViewCommon = (function (_super) {
         },
         set: function (value) {
             this.style.color = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ViewCommon.prototype, "background", {
+        get: function () {
+            return this.style.background;
+        },
+        set: function (value) {
+            this.style.background = value;
         },
         enumerable: true,
         configurable: true

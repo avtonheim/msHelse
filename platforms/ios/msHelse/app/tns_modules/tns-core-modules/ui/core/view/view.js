@@ -2,8 +2,8 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-var background_1 = require("../../styling/background");
 var view_common_1 = require("./view-common");
+var background_1 = require("../../styling/background");
 var style_properties_1 = require("../../styling/style-properties");
 var profiling_1 = require("../../../profiling");
 __export(require("./view-common"));

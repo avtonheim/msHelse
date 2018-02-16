@@ -35,7 +35,7 @@ function createViewModel(database) {
 
         viewModel.selectPatientOverview = function() {
           this.Symptoms = new ObservableArray([]);
-              database.all("SELECT symptom, count(morning), count(evening), count(symptom) FROM symptoms WHERE id < 8 group by symptom order by count(symptom) desc").then(rows => {
+              database.all("SELECT symptom, count(morning), count(evening), count(symptom) FROM symptoms group by symptom order by count(symptom) desc").then(rows => {
                   for(var row in rows) {
                    this.Symptoms.push({type: rows[row][0], morncount: rows[row][1], evncount: rows[row][2], count: rows[row][3]});
                   }
@@ -46,7 +46,7 @@ function createViewModel(database) {
 
           viewModel.selectProminentSymptomWeek = function() {
               this.SymptomProminentWeek = new ObservableArray([]);
-                database.all("SELECT symptom, count(symptom), count(morning), count(evening) FROM symptoms WHERE id < 8 group by symptom order by count(symptom) desc limit 1").then(rows => {
+                database.all("SELECT symptom, count(symptom), count(morning), count(evening) FROM symptoms group by symptom order by count(symptom) desc limit 1").then(rows => {
                     for(var row in rows) {
                       this.SymptomProminentWeek.push({symptom: rows[row][0], symptomNum: rows[row][1], symptomnummorning: rows[row][2], symptomnumevening: rows[row][3]});
                       console.log(rows[row]);

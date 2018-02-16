@@ -2,8 +2,8 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-var debug_1 = require("../../../utils/debug");
 var properties_1 = require("../properties");
+var debug_1 = require("../../../utils/debug");
 var bindable_1 = require("../bindable");
 var platform_1 = require("../../../platform");
 exports.isIOS = platform_1.isIOS;
@@ -11,7 +11,6 @@ exports.isAndroid = platform_1.isAndroid;
 var utils_1 = require("../../../utils/utils");
 exports.layout = utils_1.layout;
 var style_properties_1 = require("../../styling/style-properties");
-var dom_node_1 = require("../../../debugger/dom-node");
 var types = require("../../../utils/types");
 var color_1 = require("../../../color");
 exports.Color = color_1.Color;
@@ -19,6 +18,12 @@ var profiling_1 = require("../../../profiling");
 __export(require("../bindable"));
 __export(require("../properties"));
 var ssm = require("../../styling/style-scope");
+var domNodeModule;
+function ensuredomNodeModule() {
+    if (!domNodeModule) {
+        domNodeModule = require("../../../debugger/dom-node");
+    }
+}
 var styleScopeModule;
 function ensureStyleScopeModule() {
     if (!styleScopeModule) {
@@ -94,6 +99,16 @@ var ViewBase = (function (_super) {
         _this._style = new properties_1.Style(_this);
         return _this;
     }
+    Object.defineProperty(ViewBase.prototype, "parentNode", {
+        get: function () {
+            return this._templateParent || this.parent;
+        },
+        set: function (node) {
+            this._templateParent = node;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(ViewBase.prototype, "nativeView", {
         get: function () {
             return this.nativeViewProtected;
@@ -172,7 +187,8 @@ var ViewBase = (function (_super) {
     });
     ViewBase.prototype.ensureDomNode = function () {
         if (!this.domNode) {
-            this.domNode = new dom_node_1.DOMNode(this);
+            ensuredomNodeModule();
+            this.domNode = new domNodeModule.DOMNode(this);
         }
     };
     ViewBase.prototype.set = function (name, value) {

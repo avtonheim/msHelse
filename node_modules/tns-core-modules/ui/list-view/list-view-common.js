@@ -21,6 +21,7 @@ var ListViewBase = (function (_super) {
     __extends(ListViewBase, _super);
     function ListViewBase() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this._itemIdGenerator = function (_item, index) { return index; };
         _this._itemTemplateSelectorBindable = new label_1.Label();
         _this._defaultTemplate = {
             key: "default",
@@ -66,6 +67,16 @@ var ListViewBase = (function (_super) {
             else if (typeof value === "function") {
                 this._itemTemplateSelector = value;
             }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ListViewBase.prototype, "itemIdGenerator", {
+        get: function () {
+            return this._itemIdGenerator;
+        },
+        set: function (generatorFn) {
+            this._itemIdGenerator = generatorFn;
         },
         enumerable: true,
         configurable: true
@@ -116,7 +127,7 @@ var ListViewBase = (function (_super) {
     ListViewBase.itemLoadingEvent = "itemLoading";
     ListViewBase.itemTapEvent = "itemTap";
     ListViewBase.loadMoreItemsEvent = "loadMoreItems";
-    ListViewBase.knownFunctions = ["itemTemplateSelector"];
+    ListViewBase.knownFunctions = ["itemTemplateSelector", "itemIdGenerator"];
     return ListViewBase;
 }(view_1.View));
 exports.ListViewBase = ListViewBase;

@@ -5,13 +5,13 @@
     <chart:RadCartesianChart.series>
 
 
-            <chart:BarSeries seriesName="Antall" selectionMode="DataPoint" outerRadiusFactor="0.8" expandRadius="0.2" legendTitle="Antall" items="{{ Symptoms }}" categoryProperty="type" valueProperty="count" showLabels="true">
+            <chart:BarSeries seriesName="Antall" selectionMode="DataPointMultiple" outerRadiusFactor="0.8" expandRadius="0.2" legendTitle="Antall" items="{{ Symptoms }}" categoryProperty="type" valueProperty="count" showLabels="true">
               <chart:LineSeries.labelStyle>
-              <chart:PointLabelStyle margin="5" fontStyle="Bold" fillColor="#60B3FC" textSize="18" textColor="White" />
+              <chart:PointLabelStyle margin="22" fontStyle="Bold" fillColor="#60B3FC" textSize="18" textColor="White" />
           </chart:LineSeries.labelStyle>
         </chart:BarSeries>
 
-            <chart:BarSeries seriesName="Kveld" legendTitle="Kveld" items="{{ Symptoms }}" categoryProperty="type" valueProperty="evncount" showLabels="true">
+    <!--        <chart:BarSeries seriesName="Kveld" legendTitle="Kveld" items="{{ Symptoms }}" categoryProperty="type" valueProperty="evncount" showLabels="true">
                <chart:LineSeries.labelStyle>
                <chart:PointLabelStyle margin="5" fontStyle="Bold" fillColor="#60B3FC" textSize="12" textColor="White" />
            </chart:LineSeries.labelStyle>
@@ -22,7 +22,7 @@
             <chart:PointLabelStyle margin="5" fontStyle="Bold" fillColor="#60B3FC" textSize="12" textColor="White" />
         </chart:LineSeries.labelStyle>
       </chart:BarSeries>
-
+-->
           <chart:BarSeries.labelStyle>
                 <chart:PointLabelStyle margin="15" fontStyle="Bold" textSize="20" textColor="White" />
           </chart:BarSeries.labelStyle>
@@ -32,7 +32,7 @@
             <chart:PaletteEntry strokeColor="#1280A0" fillColor="#1280A0"/>
           </chart:Palette.entries>
         </chart:Palette>
-
+<!--
         <chart:Palette seriesName="Kveld">
           <chart:Palette.entries>
           <chart:PaletteEntry strokeColor="#1ABFF0" fillColor="#1ABFF0"/>
@@ -45,7 +45,7 @@
         </chart:Palette.entries>
       </chart:Palette>
 
-
+-->
       </chart:RadCartesianChart.palettes>
     </chart:RadCartesianChart.series>
 

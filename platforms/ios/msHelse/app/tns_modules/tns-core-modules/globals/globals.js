@@ -21,6 +21,33 @@ global.moduleResolvers = [global.require];
 global.registerModule = function (name, loader) {
     modules.set(name, loader);
 };
+var defaultExtensionMap = { ".js": ".js", ".ts": ".js", ".css": ".css", ".scss": ".css", ".xml": ".xml", ".less": ".css", ".sass": ".css" };
+global.registerWebpackModules = function registerWebpackModules(context, extensionMap) {
+    if (extensionMap === void 0) { extensionMap = {}; }
+    context.keys().forEach(function (key) {
+        var extDotIndex = key.lastIndexOf(".");
+        var base = key.substr(0, extDotIndex);
+        var originalExt = key.substr(extDotIndex);
+        var registerExt = extensionMap[originalExt] || defaultExtensionMap[originalExt] || originalExt;
+        var isSourceFile = originalExt !== registerExt;
+        var registerName = base + registerExt;
+        if (registerName.startsWith("./") && registerName.endsWith(".js")) {
+            var jsNickNames = [
+                registerName.substr(2, registerName.length - 5),
+                registerName.substr(0, registerName.length - 3),
+                registerName.substr(2),
+            ];
+            jsNickNames.forEach(function (jsNickName) {
+                if (isSourceFile || !global.moduleExists(jsNickName)) {
+                    global.registerModule(jsNickName, function () { return context(key); });
+                }
+            });
+        }
+        if (isSourceFile || !global.moduleExists(registerName)) {
+            global.registerModule(registerName, function () { return context(key); });
+        }
+    });
+};
 global.moduleExists = function (name) {
     return modules.has(name);
 };
@@ -58,6 +85,18 @@ global.registerModule("timer", function () { return require("timer"); });
 global.registerModule("ui/dialogs", function () { return require("ui/dialogs"); });
 global.registerModule("xhr", function () { return require("xhr"); });
 global.registerModule("fetch", function () { return require("fetch"); });
+global.System = {
+    import: function (path) {
+        return new Promise(function (resolve, reject) {
+            try {
+                resolve(global.require(path));
+            }
+            catch (e) {
+                reject(e);
+            }
+        });
+    }
+};
 var __tnsGlobalMergedModules = new Map();
 function registerOnGlobalContext(name, module) {
     Object.defineProperty(global, name, {

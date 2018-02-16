@@ -73,9 +73,6 @@ var layout;
         else if (mode === layout.AT_MOST) {
             text += "AT_MOST ";
         }
-        else {
-            text += mode + " ";
-        }
         text += size;
         return text;
     }

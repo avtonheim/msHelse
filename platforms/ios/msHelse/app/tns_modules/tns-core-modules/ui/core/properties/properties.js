@@ -363,17 +363,18 @@ var CssProperty = (function () {
         var valueChanged = options.valueChanged;
         var valueConverter = options.valueConverter;
         var property = this;
-        function setLocalValue(value) {
-            var reset = value === exports.unsetValue;
+        function setLocalValue(newValue) {
+            var reset = newValue === exports.unsetValue || newValue === "";
+            var value;
             if (reset) {
                 value = defaultValue;
                 delete this[sourceKey];
             }
             else {
                 this[sourceKey] = 3;
-                if (valueConverter && typeof value === "string") {
-                    value = valueConverter(value);
-                }
+                value = (valueConverter && typeof newValue === "string") ?
+                    valueConverter(newValue) :
+                    newValue;
             }
             var oldValue = key in this ? this[key] : defaultValue;
             var changed = equalityComparer ? !equalityComparer(oldValue, value) : oldValue !== value;
@@ -428,20 +429,21 @@ var CssProperty = (function () {
                 }
             }
         }
-        function setCssValue(value) {
-            var reset = value === exports.unsetValue;
+        function setCssValue(newValue) {
             var currentValueSource = this[sourceKey] || 0;
             if (currentValueSource === 3) {
                 return;
             }
+            var reset = newValue === exports.unsetValue || newValue === "";
+            var value;
             if (reset) {
                 value = defaultValue;
                 delete this[sourceKey];
             }
             else {
-                if (valueConverter && typeof value === "string") {
-                    value = valueConverter(value);
-                }
+                value = valueConverter && typeof newValue === "string" ?
+                    valueConverter(newValue) :
+                    newValue;
                 this[sourceKey] = 2;
             }
             var oldValue = key in this ? this[key] : defaultValue;
@@ -574,7 +576,8 @@ var CssAnimationProperty = (function () {
                     var oldValue = this[computedValue];
                     var oldSource = this[computedSource];
                     var wasSet = oldSource !== 0;
-                    if (boxedValue === exports.unsetValue) {
+                    var reset = boxedValue === exports.unsetValue || boxedValue === "";
+                    if (reset) {
                         this[symbol] = exports.unsetValue;
                         if (this[computedSource] === propertySource) {
                             if (this[styleValue] !== exports.unsetValue) {
@@ -670,6 +673,9 @@ var CssAnimationProperty = (function () {
     CssAnimationProperty._getByCssName = function (name) {
         return this.properties[name];
     };
+    CssAnimationProperty._getPropertyNames = function () {
+        return Object.keys(CssAnimationProperty.properties);
+    };
     CssAnimationProperty.prototype.isSet = function (instance) {
         return instance[this.source] !== 0;
     };
@@ -696,7 +702,7 @@ var InheritedCssProperty = (function (_super) {
         var valueConverter = options.valueConverter;
         var property = _this;
         var setFunc = function (valueSource) { return function (boxedValue) {
-            var reset = boxedValue === exports.unsetValue;
+            var reset = boxedValue === exports.unsetValue || boxedValue === "";
             var currentValueSource = this[sourceKey] || 0;
             if (reset) {
                 if (valueSource === 2 && currentValueSource === 3) {

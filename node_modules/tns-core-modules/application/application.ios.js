@@ -7,6 +7,7 @@ __export(require("./application-common"));
 var frame_1 = require("../ui/frame");
 var utils_1 = require("../ui/utils");
 var utils = require("../utils/utils");
+var profiling_1 = require("../profiling");
 var Responder = (function (_super) {
     __extends(Responder, _super);
     function Responder() {
@@ -35,6 +36,9 @@ var Window = (function (_super) {
             utils_1.ios._layoutRootView(this.content, this.frame);
         }
     };
+    __decorate([
+        profiling_1.profile
+    ], Window.prototype, "layoutSubviews", null);
     return Window;
 }(UIWindow));
 var NotificationObserver = (function (_super) {
@@ -137,15 +141,27 @@ var IOSApplication = (function () {
         var ios = utils.ios.getter(UIApplication, UIApplication.sharedApplication);
         var object = this;
         application_common_1.notify({ eventName: application_common_1.resumeEvent, object: object, ios: ios });
+        var content = this._window.content;
+        if (content && !content.isLoaded) {
+            content.onLoaded();
+        }
         if (!displayedOnce) {
             application_common_1.notify({ eventName: application_common_1.displayedEvent, object: object, ios: ios });
             displayedOnce = true;
         }
     };
     IOSApplication.prototype.didEnterBackground = function (notification) {
+        var content = this._window.content;
+        if (content && content.isLoaded) {
+            content.onUnloaded();
+        }
         application_common_1.notify({ eventName: application_common_1.suspendEvent, object: this, ios: utils.ios.getter(UIApplication, UIApplication.sharedApplication) });
     };
     IOSApplication.prototype.willTerminate = function (notification) {
+        var content = this._window.content;
+        if (content && content.isLoaded) {
+            content.onUnloaded();
+        }
         application_common_1.notify({ eventName: application_common_1.exitEvent, object: this, ios: utils.ios.getter(UIApplication, UIApplication.sharedApplication) });
     };
     IOSApplication.prototype.didReceiveMemoryWarning = function (notification) {
@@ -177,6 +193,12 @@ var IOSApplication = (function () {
             });
         }
     };
+    __decorate([
+        profiling_1.profile
+    ], IOSApplication.prototype, "didFinishLaunchingWithOptions", null);
+    __decorate([
+        profiling_1.profile
+    ], IOSApplication.prototype, "didBecomeActive", null);
     return IOSApplication;
 }());
 var iosApp = new IOSApplication();

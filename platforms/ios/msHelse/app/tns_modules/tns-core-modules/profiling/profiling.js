@@ -3,6 +3,15 @@ function uptime() {
     return global.android ? org.nativescript.Process.getUpTime() : global.__tns_uptime();
 }
 exports.uptime = uptime;
+function log(message) {
+    if (global.__nslog) {
+        global.__nslog("CONSOLE LOG: " + message);
+    }
+    else {
+        console.log(message);
+    }
+}
+exports.log = log;
 var timers = {};
 var anyGlobal = global;
 var profileNames = [];

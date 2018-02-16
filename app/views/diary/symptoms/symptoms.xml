@@ -10,7 +10,7 @@
   <ScrollView>
     <StackLayout class="diaryComp">
        <Progress value="{{ someProperty }}"/>
-      <Label class="titleMain" style="font-size: 35pt;" text="Kva har prega dagen?"/>
+      <Label class="titleMain" style="font-size: 35pt; padding: 5px;" text="Kva har prega deg sidan sist registrering?" textWrap="true"/>
       <Label class="body" text="Trykk på dei kvite knappane for å registrere" textWrap="true"/>
 
       <StackLayout class="symptomCont" style="height: 200px; margin-top: 50px;">
@@ -21,7 +21,7 @@
         </GridLayout>
       </StackLayout>
 
-      <StackLayout class="symptomCont">
+      <StackLayout class="symptomCont" tap="expandCard">
         <Label text="Vannlatning"/>
         <GridLayout columns="*,*" rows="*">
           <Button class="eventBtn" col="0" row="0" value="1" context="Vannlatning" text="Morgon" tap="{{ insert }}"></Button>

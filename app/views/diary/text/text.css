@@ -1,0 +1,13 @@
+.answerBtn{
+  background-color: #80CEBF;
+  color: white;
+  width: auto;
+  height: 100px;
+  margin: 20px;
+  border-radius: 15px;
+  font-size: 20pt;
+}
+
+#attack{
+  margin-top: -200px;
+}

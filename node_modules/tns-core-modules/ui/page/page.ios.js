@@ -125,18 +125,13 @@ var UIViewControllerImpl = (function (_super) {
         }
         if (frame) {
             if (!page.parent) {
-                if (!frame._currentEntry) {
-                    frame._currentEntry = newEntry;
-                }
-                else {
-                    frame._navigateToEntry = newEntry;
-                }
                 frame._addView(page);
-                frame.remeasureFrame();
             }
             else if (page.parent !== frame) {
                 throw new Error("Page is already shown on another frame.");
             }
+            frame.measurePage(page);
+            frame.layoutPage(page);
             page.actionBar.update();
         }
         page._viewWillDisappear = false;
@@ -156,33 +151,32 @@ var UIViewControllerImpl = (function (_super) {
             return;
         }
         page._viewWillDisappear = false;
-        var frame = this.navigationController ? this.navigationController.owner : null;
+        var navigationController = this.navigationController;
+        var frame = navigationController ? navigationController.owner : null;
         if (!page._presentedViewController && frame) {
             var newEntry = this[ENTRY];
             var isBack = isBackNavigationTo(page, newEntry);
             if (frame.currentPage === page && frame._navigationQueue.length === 0) {
                 isBack = false;
             }
-            frame._navigateToEntry = null;
-            frame._currentEntry = newEntry;
+            frame._updateBackstack(newEntry, isBack);
+            frame.setCurrent(newEntry, isBack);
             frame.remeasureFrame();
             frame._updateActionBar(page);
-            page.onNavigatedTo(isBack);
             frame.ios.controller.delegate = this[DELEGATE];
+            frame._processNavigationQueue(page);
             if (frame.canGoBack()) {
-                this.navigationController.interactivePopGestureRecognizer.delegate = this.navigationController;
-                this.navigationController.interactivePopGestureRecognizer.enabled = page.enableSwipeBackNavigation;
+                navigationController.interactivePopGestureRecognizer.delegate = navigationController;
+                navigationController.interactivePopGestureRecognizer.enabled = page.enableSwipeBackNavigation;
             }
             else {
-                this.navigationController.interactivePopGestureRecognizer.enabled = false;
+                navigationController.interactivePopGestureRecognizer.enabled = false;
             }
-            frame._processNavigationQueue(page);
         }
         if (!this.presentedViewController) {
             page._presentedViewController = null;
         }
     };
-    ;
     UIViewControllerImpl.prototype.viewWillDisappear = function (animated) {
         _super.prototype.viewWillDisappear.call(this, animated);
         var page = this._owner.get();
@@ -218,23 +212,26 @@ var UIViewControllerImpl = (function (_super) {
             modalParent.frame._removeView(page);
             modalParent._modal = undefined;
         }
-        var frame = page.frame;
-        if (!modalParent && frame && frame.backStack.length > 0 && frame.navigationQueueIsEmpty() && frame.currentPage === page) {
-            frame._backStack.pop();
-        }
         page._enableLoadedEvents = true;
-        var isBack = isBackNavigationFrom(this, page);
-        if (isBack) {
-            frame._removeView(page);
-        }
         if (page.isLoaded) {
             page.onUnloaded();
         }
-        page._enableLoadedEvents = false;
-        if (!modalParent) {
-            page.onNavigatedFrom(isBack);
-        }
     };
+    __decorate([
+        profiling_1.profile
+    ], UIViewControllerImpl.prototype, "viewDidLayoutSubviews", null);
+    __decorate([
+        profiling_1.profile
+    ], UIViewControllerImpl.prototype, "viewWillAppear", null);
+    __decorate([
+        profiling_1.profile
+    ], UIViewControllerImpl.prototype, "viewDidAppear", null);
+    __decorate([
+        profiling_1.profile
+    ], UIViewControllerImpl.prototype, "viewWillDisappear", null);
+    __decorate([
+        profiling_1.profile
+    ], UIViewControllerImpl.prototype, "viewDidDisappear", null);
     return UIViewControllerImpl;
 }(UIViewController));
 var Page = (function (_super) {
@@ -428,9 +425,6 @@ var Page = (function (_super) {
             return;
         }
         _super.prototype._removeViewFromNativeVisualTree.call(this, view);
-    };
-    Page.prototype[page_common_1.actionBarHiddenProperty.getDefault] = function () {
-        return undefined;
     };
     Page.prototype[page_common_1.actionBarHiddenProperty.setNative] = function (value) {
         this._updateEnableSwipeBackNavigation(value);

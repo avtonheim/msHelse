@@ -5,6 +5,7 @@ var binding_builder_1 = require("../binding-builder");
 var file_name_resolver_1 = require("../../../file-system/file-name-resolver");
 var profiling_1 = require("../../../profiling");
 var platform = require("../../../platform");
+var filesystem = require("../../../file-system");
 var UI_PATH = "ui/";
 var MODULES = {
     "TabViewItem": "ui/tab-view",
@@ -97,6 +98,11 @@ var applyComponentCss = profiling_1.profile("applyComponentCss", function (insta
     }
     if (typeof instance.addCssFile === "function") {
         if (moduleNamePath && !cssApplied) {
+            var appPath = filesystem.knownFolders.currentApp().path;
+            var cssPathRelativeToApp = (moduleNamePath.startsWith(appPath) ? "./" + moduleNamePath.substr(appPath.length + 1) : moduleNamePath) + ".css";
+            if (global.moduleExists(cssPathRelativeToApp)) {
+                instance.addCssFile(cssPathRelativeToApp);
+            }
             var cssFilePath = file_name_resolver_1.resolveFileName(moduleNamePath, "css");
             if (cssFilePath) {
                 instance.addCssFile(cssFilePath);

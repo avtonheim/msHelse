@@ -1,14 +1,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
+var properties_1 = require("../core/properties");
 var color_1 = require("../../color");
 var font_1 = require("../../ui/styling/font");
 var utils_1 = require("../../utils/utils");
 var background_1 = require("../../ui/styling/background");
 var platform_1 = require("../../platform");
-var style_1 = require("./style");
-var properties_1 = require("../core/properties");
-var utils_2 = require("../../utils/utils");
 var number_utils_1 = require("../../utils/number-utils");
 var matrix_1 = require("../../matrix");
+var parser = require("../../css/parser");
 function equalsCommon(a, b) {
     if (a == "auto") {
         return b == "auto";
@@ -149,18 +148,18 @@ exports.minWidthProperty = new properties_1.CssProperty({
         target.view.effectiveMinWidth = Length.toDevicePixels(newValue, 0);
     }, valueConverter: Length.parse
 });
-exports.minWidthProperty.register(style_1.Style);
+exports.minWidthProperty.register(properties_1.Style);
 exports.minHeightProperty = new properties_1.CssProperty({
     name: "minHeight", cssName: "min-height", defaultValue: exports.zeroLength, affectsLayout: platform_1.isIOS, equalityComparer: Length.equals,
     valueChanged: function (target, oldValue, newValue) {
         target.view.effectiveMinHeight = Length.toDevicePixels(newValue, 0);
     }, valueConverter: Length.parse
 });
-exports.minHeightProperty.register(style_1.Style);
+exports.minHeightProperty.register(properties_1.Style);
 exports.widthProperty = new properties_1.CssProperty({ name: "width", cssName: "width", defaultValue: "auto", affectsLayout: platform_1.isIOS, equalityComparer: Length.equals, valueConverter: PercentLength.parse });
-exports.widthProperty.register(style_1.Style);
+exports.widthProperty.register(properties_1.Style);
 exports.heightProperty = new properties_1.CssProperty({ name: "height", cssName: "height", defaultValue: "auto", affectsLayout: platform_1.isIOS, equalityComparer: Length.equals, valueConverter: PercentLength.parse });
-exports.heightProperty.register(style_1.Style);
+exports.heightProperty.register(properties_1.Style);
 var marginProperty = new properties_1.ShorthandProperty({
     name: "margin", cssName: "margin",
     getter: function () {
@@ -173,15 +172,15 @@ var marginProperty = new properties_1.ShorthandProperty({
     },
     converter: convertToMargins
 });
-marginProperty.register(style_1.Style);
+marginProperty.register(properties_1.Style);
 exports.marginLeftProperty = new properties_1.CssProperty({ name: "marginLeft", cssName: "margin-left", defaultValue: exports.zeroLength, affectsLayout: platform_1.isIOS, equalityComparer: Length.equals, valueConverter: PercentLength.parse });
-exports.marginLeftProperty.register(style_1.Style);
+exports.marginLeftProperty.register(properties_1.Style);
 exports.marginRightProperty = new properties_1.CssProperty({ name: "marginRight", cssName: "margin-right", defaultValue: exports.zeroLength, affectsLayout: platform_1.isIOS, equalityComparer: Length.equals, valueConverter: PercentLength.parse });
-exports.marginRightProperty.register(style_1.Style);
+exports.marginRightProperty.register(properties_1.Style);
 exports.marginTopProperty = new properties_1.CssProperty({ name: "marginTop", cssName: "margin-top", defaultValue: exports.zeroLength, affectsLayout: platform_1.isIOS, equalityComparer: Length.equals, valueConverter: PercentLength.parse });
-exports.marginTopProperty.register(style_1.Style);
+exports.marginTopProperty.register(properties_1.Style);
 exports.marginBottomProperty = new properties_1.CssProperty({ name: "marginBottom", cssName: "margin-bottom", defaultValue: exports.zeroLength, affectsLayout: platform_1.isIOS, equalityComparer: Length.equals, valueConverter: PercentLength.parse });
-exports.marginBottomProperty.register(style_1.Style);
+exports.marginBottomProperty.register(properties_1.Style);
 var paddingProperty = new properties_1.ShorthandProperty({
     name: "padding", cssName: "padding",
     getter: function () {
@@ -194,35 +193,35 @@ var paddingProperty = new properties_1.ShorthandProperty({
     },
     converter: convertToPaddings
 });
-paddingProperty.register(style_1.Style);
+paddingProperty.register(properties_1.Style);
 exports.paddingLeftProperty = new properties_1.CssProperty({
     name: "paddingLeft", cssName: "padding-left", defaultValue: exports.zeroLength, affectsLayout: platform_1.isIOS, equalityComparer: Length.equals,
     valueChanged: function (target, oldValue, newValue) {
         target.view.effectivePaddingLeft = Length.toDevicePixels(newValue, 0);
     }, valueConverter: Length.parse
 });
-exports.paddingLeftProperty.register(style_1.Style);
+exports.paddingLeftProperty.register(properties_1.Style);
 exports.paddingRightProperty = new properties_1.CssProperty({
     name: "paddingRight", cssName: "padding-right", defaultValue: exports.zeroLength, affectsLayout: platform_1.isIOS, equalityComparer: Length.equals,
     valueChanged: function (target, oldValue, newValue) {
         target.view.effectivePaddingRight = Length.toDevicePixels(newValue, 0);
     }, valueConverter: Length.parse
 });
-exports.paddingRightProperty.register(style_1.Style);
+exports.paddingRightProperty.register(properties_1.Style);
 exports.paddingTopProperty = new properties_1.CssProperty({
     name: "paddingTop", cssName: "padding-top", defaultValue: exports.zeroLength, affectsLayout: platform_1.isIOS, equalityComparer: Length.equals,
     valueChanged: function (target, oldValue, newValue) {
         target.view.effectivePaddingTop = Length.toDevicePixels(newValue, 0);
     }, valueConverter: Length.parse
 });
-exports.paddingTopProperty.register(style_1.Style);
+exports.paddingTopProperty.register(properties_1.Style);
 exports.paddingBottomProperty = new properties_1.CssProperty({
     name: "paddingBottom", cssName: "padding-bottom", defaultValue: exports.zeroLength, affectsLayout: platform_1.isIOS, equalityComparer: Length.equals,
     valueChanged: function (target, oldValue, newValue) {
         target.view.effectivePaddingBottom = Length.toDevicePixels(newValue, 0);
     }, valueConverter: Length.parse
 });
-exports.paddingBottomProperty.register(style_1.Style);
+exports.paddingBottomProperty.register(properties_1.Style);
 var HorizontalAlignment;
 (function (HorizontalAlignment) {
     HorizontalAlignment.LEFT = "left";
@@ -233,7 +232,7 @@ var HorizontalAlignment;
     HorizontalAlignment.parse = properties_1.makeParser(HorizontalAlignment.isValid);
 })(HorizontalAlignment = exports.HorizontalAlignment || (exports.HorizontalAlignment = {}));
 exports.horizontalAlignmentProperty = new properties_1.CssProperty({ name: "horizontalAlignment", cssName: "horizontal-align", defaultValue: HorizontalAlignment.STRETCH, affectsLayout: platform_1.isIOS, valueConverter: HorizontalAlignment.parse });
-exports.horizontalAlignmentProperty.register(style_1.Style);
+exports.horizontalAlignmentProperty.register(properties_1.Style);
 var VerticalAlignment;
 (function (VerticalAlignment) {
     VerticalAlignment.TOP = "top";
@@ -245,7 +244,7 @@ var VerticalAlignment;
     var parseStrict = properties_1.makeParser(VerticalAlignment.isValid);
 })(VerticalAlignment = exports.VerticalAlignment || (exports.VerticalAlignment = {}));
 exports.verticalAlignmentProperty = new properties_1.CssProperty({ name: "verticalAlignment", cssName: "vertical-align", defaultValue: VerticalAlignment.STRETCH, affectsLayout: platform_1.isIOS, valueConverter: VerticalAlignment.parse });
-exports.verticalAlignmentProperty.register(style_1.Style);
+exports.verticalAlignmentProperty.register(properties_1.Style);
 function parseThickness(value) {
     if (typeof value === "string") {
         var arr = value.split(/[ ,]+/);
@@ -330,11 +329,11 @@ function convertToPaddings(value) {
     }
 }
 exports.rotateProperty = new properties_1.CssAnimationProperty({ name: "rotate", cssName: "rotate", defaultValue: 0, valueConverter: parseFloat });
-exports.rotateProperty.register(style_1.Style);
+exports.rotateProperty.register(properties_1.Style);
 exports.scaleXProperty = new properties_1.CssAnimationProperty({ name: "scaleX", cssName: "scaleX", defaultValue: 1, valueConverter: parseFloat });
-exports.scaleXProperty.register(style_1.Style);
+exports.scaleXProperty.register(properties_1.Style);
 exports.scaleYProperty = new properties_1.CssAnimationProperty({ name: "scaleY", cssName: "scaleY", defaultValue: 1, valueConverter: parseFloat });
-exports.scaleYProperty.register(style_1.Style);
+exports.scaleYProperty.register(properties_1.Style);
 function parseDIPs(value) {
     if (value.indexOf("px") !== -1) {
         return utils_1.layout.toDeviceIndependentPixels(parseFloat(value.replace("px", "").trim()));
@@ -344,9 +343,9 @@ function parseDIPs(value) {
     }
 }
 exports.translateXProperty = new properties_1.CssAnimationProperty({ name: "translateX", cssName: "translateX", defaultValue: 0, valueConverter: parseDIPs });
-exports.translateXProperty.register(style_1.Style);
+exports.translateXProperty.register(properties_1.Style);
 exports.translateYProperty = new properties_1.CssAnimationProperty({ name: "translateY", cssName: "translateY", defaultValue: 0, valueConverter: parseDIPs });
-exports.translateYProperty.register(style_1.Style);
+exports.translateYProperty.register(properties_1.Style);
 var transformProperty = new properties_1.ShorthandProperty({
     name: "transform", cssName: "transform",
     getter: function () {
@@ -369,7 +368,7 @@ var transformProperty = new properties_1.ShorthandProperty({
     },
     converter: convertToTransform
 });
-transformProperty.register(style_1.Style);
+transformProperty.register(properties_1.Style);
 var IDENTITY_TRANSFORMATION = {
     translate: { x: 0, y: 0 },
     rotate: 0,
@@ -429,7 +428,7 @@ function transformConverter(text) {
         return IDENTITY_TRANSFORMATION;
     }
     var usedTransforms = transformations.map(function (t) { return t.property; });
-    if (!utils_2.hasDuplicates(usedTransforms)) {
+    if (!utils_1.hasDuplicates(usedTransforms)) {
         var fullTransformations_1 = Object.assign({}, IDENTITY_TRANSFORMATION);
         transformations.forEach(function (transform) {
             fullTransformations_1[transform.property] = transform.value;
@@ -466,26 +465,34 @@ function convertTransformValue(property, stringValue) {
     }
     return { x: x, y: y };
 }
+var backgroundProperty = new properties_1.ShorthandProperty({
+    name: "background", cssName: "background",
+    getter: function () {
+        return this.backgroundColor + " " + this.backgroundImage + " " + this.backgroundRepeat + " " + this.backgroundPosition;
+    },
+    converter: convertToBackgrounds
+});
+backgroundProperty.register(properties_1.Style);
 exports.backgroundInternalProperty = new properties_1.CssProperty({
     name: "backgroundInternal",
     cssName: "_backgroundInternal",
     defaultValue: background_1.Background.default
 });
-exports.backgroundInternalProperty.register(style_1.Style);
+exports.backgroundInternalProperty.register(properties_1.Style);
 exports.backgroundImageProperty = new properties_1.CssProperty({
     name: "backgroundImage", cssName: "background-image", valueChanged: function (target, oldValue, newValue) {
         var background = target.backgroundInternal.withImage(newValue);
         target.backgroundInternal = background;
     }
 });
-exports.backgroundImageProperty.register(style_1.Style);
+exports.backgroundImageProperty.register(properties_1.Style);
 exports.backgroundColorProperty = new properties_1.CssAnimationProperty({
     name: "backgroundColor", cssName: "background-color", valueChanged: function (target, oldValue, newValue) {
         var background = target.backgroundInternal.withColor(newValue);
         target.backgroundInternal = background;
     }, equalityComparer: color_1.Color.equals, valueConverter: function (value) { return new color_1.Color(value); }
 });
-exports.backgroundColorProperty.register(style_1.Style);
+exports.backgroundColorProperty.register(properties_1.Style);
 var BackgroundRepeat;
 (function (BackgroundRepeat) {
     BackgroundRepeat.REPEAT = "repeat";
@@ -502,21 +509,44 @@ exports.backgroundRepeatProperty = new properties_1.CssProperty({
         target.backgroundInternal = background;
     }
 });
-exports.backgroundRepeatProperty.register(style_1.Style);
+exports.backgroundRepeatProperty.register(properties_1.Style);
 exports.backgroundSizeProperty = new properties_1.CssProperty({
     name: "backgroundSize", cssName: "background-size", valueChanged: function (target, oldValue, newValue) {
         var background = target.backgroundInternal.withSize(newValue);
         target.backgroundInternal = background;
     }
 });
-exports.backgroundSizeProperty.register(style_1.Style);
+exports.backgroundSizeProperty.register(properties_1.Style);
 exports.backgroundPositionProperty = new properties_1.CssProperty({
     name: "backgroundPosition", cssName: "background-position", valueChanged: function (target, oldValue, newValue) {
         var background = target.backgroundInternal.withPosition(newValue);
         target.backgroundInternal = background;
     }
 });
-exports.backgroundPositionProperty.register(style_1.Style);
+exports.backgroundPositionProperty.register(properties_1.Style);
+function convertToBackgrounds(value) {
+    if (typeof value === "string") {
+        var backgrounds = parser.parseBackground(value).value;
+        var backgroundColor = backgrounds.color ? new color_1.Color(backgrounds.color) : properties_1.unsetValue;
+        var backgroundImage = backgrounds.image || properties_1.unsetValue;
+        var backgroundRepeat = backgrounds.repeat || properties_1.unsetValue;
+        var backgroundPosition = backgrounds.position ? backgrounds.position.text : properties_1.unsetValue;
+        return [
+            [exports.backgroundColorProperty, backgroundColor],
+            [exports.backgroundImageProperty, backgroundImage],
+            [exports.backgroundRepeatProperty, backgroundRepeat],
+            [exports.backgroundPositionProperty, backgroundPosition]
+        ];
+    }
+    else {
+        return [
+            [exports.backgroundColorProperty, properties_1.unsetValue],
+            [exports.backgroundImageProperty, properties_1.unsetValue],
+            [exports.backgroundRepeatProperty, properties_1.unsetValue],
+            [exports.backgroundPositionProperty, properties_1.unsetValue]
+        ];
+    }
+}
 function parseBorderColor(value) {
     var result = { top: undefined, right: undefined, bottom: undefined, left: undefined };
     if (value.indexOf("rgb") === 0) {
@@ -595,35 +625,35 @@ var borderColorProperty = new properties_1.ShorthandProperty({
         }
     }
 });
-borderColorProperty.register(style_1.Style);
+borderColorProperty.register(properties_1.Style);
 exports.borderTopColorProperty = new properties_1.CssProperty({
     name: "borderTopColor", cssName: "border-top-color", valueChanged: function (target, oldValue, newValue) {
         var background = target.backgroundInternal.withBorderTopColor(newValue);
         target.backgroundInternal = background;
     }, equalityComparer: color_1.Color.equals, valueConverter: function (value) { return new color_1.Color(value); }
 });
-exports.borderTopColorProperty.register(style_1.Style);
+exports.borderTopColorProperty.register(properties_1.Style);
 exports.borderRightColorProperty = new properties_1.CssProperty({
     name: "borderRightColor", cssName: "border-right-color", valueChanged: function (target, oldValue, newValue) {
         var background = target.backgroundInternal.withBorderRightColor(newValue);
         target.backgroundInternal = background;
     }, equalityComparer: color_1.Color.equals, valueConverter: function (value) { return new color_1.Color(value); }
 });
-exports.borderRightColorProperty.register(style_1.Style);
+exports.borderRightColorProperty.register(properties_1.Style);
 exports.borderBottomColorProperty = new properties_1.CssProperty({
     name: "borderBottomColor", cssName: "border-bottom-color", valueChanged: function (target, oldValue, newValue) {
         var background = target.backgroundInternal.withBorderBottomColor(newValue);
         target.backgroundInternal = background;
     }, equalityComparer: color_1.Color.equals, valueConverter: function (value) { return new color_1.Color(value); }
 });
-exports.borderBottomColorProperty.register(style_1.Style);
+exports.borderBottomColorProperty.register(properties_1.Style);
 exports.borderLeftColorProperty = new properties_1.CssProperty({
     name: "borderLeftColor", cssName: "border-left-color", valueChanged: function (target, oldValue, newValue) {
         var background = target.backgroundInternal.withBorderLeftColor(newValue);
         target.backgroundInternal = background;
     }, equalityComparer: color_1.Color.equals, valueConverter: function (value) { return new color_1.Color(value); }
 });
-exports.borderLeftColorProperty.register(style_1.Style);
+exports.borderLeftColorProperty.register(properties_1.Style);
 var borderWidthProperty = new properties_1.ShorthandProperty({
     name: "borderWidth", cssName: "border-width",
     getter: function () {
@@ -656,7 +686,7 @@ var borderWidthProperty = new properties_1.ShorthandProperty({
         }
     }
 });
-borderWidthProperty.register(style_1.Style);
+borderWidthProperty.register(properties_1.Style);
 exports.borderTopWidthProperty = new properties_1.CssProperty({
     name: "borderTopWidth", cssName: "border-top-width", defaultValue: exports.zeroLength, affectsLayout: platform_1.isIOS, equalityComparer: Length.equals,
     valueChanged: function (target, oldValue, newValue) {
@@ -669,7 +699,7 @@ exports.borderTopWidthProperty = new properties_1.CssProperty({
         target.backgroundInternal = background;
     }, valueConverter: Length.parse
 });
-exports.borderTopWidthProperty.register(style_1.Style);
+exports.borderTopWidthProperty.register(properties_1.Style);
 exports.borderRightWidthProperty = new properties_1.CssProperty({
     name: "borderRightWidth", cssName: "border-right-width", defaultValue: exports.zeroLength, affectsLayout: platform_1.isIOS, equalityComparer: Length.equals,
     valueChanged: function (target, oldValue, newValue) {
@@ -682,7 +712,7 @@ exports.borderRightWidthProperty = new properties_1.CssProperty({
         target.backgroundInternal = background;
     }, valueConverter: Length.parse
 });
-exports.borderRightWidthProperty.register(style_1.Style);
+exports.borderRightWidthProperty.register(properties_1.Style);
 exports.borderBottomWidthProperty = new properties_1.CssProperty({
     name: "borderBottomWidth", cssName: "border-bottom-width", defaultValue: exports.zeroLength, affectsLayout: platform_1.isIOS, equalityComparer: Length.equals,
     valueChanged: function (target, oldValue, newValue) {
@@ -695,7 +725,7 @@ exports.borderBottomWidthProperty = new properties_1.CssProperty({
         target.backgroundInternal = background;
     }, valueConverter: Length.parse
 });
-exports.borderBottomWidthProperty.register(style_1.Style);
+exports.borderBottomWidthProperty.register(properties_1.Style);
 exports.borderLeftWidthProperty = new properties_1.CssProperty({
     name: "borderLeftWidth", cssName: "border-left-width", defaultValue: exports.zeroLength, affectsLayout: platform_1.isIOS, equalityComparer: Length.equals,
     valueChanged: function (target, oldValue, newValue) {
@@ -708,7 +738,7 @@ exports.borderLeftWidthProperty = new properties_1.CssProperty({
         target.backgroundInternal = background;
     }, valueConverter: Length.parse
 });
-exports.borderLeftWidthProperty.register(style_1.Style);
+exports.borderLeftWidthProperty.register(properties_1.Style);
 var borderRadiusProperty = new properties_1.ShorthandProperty({
     name: "borderRadius", cssName: "border-radius",
     getter: function () {
@@ -739,7 +769,7 @@ var borderRadiusProperty = new properties_1.ShorthandProperty({
         }
     }
 });
-borderRadiusProperty.register(style_1.Style);
+borderRadiusProperty.register(properties_1.Style);
 exports.borderTopLeftRadiusProperty = new properties_1.CssProperty({
     name: "borderTopLeftRadius", cssName: "border-top-left-radius", defaultValue: 0, affectsLayout: platform_1.isIOS, valueChanged: function (target, oldValue, newValue) {
         var value = Length.toDevicePixels(newValue, 0);
@@ -750,7 +780,7 @@ exports.borderTopLeftRadiusProperty = new properties_1.CssProperty({
         target.backgroundInternal = background;
     }, valueConverter: Length.parse
 });
-exports.borderTopLeftRadiusProperty.register(style_1.Style);
+exports.borderTopLeftRadiusProperty.register(properties_1.Style);
 exports.borderTopRightRadiusProperty = new properties_1.CssProperty({
     name: "borderTopRightRadius", cssName: "border-top-right-radius", defaultValue: 0, affectsLayout: platform_1.isIOS, valueChanged: function (target, oldValue, newValue) {
         var value = Length.toDevicePixels(newValue, 0);
@@ -761,7 +791,7 @@ exports.borderTopRightRadiusProperty = new properties_1.CssProperty({
         target.backgroundInternal = background;
     }, valueConverter: Length.parse
 });
-exports.borderTopRightRadiusProperty.register(style_1.Style);
+exports.borderTopRightRadiusProperty.register(properties_1.Style);
 exports.borderBottomRightRadiusProperty = new properties_1.CssProperty({
     name: "borderBottomRightRadius", cssName: "border-bottom-right-radius", defaultValue: 0, affectsLayout: platform_1.isIOS, valueChanged: function (target, oldValue, newValue) {
         var value = Length.toDevicePixels(newValue, 0);
@@ -772,7 +802,7 @@ exports.borderBottomRightRadiusProperty = new properties_1.CssProperty({
         target.backgroundInternal = background;
     }, valueConverter: Length.parse
 });
-exports.borderBottomRightRadiusProperty.register(style_1.Style);
+exports.borderBottomRightRadiusProperty.register(properties_1.Style);
 exports.borderBottomLeftRadiusProperty = new properties_1.CssProperty({
     name: "borderBottomLeftRadius", cssName: "border-bottom-left-radius", defaultValue: 0, affectsLayout: platform_1.isIOS, valueChanged: function (target, oldValue, newValue) {
         var value = Length.toDevicePixels(newValue, 0);
@@ -783,7 +813,7 @@ exports.borderBottomLeftRadiusProperty = new properties_1.CssProperty({
         target.backgroundInternal = background;
     }, valueConverter: Length.parse
 });
-exports.borderBottomLeftRadiusProperty.register(style_1.Style);
+exports.borderBottomLeftRadiusProperty.register(properties_1.Style);
 function isNonNegativeFiniteNumber(value) {
     return isFinite(value) && !isNaN(value) && value >= 0;
 }
@@ -804,7 +834,7 @@ exports.clipPathProperty = new properties_1.CssProperty({
         target.backgroundInternal = background;
     }
 });
-exports.clipPathProperty.register(style_1.Style);
+exports.clipPathProperty.register(properties_1.Style);
 function isFloatValueConverter(value) {
     var newValue = parseFloat(value);
     if (isNaN(newValue)) {
@@ -813,7 +843,7 @@ function isFloatValueConverter(value) {
     return newValue;
 }
 exports.zIndexProperty = new properties_1.CssProperty({ name: "zIndex", cssName: "z-index", valueConverter: isFloatValueConverter });
-exports.zIndexProperty.register(style_1.Style);
+exports.zIndexProperty.register(properties_1.Style);
 function opacityConverter(value) {
     var newValue = parseFloat(value);
     if (!isNaN(newValue) && 0 <= newValue && newValue <= 1) {
@@ -822,11 +852,11 @@ function opacityConverter(value) {
     throw new Error("Opacity should be between [0, 1]. Value: " + newValue);
 }
 exports.opacityProperty = new properties_1.CssAnimationProperty({ name: "opacity", cssName: "opacity", defaultValue: 1, valueConverter: opacityConverter });
-exports.opacityProperty.register(style_1.Style);
+exports.opacityProperty.register(properties_1.Style);
 exports.colorProperty = new properties_1.InheritedCssProperty({ name: "color", cssName: "color", equalityComparer: color_1.Color.equals, valueConverter: function (v) { return new color_1.Color(v); } });
-exports.colorProperty.register(style_1.Style);
+exports.colorProperty.register(properties_1.Style);
 exports.fontInternalProperty = new properties_1.CssProperty({ name: "fontInternal", cssName: "_fontInternal", defaultValue: font_1.Font.default });
-exports.fontInternalProperty.register(style_1.Style);
+exports.fontInternalProperty.register(properties_1.Style);
 exports.fontFamilyProperty = new properties_1.InheritedCssProperty({
     name: "fontFamily", cssName: "font-family", affectsLayout: platform_1.isIOS, valueChanged: function (target, oldValue, newValue) {
         var currentFont = target.fontInternal;
@@ -836,7 +866,7 @@ exports.fontFamilyProperty = new properties_1.InheritedCssProperty({
         }
     }
 });
-exports.fontFamilyProperty.register(style_1.Style);
+exports.fontFamilyProperty.register(properties_1.Style);
 exports.fontSizeProperty = new properties_1.InheritedCssProperty({
     name: "fontSize", cssName: "font-size", affectsLayout: platform_1.isIOS, valueChanged: function (target, oldValue, newValue) {
         var currentFont = target.fontInternal;
@@ -847,7 +877,7 @@ exports.fontSizeProperty = new properties_1.InheritedCssProperty({
     },
     valueConverter: function (v) { return parseFloat(v); }
 });
-exports.fontSizeProperty.register(style_1.Style);
+exports.fontSizeProperty.register(properties_1.Style);
 exports.fontStyleProperty = new properties_1.InheritedCssProperty({
     name: "fontStyle", cssName: "font-style", affectsLayout: platform_1.isIOS, defaultValue: font_1.FontStyle.NORMAL, valueConverter: font_1.FontStyle.parse, valueChanged: function (target, oldValue, newValue) {
         var currentFont = target.fontInternal;
@@ -857,7 +887,7 @@ exports.fontStyleProperty = new properties_1.InheritedCssProperty({
         }
     }
 });
-exports.fontStyleProperty.register(style_1.Style);
+exports.fontStyleProperty.register(properties_1.Style);
 exports.fontWeightProperty = new properties_1.InheritedCssProperty({
     name: "fontWeight", cssName: "font-weight", affectsLayout: platform_1.isIOS, defaultValue: font_1.FontWeight.NORMAL, valueConverter: font_1.FontWeight.parse, valueChanged: function (target, oldValue, newValue) {
         var currentFont = target.fontInternal;
@@ -867,7 +897,7 @@ exports.fontWeightProperty = new properties_1.InheritedCssProperty({
         }
     }
 });
-exports.fontWeightProperty.register(style_1.Style);
+exports.fontWeightProperty.register(properties_1.Style);
 var fontProperty = new properties_1.ShorthandProperty({
     name: "font", cssName: "font",
     getter: function () {
@@ -894,7 +924,7 @@ var fontProperty = new properties_1.ShorthandProperty({
         }
     }
 });
-fontProperty.register(style_1.Style);
+fontProperty.register(properties_1.Style);
 var Visibility;
 (function (Visibility) {
     Visibility.VISIBLE = "visible";
@@ -909,5 +939,5 @@ exports.visibilityProperty = new properties_1.CssProperty({
         target.view.isCollapsed = (newValue === Visibility.COLLAPSE);
     }
 });
-exports.visibilityProperty.register(style_1.Style);
+exports.visibilityProperty.register(properties_1.Style);
 //# sourceMappingURL=style-properties.js.map

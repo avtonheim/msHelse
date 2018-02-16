@@ -273,7 +273,7 @@ function uiColorFromImage(img, view, callback, flip) {
     var params = getDrawParams(img, background, boundsWidth, boundsHeight);
     if (params.sizeX > 0 && params.sizeY > 0) {
         var resizeRect = CGRectMake(0, 0, params.sizeX, params.sizeY);
-        UIGraphicsBeginImageContext(resizeRect.size);
+        UIGraphicsBeginImageContextWithOptions(resizeRect.size, false, 0.0);
         img.drawInRect(resizeRect);
         img = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();

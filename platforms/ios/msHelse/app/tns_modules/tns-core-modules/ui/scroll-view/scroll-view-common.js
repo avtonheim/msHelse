@@ -20,7 +20,7 @@ var ScrollViewBase = (function (_super) {
         }
     };
     ScrollViewBase.prototype.removeEventListener = function (arg, callback, thisArg) {
-        _super.prototype.addEventListener.call(this, arg, callback, thisArg);
+        _super.prototype.removeEventListener.call(this, arg, callback, thisArg);
         if (arg === ScrollViewBase.scrollEvent) {
             this._scrollChangeCount--;
             this.dettach();

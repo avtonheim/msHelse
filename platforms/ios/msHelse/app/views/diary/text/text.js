@@ -24,3 +24,9 @@ if (!Sqlite.exists("populated.db")) {
        console.log("OPEN DB ERROR", error);
    });
 } exports.onNavigatingTo = onNavigatingTo;
+
+function selected(args){
+  var selected = args.object;
+  selected.backgroundColor = "gray";
+
+} exports.selected = selected;

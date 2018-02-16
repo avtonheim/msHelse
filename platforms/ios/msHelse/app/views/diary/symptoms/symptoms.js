@@ -2,6 +2,10 @@ var createViewModel = require("./symptoms-view-model").createViewModel;
 var Sqlite = require("nativescript-sqlite");
 var frameModule = require('ui/frame');
 
+/*
+Sjå på denne! https://docs.nativescript.org/cookbook/ui/switch
+*/
+
 function onNavigatingTo(args){
   var page = args.object;
   //page.bindingContext = { someProperty : 50};
@@ -9,6 +13,7 @@ function onNavigatingTo(args){
   var controller = frameModule.topmost().ios.controller;
   var navigationItem = controller.visibleViewController.navigationItem;
   navigationItem.setHidesBackButtonAnimated(true, false);
+
 
   if (!Sqlite.exists("populated.db")) {
           Sqlite.copyDatabase("populated.db");
@@ -24,6 +29,21 @@ function onNavigatingTo(args){
       });
 }
 exports.onNavigatingTo = onNavigatingTo;
+/*
+function expandCard(args){
+   var btn = args.object;
+   btn.height = "400px";
+
+
+} exports.expandCard = expandCard;
+
+function exitCard(args){
+  var page = args.object;
+  var reduceCard = page.getViewById("symptomC");
+
+  reduceCard.height = "100px";
+} exports.exitCard = exitCard;
+*/
 
 function tapHome(){
   frameModule.topmost().navigate('views/home-page/home-page');

@@ -61,12 +61,12 @@ function loadCustomComponent(componentPath, componentName, attributes, context, 
     }
     var xmlFilePath = file_name_resolver_1.resolveFileName(fullComponentPathFilePathWithoutExt, "xml");
     if (xmlFilePath) {
-        var jsFilePath = file_name_resolver_1.resolveFileName(fullComponentPathFilePathWithoutExt, "js");
         var subExports = context;
         if (global.moduleExists(moduleName)) {
             subExports = global.loadModule(moduleName);
         }
         else {
+            var jsFilePath = file_name_resolver_1.resolveFileName(fullComponentPathFilePathWithoutExt, "js");
             if (jsFilePath) {
                 subExports = global.loadModule(jsFilePath);
             }
@@ -85,14 +85,26 @@ function loadCustomComponent(componentPath, componentName, attributes, context, 
     else {
         result = component_builder_1.getComponentModule(componentName, componentPath, attributes, context);
     }
-    var cssFilePath = file_name_resolver_1.resolveFileName(fullComponentPathFilePathWithoutExt, "css");
-    if (cssFilePath) {
-        if (parentPage && typeof parentPage.addCssFile === "function") {
-            parentPage.addCssFile(cssFilePath);
+    var cssModulePath = fullComponentPathFilePathWithoutExt + ".css";
+    if (cssModulePath.startsWith("/")) {
+        var app = file_system_1.knownFolders.currentApp().path + "/";
+        if (cssModulePath.startsWith(app)) {
+            cssModulePath = "./" + cssModulePath.substr(app.length);
         }
-        else {
-            ensureTrace();
-            trace.write("CSS file found but no page specified. Please specify page in the options!", trace.categories.Error, trace.messageType.error);
+    }
+    if (global.moduleExists(cssModulePath)) {
+        parentPage.addCssFile(cssModulePath);
+    }
+    else {
+        var cssFilePath = file_name_resolver_1.resolveFileName(fullComponentPathFilePathWithoutExt, "css");
+        if (cssFilePath) {
+            if (parentPage && typeof parentPage.addCssFile === "function") {
+                parentPage.addCssFile(cssFilePath);
+            }
+            else {
+                ensureTrace();
+                trace.write("CSS file found but no page specified. Please specify page in the options!", trace.categories.Error, trace.messageType.error);
+            }
         }
     }
     return result;
