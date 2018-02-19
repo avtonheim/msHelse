@@ -1,28 +1,15 @@
   <StackLayout loaded="pageLoaded"
     xmlns="http://schemas.nativescript.org/tns.xsd"
     xmlns:chart="nativescript-pro-ui/chart">
-<chart:RadCartesianChart class="graphBox" height="350">
+  <chart:RadCartesianChart class="graphBox" height="350">
     <chart:RadCartesianChart.series>
 
-
-            <chart:BarSeries seriesName="Antall" selectionMode="DataPointMultiple" outerRadiusFactor="0.8" expandRadius="0.2" legendTitle="Antall" items="{{ Symptoms }}" categoryProperty="type" valueProperty="count" showLabels="true">
+    <chart:BarSeries seriesName="Antall" selectionMode="DataPointMultiple" outerRadiusFactor="0.8" expandRadius="0.2" legendTitle="Antall" items="{{ Symptoms }}" categoryProperty="type" valueProperty="count" showLabels="true">
               <chart:LineSeries.labelStyle>
               <chart:PointLabelStyle margin="22" fontStyle="Bold" fillColor="#60B3FC" textSize="18" textColor="White" />
           </chart:LineSeries.labelStyle>
         </chart:BarSeries>
 
-    <!--        <chart:BarSeries seriesName="Kveld" legendTitle="Kveld" items="{{ Symptoms }}" categoryProperty="type" valueProperty="evncount" showLabels="true">
-               <chart:LineSeries.labelStyle>
-               <chart:PointLabelStyle margin="5" fontStyle="Bold" fillColor="#60B3FC" textSize="12" textColor="White" />
-           </chart:LineSeries.labelStyle>
-         </chart:BarSeries>
-
-            <chart:BarSeries seriesName="Morgon" legendTitle="Morgon" items="{{ Symptoms }}"  categoryProperty="type" valueProperty="morncount" showLabels="true">
-              <chart:LineSeries.labelStyle>
-            <chart:PointLabelStyle margin="5" fontStyle="Bold" fillColor="#60B3FC" textSize="12" textColor="White" />
-        </chart:LineSeries.labelStyle>
-      </chart:BarSeries>
--->
           <chart:BarSeries.labelStyle>
                 <chart:PointLabelStyle margin="15" fontStyle="Bold" textSize="20" textColor="White" />
           </chart:BarSeries.labelStyle>
@@ -32,28 +19,15 @@
             <chart:PaletteEntry strokeColor="#1280A0" fillColor="#1280A0"/>
           </chart:Palette.entries>
         </chart:Palette>
-<!--
-        <chart:Palette seriesName="Kveld">
-          <chart:Palette.entries>
-          <chart:PaletteEntry strokeColor="#1ABFF0" fillColor="#1ABFF0"/>
-        </chart:Palette.entries>
-      </chart:Palette>
 
-        <chart:Palette seriesName="Morgon">
-          <chart:Palette.entries>
-          <chart:PaletteEntry strokeColor="#B5EEFF" fillColor="#B5EEFF"/>
-        </chart:Palette.entries>
-      </chart:Palette>
-
--->
       </chart:RadCartesianChart.palettes>
     </chart:RadCartesianChart.series>
 
     <chart:RadCartesianChart.horizontalAxis>
-        <chart:CategoricalAxis labelFitMode="Rotate"/>
+       <chart:CategoricalAxis allowPan="true" allowZoom="true" labelFitMode="Rotate"/>
     </chart:RadCartesianChart.horizontalAxis>
     <chart:RadCartesianChart.verticalAxis>
-        <chart:LinearAxis majorStep="1"/>
+         <chart:LinearAxis horizontalLocation="Left" allowZoom="true" allowPan="true" majorStep="1"/>
     </chart:RadCartesianChart.verticalAxis>
     <chart:RadCartesianChart.trackball>
       <chart:Trackball/>

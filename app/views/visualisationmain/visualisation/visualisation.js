@@ -28,6 +28,4 @@ exports.onLoad = function(args) {
   stackMood.addChild(componentMoodXML);
   stackSymptomTextVisual.addChild(componentSymptomTextVisualXML);
   stackMoodTextVisual.addChild(componentMoodTextVisualXML);
-
-
 };

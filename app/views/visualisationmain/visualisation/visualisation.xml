@@ -7,17 +7,23 @@
        </ActionBar>
    </Page.actionBar>
    <ScrollView>
-   <StackLayout class="p-20" >
+   <StackLayout class="p-10" >
      <Label class="h1" text="Graf over dagbok"></Label>
      <Label class="body" textWrap="true" text="Dette er ein oversikt over dine symptom og dagsform."></Label>
 
      <StackLayout class="graphContainer">
        <Label class="h2" text="Symptom"></Label>
-
        <StackLayout id="symptomTextVisual">
        </StackLayout>
 
-       <Label class="textInBox" textWrap="true" text="DATO (alt)."></Label>
+       <SegmentedBar>
+         <SegmentedBar.items>
+           <SegmentedBarItem title="Oversikt sist månad"/>
+           <SegmentedBarItem title="Detaljert info" tap="detailedOverview" />
+          </SegmentedBar.items>
+        </SegmentedBar>
+
+
        <StackLayout id="symptomGraph">
       </StackLayout>
     </StackLayout>
