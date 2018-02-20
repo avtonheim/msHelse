@@ -1,7 +1,9 @@
 var frameModule = require("ui/frame");
-var createViewModel = require("../diary/symptoms/symptoms-view-model").createViewModel;
+var createViewModel = require("../../../diary/symptoms/symptoms-view-model").createViewModel;
 var Observable = require("data/observable").Observable;
 var Sqlite = require("nativescript-sqlite");
+var segmentedBarModule = require("tns-core-modules/ui/segmented-bar");
+
 
 exports.pageLoaded = function(args) {
   var page = args.object;

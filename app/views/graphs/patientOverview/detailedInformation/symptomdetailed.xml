@@ -1,29 +1,22 @@
 <StackLayout loaded="pageLoaded"
   xmlns="http://schemas.nativescript.org/tns.xsd"
   xmlns:chart="nativescript-pro-ui/chart">
-
-
 <chart:RadCartesianChart class="graphBox" height="350">
   <chart:RadCartesianChart.series>
 
-  <chart:BarSeries seriesName="Kveld" legendTitle="Kveld" items="{{ Symptoms }}" categoryProperty="type" valueProperty="evncount" showLabels="true">
+  <chart:BarSeries seriesName="Kveld" selectionMode="DataPointMultiple" legendTitle="Kveld" items="{{ Symptoms }}" categoryProperty="type" valueProperty="evncount" showLabels="true">
              <chart:LineSeries.labelStyle>
              <chart:PointLabelStyle margin="5" fontStyle="Bold" fillColor="#60B3FC" textSize="12" textColor="White" />
          </chart:LineSeries.labelStyle>
        </chart:BarSeries>
 
-          <chart:BarSeries seriesName="Morgon" legendTitle="Morgon" items="{{ Symptoms }}"  categoryProperty="type" valueProperty="morncount" showLabels="true">
+   <chart:BarSeries seriesName="Morgon" selectionMode="DataPointMultiple" legendTitle="Morgon" items="{{ Symptoms }}"  categoryProperty="type" valueProperty="morncount" showLabels="true">
             <chart:LineSeries.labelStyle>
           <chart:PointLabelStyle margin="5" fontStyle="Bold" fillColor="#60B3FC" textSize="12" textColor="White" />
       </chart:LineSeries.labelStyle>
     </chart:BarSeries>
 
-
-        <chart:BarSeries.labelStyle>
-              <chart:PointLabelStyle margin="15" fontStyle="Bold" textSize="20" textColor="White" />
-        </chart:BarSeries.labelStyle>
       <chart:RadCartesianChart.palettes>
-
       <chart:Palette seriesName="Kveld">
         <chart:Palette.entries>
         <chart:PaletteEntry strokeColor="#1ABFF0" fillColor="#1ABFF0"/>
@@ -35,7 +28,6 @@
         <chart:PaletteEntry strokeColor="#B5EEFF" fillColor="#B5EEFF"/>
       </chart:Palette.entries>
     </chart:Palette>
-
 
     </chart:RadCartesianChart.palettes>
   </chart:RadCartesianChart.series>
@@ -50,7 +42,7 @@
     <chart:Trackball/>
   </chart:RadCartesianChart.trackball>
   <chart:RadCartesianChart.legend>
-  <chart:RadLegendView position="Middle" title="Forklaring" height="200" width="200" enableSelection="true"/>
+  <chart:RadLegendView position="Middle" title="Forklaring" height="100" width="100" enableSelection="true"/>
 </chart:RadCartesianChart.legend>
 </chart:RadCartesianChart>
 </StackLayout>

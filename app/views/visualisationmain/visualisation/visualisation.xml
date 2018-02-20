@@ -16,16 +16,12 @@
        <StackLayout id="symptomTextVisual">
        </StackLayout>
 
-       <SegmentedBar>
-         <SegmentedBar.items>
-           <SegmentedBarItem title="Oversikt sist månad"/>
-           <SegmentedBarItem title="Detaljert info" tap="detailedOverview" />
-          </SegmentedBar.items>
-        </SegmentedBar>
+        <Button class="segment" text="{{ showDetails ? 'Vis oversikt sist månad' : 'Vis detaljert oversikt sist månad' }}" tap="detailsToggle"></Button>
 
-
-       <StackLayout id="symptomGraph">
+       <StackLayout id="symptomGraph" visibility="{{ showDetails ? 'collapsed' : 'visible' }}">
       </StackLayout>
+      <StackLayout id="detailedGraph" visibility="{{ showDetails ? 'visible' : 'collapsed' }}">
+     </StackLayout>
     </StackLayout>
 
      <StackLayout class="graphContainer">
@@ -33,7 +29,7 @@
 
       <StackLayout id="moodTextVisual">
       </StackLayout>
-      <Label class="textInBox" textWrap="true" text="Dei siste 7 dagane."></Label>
+      <Label class="textInBox" textWrap="true" text="Oversikt den siste veka."></Label>
       <StackLayout id="moodGraph">
       </StackLayout>
     </StackLayout>

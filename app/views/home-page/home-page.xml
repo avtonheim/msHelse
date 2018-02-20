@@ -22,6 +22,7 @@
           <Image src="~/images/analyse_ny.png" height="70px" width="70px"/>
           <Label text="Graf over dagsform"/>
           </StackLayout>
+          <Label style="font-size: 13px; margin-top: -15px;" text="Dei siste sju dagane"/>
           <StackLayout id="mood">
           </StackLayout>
     </StackLayout>

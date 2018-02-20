@@ -1,4 +1,4 @@
-var createViewModelMood = require("../../diary/mood/mood-view-model").createViewModel;
+var createViewModelMood = require("../../../diary/mood/mood-view-model").createViewModel;
 var Observable = require("data/observable").Observable;
 var Sqlite = require("nativescript-sqlite");
 

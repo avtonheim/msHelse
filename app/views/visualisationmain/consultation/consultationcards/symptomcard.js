@@ -1,4 +1,4 @@
-var createViewModelSymptom = require("../../diary/symptoms/symptoms-view-model").createViewModel;
+var createViewModelSymptom = require("../../../diary/symptoms/symptoms-view-model").createViewModel;
 var Observable = require("data/observable").Observable;
 var Sqlite = require("nativescript-sqlite");
 

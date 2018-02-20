@@ -7,7 +7,7 @@
        </ActionBar>
    </Page.actionBar>
    <ScrollView>
-   <StackLayout class="p-20" >
+   <StackLayout class="p-10" >
      <Label class="h1" text="Konsultasjon"></Label>
      <Label class="body" textWrap="true" text="Dette er ein større oversikt over data om sjukdomen. Denne funksjonen skal støtte konsultasjonen mellom lege og pasient."></Label>
 
@@ -15,11 +15,13 @@
        <Label class="h2" text="Symptom"></Label>
        <StackLayout id="symptomText">
        </StackLayout>
+       <Button class="segment" text="{{ showDetails ? 'Vis variasjon' : 'Vis detaljert oversikt' }}" tap="detailsToggle"></Button>
 
        <Label class="textInBox" textWrap="true" text="Dei siste 6 månadane."></Label>
-
-       <StackLayout id="symptomGraph">
+       <StackLayout id="symptomGraph" visibility="{{ showDetails ? 'collapsed' : 'visible' }}">
       </StackLayout>
+      <StackLayout id="symptomDetailed" visibility="{{ showDetails ? 'visible' : 'collapsed' }}">
+     </StackLayout>
     </StackLayout>
     <StackLayout class="graphContainer">
       <Label class="h2" text="Dagsform"></Label>

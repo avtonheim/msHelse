@@ -9,6 +9,7 @@ function createViewModel(database) {
     var viewModel = new Observable();
     viewModel.Symptoms = new ObservableArray([]);
     viewModel.SymptomsConsultation = new ObservableArray([]);
+    viewModel.SymptomsConsultationRange = new ObservableArray([]);
     viewModel.SymptomProminent = new ObservableArray([]);
     viewModel.SymptomProminentWeek = new ObservableArray([]);
 
@@ -68,6 +69,19 @@ function createViewModel(database) {
                 });
             }
 
+            /*Selecting the range with MIN and MAX values in the consultation module*/
+            viewModel.selectDoctorConsultationRange = function() {
+              this.SymptomsConsultationRange = new ObservableArray([]);
+                  database.all("SELECT symptom, count(symptom) FROM symptoms group by symptom order by count(symptom) desc").then(rows => {
+                      for(var row in rows) {
+                       this.SymptomsConsultationRange.push({type: rows[row][0], count: rows[row][1]});
+                      }
+                  }, error => {
+                      console.log("SELECT ERROR", error);
+                  });
+              }
+
+          /*Selecting the detailed overview in the consultation module*/
           viewModel.selectDoctorConsultation = function() {
             this.SymptomsConsultation = new ObservableArray([]);
                 database.all("SELECT symptom, count(symptom), count(morning), count(evening) FROM symptoms group by symptom order by count(symptom) desc").then(rows => {
@@ -84,6 +98,7 @@ function createViewModel(database) {
     viewModel.selectDoctorConsultation();
     viewModel.selectProminentSymptom();
     viewModel.selectProminentSymptomWeek();
+    viewModel.selectDoctorConsultationRange();
     return viewModel;
 }
 exports.createViewModel = createViewModel;

@@ -1,6 +1,6 @@
 var frameModule = require("ui/frame");
 var Observable = require("data/observable").Observable;
-var createViewModel = require("../diary/mood/mood-view-model").createViewModel;
+var createViewModel = require("../../diary/mood/mood-view-model").createViewModel;
 var Sqlite = require("nativescript-sqlite");
 
 function onPageLoaded(args){
