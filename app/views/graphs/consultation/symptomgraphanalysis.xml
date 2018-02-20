@@ -21,13 +21,13 @@
         <chart:BarSeries.labelStyle>
               <chart:PointLabelStyle margin="15" fontStyle="Bold" textSize="20" textColor="White" />
         </chart:BarSeries.labelStyle>
+
       <chart:RadCartesianChart.palettes>
     <chart:Palette seriesName="Antall">
           <chart:Palette.entries>
           <chart:PaletteEntry strokeColor="#1280A0" fillColor="#1280A0"/>
         </chart:Palette.entries>
       </chart:Palette>
-
     </chart:RadCartesianChart.palettes>
   </chart:RadCartesianChart.series>
 

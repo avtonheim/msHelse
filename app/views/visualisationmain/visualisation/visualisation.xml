@@ -16,11 +16,11 @@
        <StackLayout id="symptomTextVisual">
        </StackLayout>
 
-        <Button class="segment" text="{{ showDetails ? 'Vis oversikt sist månad' : 'Vis detaljert oversikt sist månad' }}" tap="detailsToggle"></Button>
+        <Button class="segment"  text="Vis detaljert oversikt sist månad"></Button>
 
-       <StackLayout id="symptomGraph" visibility="{{ showDetails ? 'collapsed' : 'visible' }}">
+       <StackLayout id="symptomGraph">
       </StackLayout>
-      <StackLayout id="detailedGraph" visibility="{{ showDetails ? 'visible' : 'collapsed' }}">
+      <StackLayout id="detailedGraph" visibility="collapsed">
      </StackLayout>
     </StackLayout>
 

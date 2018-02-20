@@ -1,5 +1,4 @@
 var createViewModel = require("../../../diary/mood/mood-view-model").createViewModel;
-var Observable = require("data/observable").Observable;
 var Sqlite = require("nativescript-sqlite");
 
 exports.onLoad = function(args) {
@@ -11,7 +10,6 @@ if (!Sqlite.exists("populated.db")) {
 (new Sqlite("populated.db")).then(db => {
        db.execSQL("CREATE TABLE IF NOT EXISTS mood (id INTEGER PRIMARY KEY AUTOINCREMENT, moodState INT, timestamp INT)").then(id => {
            page.bindingContext = createViewModel(db);
-            console.log("Database Saved!");
        }, error => {
            console.log("CREATE TABLE ERROR", error);
        });

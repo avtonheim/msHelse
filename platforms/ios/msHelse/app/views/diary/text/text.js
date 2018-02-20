@@ -16,7 +16,6 @@ if (!Sqlite.exists("populated.db")) {
 (new Sqlite("populated.db")).then(db => {
        db.execSQL("CREATE TABLE IF NOT EXISTS dialouge (id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT, timestamp INT)").then(id => {
            page.bindingContext = createViewModel(db);
-           console.log("Databse saved!");
        }, error => {
            console.log("CREATE TABLE ERROR", error);
        });

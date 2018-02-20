@@ -50,7 +50,6 @@ function createViewModel(database) {
                 database.all("SELECT symptom, count(symptom), count(morning), count(evening) FROM symptoms WHERE id < 8 group by symptom order by count(symptom) desc limit 1").then(rows => {
                     for(var row in rows) {
                       this.SymptomProminentWeek.push({symptom: rows[row][0], symptomNum: rows[row][1], symptomnummorning: rows[row][2], symptomnumevening: rows[row][3]});
-                      console.log(rows[row]);
                     }
                 }, error => {
                     console.log("SELECT ERROR", error);
@@ -62,7 +61,6 @@ function createViewModel(database) {
                 database.all("SELECT symptom, count(symptom), count(morning), count(evening) FROM symptoms group by symptom order by count(symptom) desc limit 1").then(rows => {
                     for(var row in rows) {
                       this.SymptomProminent.push({symptom: rows[row][0], symptomNum: rows[row][1], symptomnummorning: rows[row][2], symptomnumevening: rows[row][3]});
-
                     }
                 }, error => {
                     console.log("SELECT ERROR", error);

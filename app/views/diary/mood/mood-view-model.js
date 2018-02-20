@@ -27,16 +27,7 @@ function createViewModel(database) {
         });
     }
 
-    /*Testing purposes*/
-    viewModel.selectEverything = function() {
-          database.all("SELECT * FROM mood group by timestamp").then(rows => {
-              for(var row in rows) {
 
-             }
-          }, error => {
-              console.log("SELECT ERROR", error);
-          });
-      }
 
       /*Selecting average mood last 7 days*/
       viewModel.selectAverage = function() {

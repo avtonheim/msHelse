@@ -47,7 +47,7 @@
     <chart:Trackball/>
   </chart:RadCartesianChart.trackball>
   <chart:RadCartesianChart.legend>
-  <chart:RadLegendView position="Middle" title="Forklaring" height="200" width="200" enableSelection="true"/>
+  <chart:RadLegendView position="Top" title="Forklaring" height="200" width="200" enableSelection="true"/>
 </chart:RadCartesianChart.legend>
 </chart:RadCartesianChart>
 </StackLayout>
