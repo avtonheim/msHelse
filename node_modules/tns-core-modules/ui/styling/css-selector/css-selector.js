@@ -426,14 +426,14 @@ function createSelectorFromAst(ast) {
     if (ast.length === 0) {
         return new InvalidSelector(new Error("Empty selector."));
     }
-    else if (ast.length <= 2) {
-        return createSimpleSelectorSequenceFromAst(ast[0]);
+    else if (ast.length === 1) {
+        return createSimpleSelectorSequenceFromAst(ast[0][0]);
     }
     else {
         var simpleSelectorSequences = [];
-        for (var i = 0; i < ast.length; i += 2) {
-            var simpleSelectorSequence = createSimpleSelectorSequenceFromAst(ast[i]);
-            var combinator = ast[i + 1];
+        for (var i = 0; i < ast.length; i++) {
+            var simpleSelectorSequence = createSimpleSelectorSequenceFromAst(ast[i][0]);
+            var combinator = ast[i][1];
             if (combinator) {
                 simpleSelectorSequence.combinator = combinator;
             }

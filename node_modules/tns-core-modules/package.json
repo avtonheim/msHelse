@@ -14,19 +14,19 @@
     ]
   ],
   "_from": "tns-core-modules@latest",
-  "_id": "tns-core-modules@3.4.0",
+  "_id": "tns-core-modules@3.4.1",
   "_inCache": true,
   "_location": "/tns-core-modules",
-  "_nodeVersion": "6.12.2",
+  "_nodeVersion": "6.7.0",
   "_npmOperationalInternal": {
     "host": "s3://npm-registry-packages",
-    "tmp": "tmp/tns-core-modules-3.4.0.tgz_1513782560788_0.5376483588479459"
+    "tmp": "tmp/tns-core-modules_3.4.1_1519134340118_0.7481611778771518"
   },
   "_npmUser": {
     "name": "tns-bot",
     "email": "nativescript@telerik.com"
   },
-  "_npmVersion": "4.6.1",
+  "_npmVersion": "5.6.0",
   "_phantomChildren": {},
   "_requested": {
     "raw": "tns-core-modules",
@@ -41,8 +41,8 @@
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/tns-core-modules/-/tns-core-modules-3.4.0.tgz",
-  "_shasum": "3c40dd3e95c6c33b3fef7ad4ee74daa843a92a11",
+  "_resolved": "https://registry.npmjs.org/tns-core-modules/-/tns-core-modules-3.4.1.tgz",
+  "_shasum": "be6882cd04127296e8803eeb10eb7ebfd9afe717",
   "_shrinkwrap": null,
   "_spec": "tns-core-modules",
   "_where": "/Users/aleksandernygardtonheim/msHelse",
@@ -56,8 +56,11 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "3c40dd3e95c6c33b3fef7ad4ee74daa843a92a11",
-    "tarball": "https://registry.npmjs.org/tns-core-modules/-/tns-core-modules-3.4.0.tgz"
+    "integrity": "sha512-sz/yTmoW7WyDPpr4JEC+trlfiEI14X365jGF//tMCT/G6ISzANr43wc17fgbGH1UA1XbKzujbAl0xPNssRHVUA==",
+    "shasum": "be6882cd04127296e8803eeb10eb7ebfd9afe717",
+    "tarball": "https://registry.npmjs.org/tns-core-modules/-/tns-core-modules-3.4.1.tgz",
+    "fileCount": 416,
+    "unpackedSize": 2190169
   },
   "files": [
     "**/*.d.ts",
@@ -78,16 +81,16 @@
   "license": "Apache-2.0",
   "maintainers": [
     {
-      "name": "tns-bot",
-      "email": "nativescript@telerik.com"
-    },
-    {
       "name": "hhristov",
       "email": "hristo.hristov@outlook.com"
     },
     {
       "name": "panayot.cankov",
       "email": "panayot.cankov@telerik.com"
+    },
+    {
+      "name": "tns-bot",
+      "email": "nativescript@telerik.com"
     },
     {
       "name": "vakrilov",
@@ -105,7 +108,7 @@
   "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
-    "url": "https://github.com/NativeScript/NativeScript/commit/40868ae54b12b1e244a9cf93e3cc116f062eae86"
+    "url": "https://github.com/NativeScript/NativeScript/commit/533630c4a64f77a799c5806d61851489f50ab807"
   },
   "snapshot": {
     "android": {
@@ -118,5 +121,5 @@
     }
   },
   "typings": "tns-core-modules.d.ts",
-  "version": "3.4.0"
+  "version": "3.4.1"
 }

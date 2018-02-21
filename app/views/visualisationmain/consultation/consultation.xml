@@ -16,16 +16,17 @@
        <StackLayout id="symptomText">
        </StackLayout>
        <ScrollView orientation="horizontal">
-       <GridLayout columns="350, 350" rows="*">
+         <GridLayout columns="350,350" rows="*">
           <StackLayout col="0" row="0" id="symptomGraph"></StackLayout>
-           <StackLayout col="1" row="0" id="symptomDetailed"></StackLayout>
-          </GridLayout>
-        </ScrollView>
+          <StackLayout col="1" row="0" id="symptomDetailed"></StackLayout>
+         </GridLayout>
+       </ScrollView>
         <StackLayout orientation="horizontal" horizontalAlignment="center">
         <Image src="~/images/swipe.png" height="70px" width="70px"/>
         <Label class="textInBox" text="Sveip for å vise ein detaljert oversikt!" textWrap="true"></Label>
       </StackLayout>
     </StackLayout>
+
     <StackLayout class="graphContainer">
       <Label class="h2" text="Dagsform"></Label>
       <StackLayout id="moodText">
