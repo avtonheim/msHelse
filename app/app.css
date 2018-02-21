@@ -132,6 +132,7 @@ components that have the btn class name.
   font-size: 14pt;
   font-weight: bold;
   text-align: center;
+  margin: 20px;
 }
 .textExpl{
   color: white;

@@ -1,6 +1,7 @@
 <StackLayout loaded="pageLoaded"
   xmlns="http://schemas.nativescript.org/tns.xsd"
   xmlns:chart="nativescript-pro-ui/chart">
+  <Label class="textInBox" text="Detaljert oversikt dei siste 6 månadane."></Label>
 <chart:RadCartesianChart class="graphBox" height="350">
   <chart:RadCartesianChart.series>
 
@@ -47,7 +48,7 @@
     <chart:Trackball/>
   </chart:RadCartesianChart.trackball>
   <chart:RadCartesianChart.legend>
-  <chart:RadLegendView position="Top" title="Forklaring" height="200" width="200" enableSelection="true"/>
+  <chart:RadLegendView position="middle" title="Forklaring" height="200" width="200" enableSelection="true"/>
 </chart:RadCartesianChart.legend>
 </chart:RadCartesianChart>
 </StackLayout>

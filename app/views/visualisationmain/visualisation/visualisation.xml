@@ -16,11 +16,13 @@
        <StackLayout id="symptomTextVisual">
        </StackLayout>
 
-        <Button class="segment"  text="Vis detaljert oversikt sist månad"></Button>
+        <StackLayout>
+         <Button class="segment"  text="Vis detaljert oversikt sist månad"></Button>
 
        <StackLayout id="symptomGraph">
       </StackLayout>
       <StackLayout id="detailedGraph" visibility="collapsed">
+     </StackLayout>
      </StackLayout>
     </StackLayout>
 

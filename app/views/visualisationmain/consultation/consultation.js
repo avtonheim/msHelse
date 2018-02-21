@@ -1,8 +1,6 @@
-var observable = require("data/observable").Observable;
 var builder = require('ui/builder');
 var fs = require('file-system');
 
-var pageData = new observable();
 
 exports.onLoad = function(args) {
   var page = args.object;
@@ -34,15 +32,4 @@ exports.onLoad = function(args) {
   symptomText.addChild(componentSymptomTextXML);
   moodText.addChild(componentMoodTextXML);
   stackDetailed.addChild(componentDetailedXML);
-
-  pageData.set("showDetails", false);
-  args.object.bindingContext = pageData;
-
 };
-
-/*Toggle detailed graph and overview graph!*/
-function detailsToggle(args){
-  pageData.set("showDetails", !pageData.get("showDetails"));
-}
-
-exports.detailsToggle = detailsToggle;
