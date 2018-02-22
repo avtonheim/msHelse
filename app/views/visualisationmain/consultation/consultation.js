@@ -16,7 +16,7 @@ exports.onLoad = function(args) {
   var componentMoodJS = require(path + '/views/graphs/consultation/moodgraphanalysis.js');
   var componentSymptomTextJS = require(path + '/views/visualisationmain/consultation/consultationcards/symptomcard.js');
   var componentMoodTextJS = require(path + '/views/visualisationmain/consultation/consultationcards/moodcard.js');
-  var componentDetailedJS = require(path + '/views/graphs/consultation/detailedinformation/symptomdetailed.js');
+  var componentDetailedJS = require(path + '/views/graphs/consultation/detailedInformation/symptomdetailed.js');
 
   // Actually have the builder build the Component using the XML & JS.
   var componentSymptomXML = builder.load(path + '/views/graphs/consultation/symptomgraphanalysis.xml', componentSymptomJS);
@@ -24,7 +24,7 @@ exports.onLoad = function(args) {
   var componentMoodXML = builder.load(path + '/views/graphs/consultation/moodgraphanalysis.xml', componentMoodJS);
   var componentSymptomTextXML = builder.load(path + '/views/visualisationmain/consultation/consultationcards/symptomcard.xml', componentSymptomTextJS);
   var componentMoodTextXML = builder.load(path + '/views/visualisationmain/consultation/consultationcards/moodcard.xml', componentMoodTextJS);
-  var componentDetailedXML = builder.load(path + '/views/graphs/consultation/detailedinformation/symptomdetailed.xml', componentDetailedJS);
+  var componentDetailedXML = builder.load(path + '/views/graphs/consultation/detailedInformation/symptomdetailed.xml', componentDetailedJS);
 
   // And add our component to the visual tree
   stackSymptom.addChild(componentSymptomXML);
