@@ -1,19 +1,16 @@
 var createViewModel = require("./symptoms-view-model").createViewModel;
 var Sqlite = require("nativescript-sqlite");
 var frameModule = require('ui/frame');
-
-/*
-Sjå på denne! https://docs.nativescript.org/cookbook/ui/switch
-*/
+var observable = require("data/observable");
+var pageData = new observable.Observable();
+var Dialogs = require("ui/dialogs");
 
 function onNavigatingTo(args){
   var page = args.object;
-  //page.bindingContext = { someProperty : 50};
   //Controlling the native back-button
   var controller = frameModule.topmost().ios.controller;
   var navigationItem = controller.visibleViewController.navigationItem;
   navigationItem.setHidesBackButtonAnimated(true, false);
-
 
   if (!Sqlite.exists("populated.db")) {
           Sqlite.copyDatabase("populated.db");
@@ -28,29 +25,53 @@ function onNavigatingTo(args){
           console.log("OPEN DB ERROR", error);
       });
 }
-exports.onNavigatingTo = onNavigatingTo;
-/*
-function expandCard(args){
-   var btn = args.object;
-   btn.height = "400px";
-
-
-} exports.expandCard = expandCard;
-
-function exitCard(args){
-  var page = args.object;
-  var reduceCard = page.getViewById("symptomC");
-
-  reduceCard.height = "100px";
-} exports.exitCard = exitCard;
-*/
+function loaded(args){
+  pageData.set("showDetails0", true);
+  pageData.set("showDetails1", true);
+  pageData.set("showDetails2", true);
+  pageData.set("showDetails3", true);
+  pageData.set("showDetails4", true);
+  args.object.bindingContext = pageData;
+}
 
 function tapHome(){
-  frameModule.topmost().navigate('views/home-page/home-page');
+  Dialogs.confirm({
+      title: "Vil du avbryte?",
+      okButtonText: "Ja",
+      cancelButtonText: "Avbryt"
+  }).then(function (result) {
+      if (result === true) {
+      frameModule.topmost().navigate('views/home-page/home-page');
+    }
+  });
 }
-exports.tapHome = tapHome;
 
 function onNavText(){
   frameModule.topmost().navigate('views/diary/text/text');
 }
+/*Ugly workaround!!*/
+function toggle0(args){
+	pageData.set("showDetails0", !pageData.get("showDetails0"));
+}
+function toggle1(args){
+	pageData.set("showDetails1", !pageData.get("showDetails1"));
+}
+function toggle2(args){
+  pageData.set("showDetails2", !pageData.get("showDetails2"));
+}
+function toggle3(args){
+	pageData.set("showDetails3", !pageData.get("showDetails3"));
+}
+function toggle4(args){
+  pageData.set("showDetails4", !pageData.get("showDetails4"));
+}
+
+exports.onNavigatingTo = onNavigatingTo;
+exports.loaded = loaded;
+exports.tapHome = tapHome;
 exports.onNavText = onNavText;
+exports.toggle0 = toggle0;
+exports.toggle1 = toggle1;
+exports.toggle2 = toggle2;
+exports.toggle3 = toggle3;
+exports.toggle4 = toggle4;

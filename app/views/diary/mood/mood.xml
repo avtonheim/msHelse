@@ -5,23 +5,28 @@
               <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
            </StackLayout>
            <ActionItem text="Neste" tap="navSymptom" ios.position="right"/>
+           <ActionItem text="Avbryt" tap="tapHome" ios.position="left"/>
            </ActionBar>
      </Page.actionBar>
-     <StackLayout>
-       <Progress value="{{ someProperty }}" />
-     </StackLayout>
     <StackLayout class="diaryComp">
+      <Progress value="33" />
           <StackLayout class="marginMood">
-            <Label class="titleMain" style="font-size: 30pt; padding: 5px;" text="Korleis har du hatt det sidan sist registrering?" textWrap="true"/>
-            <Label text="Klikk på valgt knapp for å registrere."/>
+            <Label class="titleMain" text="Korleis har du hatt det sidan sist registrering?" textWrap="true"/>
+            <Label class="body" text="Klikk på valgt knapp for å registrere."/>
           </StackLayout>
         <StackLayout>
-          <Button class="btnRegister" style="background-color: #0DA52A;" value="10" text="Bra" tap="{{ insert }}">
-          </Button>
-          <Button class="btnRegister" style="background-color: #F5E35D;" value="5"  text="Middels" tap="{{ insert }}">
-          </Button>
-          <Button class="btnRegister" style="background-color: #F55D5D;" value="0" text="Dårleg" tap="{{ insert }}">
-          </Button>
+          <StackLayout class="btnRegister" value="10" tap="{{ insert }}">
+            <Image src="~/images/cheering.png" height="200px" width="200px"/>
+            <Label text="Bra"/>
+          </StackLayout>
+          <StackLayout class="btnRegister" value="5" tap="{{ insert }}">
+            <Image src="~/images/happy.png" height="200px" width="200px"/>
+            <Label text="Middels"/>
+          </StackLayout>
+          <StackLayout class="btnRegister" value="0" tap="{{ insert }}">
+            <Image src="~/images/sad.png" height="200px" width="200px"/>
+            <Label text="Dårleg"/>
+          </StackLayout>
         </StackLayout>
     </StackLayout>
 </Page>

@@ -12,13 +12,14 @@
     <StackLayout class="content">
     <StackLayout>
       <Label class="titleMain" text="Pusteøving"/>
-      <Label class="body" text="Dette er ein pusteøving for å senke stress." textWrap="true"/>
       <Label class="body" text="Øvinga går ut på at du skal finne fokus og avslapping." textWrap="true"/>
-      <Label class="body" text="Øvinga tar 1 minutt." textWrap="true"/>
+      <Label class="body" text="Klikk på blomsten for å starte (1 min)." textWrap="true"/>
     </StackLayout>
     <StackLayout id="sunFlower">
-        <Image id="view" src="~/images/sunflower.png" tap="startMind"></Image>
+        <Image id="view" src="~/images/sunflower.png"  tap="startMind"></Image>
     </StackLayout>
-     <Label id="msg" class="explainingMsg" text="{{messageToUser}}" textWrap="true"/>
-    </StackLayout>
+    <Label class="msg" id="inn" class="explainingMsg" text="Pust inn" visibility="{{ instruction0 ? 'collapsed' : 'visible' }}" textWrap="true"/>
+    <Label class="msg" id="ut" class="explainingMsg" text="Pust ut" visibility="{{ instruction1 ? 'collapsed' : 'visible' }}" textWrap="true"/>
+    <Label class="msg" id="ferdig" class="explainingMsg" text="Du er no ferdig med pusteøvinga." visibility="{{ instruction2 ? 'collapsed' : 'visible' }}" textWrap="true"/>
+  </StackLayout>
 </Page>

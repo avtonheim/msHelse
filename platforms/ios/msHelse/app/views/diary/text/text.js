@@ -1,11 +1,14 @@
 var frameModule = require("ui/frame");
 var createViewModel = require("./text-view-model").createViewModel;
 var Sqlite = require("nativescript-sqlite");
+var Dialogs = require("ui/dialogs");
 
 
 function onNavigatingTo(args){
 var page = args.object;
-//page.bindingContext = {someProperty : 100};
+var keyboard = page.getViewById("subject");
+keyboard._ios.returnKeyType = UIReturnKeyDone;
+
 //Controlling the native back-button
 var controller = frameModule.topmost().ios.controller;
 var navigationItem = controller.visibleViewController.navigationItem;
@@ -22,10 +25,26 @@ if (!Sqlite.exists("populated.db")) {
    }, error => {
        console.log("OPEN DB ERROR", error);
    });
-} exports.onNavigatingTo = onNavigatingTo;
+}
+
+function tapHome(){
+  Dialogs.confirm({
+      title: "Vil du avbryte?",
+      okButtonText: "Ja",
+      cancelButtonText: "Avbryt"
+  }).then(function (result) {
+      if (result === true) {
+      frameModule.topmost().navigate('views/home-page/home-page');
+    }
+  });
+}
+
 
 function selected(args){
   var selected = args.object;
   selected.backgroundColor = "gray";
+}
 
-} exports.selected = selected;
+exports.onNavigatingTo = onNavigatingTo;
+exports.tapHome = tapHome;
+exports.selected = selected;

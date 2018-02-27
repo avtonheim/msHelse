@@ -19,7 +19,8 @@
 .titleMain{
   font-size: 35pt;
 }
-#msg{
+.msg{
   margin-top: 190px;
   width: 300px;
+  color: black;
 }

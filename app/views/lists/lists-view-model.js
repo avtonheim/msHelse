@@ -1,17 +1,19 @@
 var Observable = require("data/observable").Observable;
 var ObservableArray = require("data/observable-array").ObservableArray;
 var Sqlite = require("nativescript-sqlite");
-var Dialogs = require("ui/dialogs");  
-
-//Read more of SQLITE in nativescript
-//https://developer.telerik.com/products/nativescript/going-off-the-grid-with-nativescript/
+var Dialogs = require("ui/dialogs");
 
 function createViewModel(database) {
     var viewModel = new Observable();
     viewModel.lists = new ObservableArray([]);
 
     viewModel.insert = function() {
-        Dialogs.prompt("Nytt gjøremål. Legg til tekst i boksen", "").then(result => {
+        Dialogs.prompt({
+          title: "Legg til nytt gjøremål",
+          message: "Planlegg ein kjekk aktivitet!",
+          okButtonText: "Legg til",
+          cancelButtonText: "Avbryt"
+        }).then(result => {
             database.execSQL("INSERT INTO lists (list_name) VALUES (?)", [result.text]).then(id => {
                 this.lists.push({id: id, list_name: result.text});
             }, error => {

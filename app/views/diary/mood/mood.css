@@ -7,12 +7,19 @@
   height: 315px;
 }
 .btnRegister{
-  color: white;
-  font-size: 35pt;
+  color: black;
+  font-size: 25pt;
+}
+.btnRegister Image{
+  margin-right: 20px;
 }
 .diaryComp{
-  margin-top: 40px;
+  margin-top: 0px;
 }
 .marginMood{
   margin-bottom: 50px;
+}
+.titleMain{
+  font-size: 30pt;
+  padding: 5px;
 }
