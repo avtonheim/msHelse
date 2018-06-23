@@ -1,0 +1,25 @@
+<Page loaded="onLoaded">
+  <Page.actionBar>
+         <ActionBar class="action-bar">
+           <StackLayout>
+              <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
+           </StackLayout>
+           <ActionItem text="Tilbake" tap="tapHome" ios.position="left"/>
+         </ActionBar>
+     </Page.actionBar>
+<StackLayout class="content">
+  <Image class="mainComp" src="~/images/informasjon.png" height="400px" width="400px"/>
+  <Label class="titleMain" text="Informasjon"></Label>
+  <Label class="body" textWrap="true" text="Dette er ei liste over relevante kjelder om MS. Ved å klikke på lenkene vil du bli vidaresent til ei nettside."></Label>
+  <StackLayout class="navButton" tap="launchNevroNel">
+    <Label text="Nevronel"></Label>
+  </StackLayout>
+  <StackLayout class="navButton" tap="launchMSforbundet">
+    <Label text="MS forbundet"></Label>
+  </StackLayout>
+  <StackLayout class="navButton" tap="launchMSveileder">
+    <Label text="Norsk MS-veileder"></Label>
+  </StackLayout>
+
+</StackLayout>
+</Page>

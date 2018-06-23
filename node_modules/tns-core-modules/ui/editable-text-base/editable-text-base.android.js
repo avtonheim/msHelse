@@ -5,8 +5,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var editable_text_base_common_1 = require("./editable-text-base-common");
 var utils_1 = require("../../utils/utils");
 __export(require("./editable-text-base-common"));
-var dismissKeyboardTimeoutId;
 var EditTextListeners;
+function clearDismissTimer() {
+    exports.dismissKeyboardOwner = null;
+    if (exports.dismissKeyboardTimeoutId) {
+        clearTimeout(exports.dismissKeyboardTimeoutId);
+        exports.dismissKeyboardTimeoutId = null;
+    }
+}
+function dismissSoftInput(owner) {
+    clearDismissTimer();
+    if (!exports.dismissKeyboardTimeoutId) {
+        exports.dismissKeyboardTimeoutId = setTimeout(function () {
+            var owner = exports.dismissKeyboardOwner && exports.dismissKeyboardOwner.get();
+            var activity = (owner && owner._context);
+            var nativeView = owner && owner.nativeViewProtected;
+            exports.dismissKeyboardTimeoutId = null;
+            exports.dismissKeyboardOwner = null;
+            var focused = activity && activity.getCurrentFocus();
+            if (!focused || !(focused instanceof android.widget.EditText)) {
+                utils_1.ad.dismissSoftInput(nativeView);
+            }
+        }, 10);
+    }
+}
 function initializeEditTextListeners() {
     if (EditTextListeners) {
         return;
@@ -44,10 +66,7 @@ function initializeEditTextListeners() {
                 return;
             }
             if (hasFocus) {
-                if (dismissKeyboardTimeoutId) {
-                    clearTimeout(dismissKeyboardTimeoutId);
-                    dismissKeyboardTimeoutId = undefined;
-                }
+                clearDismissTimer();
                 owner.notify({ eventName: EditableTextBase.focusEvent, object: owner });
             }
             else {
@@ -55,31 +74,25 @@ function initializeEditTextListeners() {
                     editable_text_base_common_1.textProperty.nativeValueChange(owner, owner._dirtyTextAccumulator);
                     owner._dirtyTextAccumulator = undefined;
                 }
-                dismissKeyboardTimeoutId = setTimeout(function () {
-                    owner.dismissSoftInput();
-                    dismissKeyboardTimeoutId = null;
-                }, 1);
                 owner.notify({ eventName: EditableTextBase.blurEvent, object: owner });
+                dismissSoftInput(owner);
             }
         };
         EditTextListenersImpl.prototype.onEditorAction = function (textView, actionId, event) {
             var owner = this.owner;
             if (!owner) {
-                return;
+                return false;
             }
             if (actionId === android.view.inputmethod.EditorInfo.IME_ACTION_DONE ||
-                actionId === android.view.inputmethod.EditorInfo.IME_ACTION_GO ||
-                actionId === android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH ||
-                actionId === android.view.inputmethod.EditorInfo.IME_ACTION_SEND ||
+                actionId === android.view.inputmethod.EditorInfo.IME_ACTION_UNSPECIFIED ||
                 (event && event.getKeyCode() === android.view.KeyEvent.KEYCODE_ENTER)) {
                 if (textView.getMaxLines() === 1) {
                     owner.dismissSoftInput();
                 }
                 owner._onReturnPress();
-                return true;
             }
-            if (actionId === android.view.inputmethod.EditorInfo.IME_ACTION_NEXT
-                || actionId === android.view.inputmethod.EditorInfo.IME_ACTION_PREVIOUS) {
+            else if (actionId === android.view.inputmethod.EditorInfo.IME_ACTION_NEXT ||
+                actionId === android.view.inputmethod.EditorInfo.IME_ACTION_PREVIOUS) {
                 owner._onReturnPress();
             }
             return false;
@@ -124,10 +137,22 @@ var EditableTextBase = (function (_super) {
         _super.prototype.resetNativeView.call(this);
         this.nativeViewProtected.setInputType(this._inputType);
     };
+    EditableTextBase.prototype.onUnloaded = function () {
+        this.dismissSoftInput();
+        _super.prototype.onUnloaded.call(this);
+    };
     EditableTextBase.prototype.dismissSoftInput = function () {
-        utils_1.ad.dismissSoftInput(this.nativeViewProtected);
+        var nativeView = this.nativeViewProtected;
+        if (!nativeView) {
+            return;
+        }
+        utils_1.ad.dismissSoftInput(nativeView);
     };
     EditableTextBase.prototype.focus = function () {
+        var nativeView = this.nativeViewProtected;
+        if (!nativeView) {
+            return;
+        }
         var result = _super.prototype.focus.call(this);
         if (result) {
             utils_1.ad.showSoftInput(this.nativeViewProtected);
@@ -152,12 +177,12 @@ var EditableTextBase = (function (_super) {
         }
     };
     EditableTextBase.prototype[editable_text_base_common_1.textProperty.getDefault] = function () {
-        return -1;
+        return editable_text_base_common_1.resetSymbol;
     };
     EditableTextBase.prototype[editable_text_base_common_1.textProperty.setNative] = function (value) {
         try {
             this._changeFromCode = true;
-            this._setNativeText(value === -1);
+            this._setNativeText(value === editable_text_base_common_1.resetSymbol);
         }
         finally {
             this._changeFromCode = false;

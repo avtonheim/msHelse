@@ -1,5 +1,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var enums_1 = require("../enums");
+var trace_1 = require("../../trace");
 var properties_1 = require("../core/properties");
 var animation_1 = require("./animation");
 var style_properties_1 = require("../styling/style-properties");
@@ -107,25 +108,31 @@ var KeyframeAnimation = (function () {
         configurable: true
     });
     KeyframeAnimation.prototype.cancel = function () {
-        if (this._isPlaying) {
-            this._isPlaying = false;
-            for (var i = this._nativeAnimations.length - 1; i >= 0; i--) {
-                var animation = this._nativeAnimations[i];
-                if (animation.isPlaying) {
-                    animation.cancel();
-                }
-            }
-            if (this._nativeAnimations.length > 0) {
-                var animation = this._nativeAnimations[0];
-                this._resetAnimationValues(this._target, animation);
-            }
-            this._rejectAnimationFinishedPromise();
+        if (!this.isPlaying) {
+            trace_1.write("Keyframe animation is already playing.", trace_1.categories.Animation, trace_1.messageType.warn);
+            return;
         }
+        this._isPlaying = false;
+        for (var i = this._nativeAnimations.length - 1; i >= 0; i--) {
+            var animation = this._nativeAnimations[i];
+            if (animation.isPlaying) {
+                animation.cancel();
+            }
+        }
+        if (this._nativeAnimations.length > 0) {
+            var animation = this._nativeAnimations[0];
+            this._resetAnimationValues(this._target, animation);
+        }
+        this._rejectAnimationFinishedPromise();
     };
     KeyframeAnimation.prototype.play = function (view) {
         var _this = this;
         if (this._isPlaying) {
-            throw new Error("Animation is already playing.");
+            var reason_1 = "Keyframe animation is already playing.";
+            trace_1.write(reason_1, trace_1.categories.Animation, trace_1.messageType.warn);
+            return new Promise(function (resolve, reject) {
+                reject(reason_1);
+            });
         }
         var animationFinishedPromise = new Promise(function (resolve, reject) {
             _this._resolve = resolve;

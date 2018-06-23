@@ -1,49 +1,31 @@
 {
   "_args": [
     [
-      {
-        "raw": "nativescript-sqlite@^1.1.11",
-        "scope": null,
-        "escapedName": "nativescript-sqlite",
-        "name": "nativescript-sqlite",
-        "rawSpec": "^1.1.11",
-        "spec": ">=1.1.11 <2.0.0",
-        "type": "range"
-      },
+      "nativescript-sqlite@1.2.0",
       "/Users/aleksandernygardtonheim/msHelse"
     ]
   ],
-  "_from": "nativescript-sqlite@>=1.1.11 <2.0.0",
+  "_from": "nativescript-sqlite@1.2.0",
   "_id": "nativescript-sqlite@1.2.0",
-  "_inCache": true,
+  "_inBundle": false,
+  "_integrity": "sha1-khBBfF8lHtSL9ZhPMXoxHSY700s=",
   "_location": "/nativescript-sqlite",
-  "_nodeVersion": "8.7.0",
-  "_npmOperationalInternal": {
-    "host": "s3://npm-registry-packages",
-    "tmp": "tmp/nativescript-sqlite-1.2.0.tgz_1512537645357_0.3817754697520286"
-  },
-  "_npmUser": {
-    "name": "nathanaela",
-    "email": "nathan@master-technology.com"
-  },
-  "_npmVersion": "5.0.3",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "nativescript-sqlite@^1.1.11",
-    "scope": null,
-    "escapedName": "nativescript-sqlite",
+    "type": "version",
+    "registry": true,
+    "raw": "nativescript-sqlite@1.2.0",
     "name": "nativescript-sqlite",
-    "rawSpec": "^1.1.11",
-    "spec": ">=1.1.11 <2.0.0",
-    "type": "range"
+    "escapedName": "nativescript-sqlite",
+    "rawSpec": "1.2.0",
+    "saveSpec": null,
+    "fetchSpec": "1.2.0"
   },
   "_requiredBy": [
     "/"
   ],
   "_resolved": "https://registry.npmjs.org/nativescript-sqlite/-/nativescript-sqlite-1.2.0.tgz",
-  "_shasum": "9210417c5f251ed48bf5984f317a311d263bd34b",
-  "_shrinkwrap": null,
-  "_spec": "nativescript-sqlite@^1.1.11",
+  "_spec": "1.2.0",
   "_where": "/Users/aleksandernygardtonheim/msHelse",
   "author": {
     "name": "Nathanael Anderson",
@@ -52,15 +34,7 @@
   "bugs": {
     "url": "https://github.com/nathanaela/nativescript-sqlite/issues"
   },
-  "dependencies": {},
   "description": "A sqlite NativeScript module for Android and iOS",
-  "devDependencies": {},
-  "directories": {},
-  "dist": {
-    "integrity": "sha512-pYDyl35/P32f3j/7AWy2gyCHLyzfaZJepMuZ01oP9DU294UnGQCBQWTg1sDN2ZPIREDcFkjpZYhThWB3kTFA8w==",
-    "shasum": "9210417c5f251ed48bf5984f317a311d263bd34b",
-    "tarball": "https://registry.npmjs.org/nativescript-sqlite/-/nativescript-sqlite-1.2.0.tgz"
-  },
   "homepage": "https://github.com/nathanaela/nativescript-sqlite",
   "keywords": [
     "NativeScript",
@@ -78,12 +52,6 @@
     "url": "https://github.com/nathanaela/nativescript-sqlite/blob/master/LICENSE"
   },
   "main": "sqlite",
-  "maintainers": [
-    {
-      "name": "nathanaela",
-      "email": "nathanael.anderson@gmail.com"
-    }
-  ],
   "name": "nativescript-sqlite",
   "nativescript": {
     "platforms": {
@@ -98,8 +66,6 @@
       "category": "Database"
     }
   },
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nathanaela/nativescript-sqlite.git"

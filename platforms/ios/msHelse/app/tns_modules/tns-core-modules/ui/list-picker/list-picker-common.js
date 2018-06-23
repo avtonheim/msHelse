@@ -17,6 +17,9 @@ var ListPickerBase = (function (_super) {
         var item = this.isItemsSource ? this.items.getItem(index) : this.items[index];
         return (item === undefined || item === null) ? index + "" : item + "";
     };
+    ListPickerBase = __decorate([
+        view_1.CSSType("ListPicker")
+    ], ListPickerBase);
     return ListPickerBase;
 }(view_1.View));
 exports.ListPickerBase = ListPickerBase;

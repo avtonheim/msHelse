@@ -1,0 +1,25 @@
+<Page loaded="pageLoaded">
+  <Page.actionBar>
+         <ActionBar class="action-bar">
+           <StackLayout>
+              <Image src="~/images/tittel.png" class="iconTitle" ios.position="center"></Image>
+           </StackLayout>
+           <ActionBar.actionItems>
+               <ActionItem id="stopBtn" text="Stopp øving" tap="stopMind" ios.position="right" />
+           </ActionBar.actionItems>
+         </ActionBar>
+     </Page.actionBar>
+    <StackLayout class="content">
+    <StackLayout>
+      <Label class="titleMain" text="Pusteøving"/>
+      <Label class="body" text="Øvinga går ut på at du skal finne fokus og avslapping." textWrap="true"/>
+      <Label class="body" text="Klikk på blomsten for å starte (1 min)." textWrap="true"/>
+    </StackLayout>
+    <StackLayout id="sunFlower">
+        <Image id="view" src="~/images/sunflower.png"  tap="startMind"></Image>
+    </StackLayout>
+    <Label class="msg" id="inn" class="explainingMsg" text="Pust inn" visibility="{{ instruction0 ? 'collapsed' : 'visible' }}" textWrap="true"/>
+    <Label class="msg" id="ut" class="explainingMsg" text="Pust ut" visibility="{{ instruction1 ? 'collapsed' : 'visible' }}" textWrap="true"/>
+    <Label class="msg" id="ferdig" class="explainingMsg" text="Du er no ferdig med pusteøvinga." visibility="{{ instruction2 ? 'collapsed' : 'visible' }}" textWrap="true"/>
+  </StackLayout>
+</Page>

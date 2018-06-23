@@ -77,10 +77,10 @@ var TextBase = (function (_super) {
         this._maxHeight = this._maxLines = undefined;
     };
     TextBase.prototype[text_base_common_1.textProperty.getDefault] = function () {
-        return -1;
+        return text_base_common_1.resetSymbol;
     };
     TextBase.prototype[text_base_common_1.textProperty.setNative] = function (value) {
-        var reset = value === -1;
+        var reset = value === text_base_common_1.resetSymbol;
         if (!reset && this.formattedText) {
             return;
         }
@@ -99,7 +99,7 @@ var TextBase = (function (_super) {
         }
         var spannableStringBuilder = createSpannableStringBuilder(value);
         nativeView.setText(spannableStringBuilder);
-        text_base_common_1.textProperty.nativeValueChange(this, (value === null || value === undefined) ? '' : value.toString());
+        text_base_common_1.textProperty.nativeValueChange(this, (value === null || value === undefined) ? "" : value.toString());
         if (spannableStringBuilder && nativeView instanceof android.widget.Button &&
             !(nativeView.getTransformationMethod() instanceof TextTransformation)) {
             nativeView.setTransformationMethod(new TextTransformation(this));
@@ -251,7 +251,7 @@ var TextBase = (function (_super) {
         }
         else {
             var text = this.text;
-            var stringValue = (text === null || text === undefined) ? '' : text.toString();
+            var stringValue = (text === null || text === undefined) ? "" : text.toString();
             transformedText = getTransformedText(stringValue, this.textTransform);
         }
         this.nativeViewProtected.setText(transformedText);
@@ -291,7 +291,7 @@ function createSpannableStringBuilder(formattedString) {
         var span = formattedString.spans.getItem(i);
         var text = span.text;
         var textTransform = formattedString.parent.textTransform;
-        var spanText = (text === null || text === undefined) ? '' : text.toString();
+        var spanText = (text === null || text === undefined) ? "" : text.toString();
         if (textTransform && textTransform !== "none") {
             spanText = getTransformedText(spanText, textTransform);
         }
@@ -357,11 +357,11 @@ function setSpanModifiers(ssb, span, start, end) {
     }
     if (valueSource) {
         var textDecorations = valueSource.textDecoration;
-        var underline_1 = textDecorations.indexOf('underline') !== -1;
+        var underline_1 = textDecorations.indexOf("underline") !== -1;
         if (underline_1) {
             ssb.setSpan(new android.text.style.UnderlineSpan(), start, end, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
-        var strikethrough = textDecorations.indexOf('line-through') !== -1;
+        var strikethrough = textDecorations.indexOf("line-through") !== -1;
         if (strikethrough) {
             ssb.setSpan(new android.text.style.StrikethroughSpan(), start, end, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }

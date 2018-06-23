@@ -4,8 +4,9 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var application_common_1 = require("./application-common");
 __export(require("./application-common"));
+var builder_1 = require("../ui/builder");
+var view_1 = require("../ui/core/view");
 var frame_1 = require("../ui/frame");
-var utils_1 = require("../ui/utils");
 var utils = require("../utils/utils");
 var profiling_1 = require("../profiling");
 var Responder = (function (_super) {
@@ -15,31 +16,6 @@ var Responder = (function (_super) {
     }
     return Responder;
 }(UIResponder));
-var Window = (function (_super) {
-    __extends(Window, _super);
-    function Window() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Window.prototype.initWithFrame = function (frame) {
-        var window = _super.prototype.initWithFrame.call(this, frame);
-        if (window) {
-            window.autoresizingMask = 0;
-        }
-        return window;
-    };
-    Window.prototype.layoutSubviews = function () {
-        if (utils.ios.MajorVersion < 9) {
-            utils_1.ios._layoutRootView(this.content, utils.ios.getter(UIScreen, UIScreen.mainScreen).bounds);
-        }
-        else {
-            utils_1.ios._layoutRootView(this.content, this.frame);
-        }
-    };
-    __decorate([
-        profiling_1.profile
-    ], Window.prototype, "layoutSubviews", null);
-    return Window;
-}(UIWindow));
 var NotificationObserver = (function (_super) {
     __extends(NotificationObserver, _super);
     function NotificationObserver() {
@@ -91,6 +67,13 @@ var IOSApplication = (function () {
         this.addNotificationObserver(UIApplicationDidReceiveMemoryWarningNotification, this.didReceiveMemoryWarning.bind(this));
         this.addNotificationObserver(UIDeviceOrientationDidChangeNotification, this.orientationDidChange.bind(this));
     }
+    Object.defineProperty(IOSApplication.prototype, "rootController", {
+        get: function () {
+            return this._window.rootViewController;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(IOSApplication.prototype, "nativeApp", {
         get: function () {
             return utils.ios.getter(UIApplication, UIApplication.sharedApplication);
@@ -117,6 +100,13 @@ var IOSApplication = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(IOSApplication.prototype, "rootView", {
+        get: function () {
+            return this._rootView;
+        },
+        enumerable: true,
+        configurable: true
+    });
     IOSApplication.prototype.addNotificationObserver = function (notificationName, onReceiveCallback) {
         var observer = NotificationObserver.initWithCallback(onReceiveCallback);
         utils.ios.getter(NSNotificationCenter, NSNotificationCenter.defaultCenter).addObserverSelectorNameObject(observer, "onReceive", notificationName, null);
@@ -137,7 +127,7 @@ var IOSApplication = (function () {
             displayedLink.addToRunLoopForMode(NSRunLoop.mainRunLoop, NSDefaultRunLoopMode);
             displayedLink.addToRunLoopForMode(NSRunLoop.mainRunLoop, UITrackingRunLoopMode);
         }
-        this._window = Window.alloc().initWithFrame(utils.ios.getter(UIScreen, UIScreen.mainScreen).bounds);
+        this._window = UIWindow.alloc().initWithFrame(utils.ios.getter(UIScreen, UIScreen.mainScreen).bounds);
         this._window.backgroundColor = utils.ios.getter(UIColor, UIColor.whiteColor);
         var args = {
             eventName: application_common_1.launchEvent,
@@ -146,46 +136,30 @@ var IOSApplication = (function () {
         };
         application_common_1.notify(args);
         application_common_1.notify({ eventName: "loadAppCss", object: this, cssFile: application_common_1.getCssFileName() });
-        var rootView = createRootView(args.root);
-        this._window.content = rootView;
-        if (rootView instanceof frame_1.Frame) {
-            this.rootController = this._window.rootViewController = rootView.ios.controller;
-        }
-        else if (rootView.ios instanceof UIViewController) {
-            this.rootController = this._window.rootViewController = rootView.ios;
-        }
-        else if (rootView.ios instanceof UIView) {
-            var newController = UIViewController.new();
-            newController.view.addSubview(rootView.ios);
-            this.rootController = newController;
-        }
-        else {
-            throw new Error("Root should be either UIViewController or UIView");
-        }
-        this._window.makeKeyAndVisible();
+        this.setWindowContent(args.root);
     };
     IOSApplication.prototype.didBecomeActive = function (notification) {
         var ios = utils.ios.getter(UIApplication, UIApplication.sharedApplication);
         var object = this;
         application_common_1.notify({ eventName: application_common_1.resumeEvent, object: object, ios: ios });
-        var content = this._window.content;
-        if (content && !content.isLoaded) {
-            content.onLoaded();
+        var rootView = this._rootView;
+        if (rootView && !rootView.isLoaded) {
+            rootView.callLoaded();
         }
     };
     IOSApplication.prototype.didEnterBackground = function (notification) {
-        var content = this._window.content;
-        if (content && content.isLoaded) {
-            content.onUnloaded();
-        }
         application_common_1.notify({ eventName: application_common_1.suspendEvent, object: this, ios: utils.ios.getter(UIApplication, UIApplication.sharedApplication) });
+        var rootView = this._rootView;
+        if (rootView && rootView.isLoaded) {
+            rootView.callUnloaded();
+        }
     };
     IOSApplication.prototype.willTerminate = function (notification) {
-        var content = this._window.content;
-        if (content && content.isLoaded) {
-            content.onUnloaded();
-        }
         application_common_1.notify({ eventName: application_common_1.exitEvent, object: this, ios: utils.ios.getter(UIApplication, UIApplication.sharedApplication) });
+        var rootView = this._rootView;
+        if (rootView && rootView.isLoaded) {
+            rootView.callUnloaded();
+        }
     };
     IOSApplication.prototype.didReceiveMemoryWarning = function (notification) {
         application_common_1.notify({ eventName: application_common_1.lowMemoryEvent, object: this, ios: utils.ios.getter(UIApplication, UIApplication.sharedApplication) });
@@ -216,6 +190,30 @@ var IOSApplication = (function () {
             });
         }
     };
+    IOSApplication.prototype._onLivesync = function () {
+        if (!this._rootView._onLivesync()) {
+            this.setWindowContent();
+        }
+    };
+    IOSApplication.prototype.setWindowContent = function (view) {
+        if (this._rootView) {
+            this._rootView._onRootViewReset();
+        }
+        var rootView = createRootView(view);
+        this._rootView = rootView;
+        var controller = getViewController(rootView);
+        if (createRootFrame.value) {
+            rootView._setupUI({});
+        }
+        else {
+            rootView._setupAsRootView({});
+        }
+        var haveController = this._window.rootViewController !== null;
+        this._window.rootViewController = controller;
+        if (!haveController) {
+            this._window.makeKeyAndVisible();
+        }
+    };
     __decorate([
         profiling_1.profile
     ], IOSApplication.prototype, "didFinishLaunchingWithOptions", null);
@@ -227,29 +225,37 @@ var IOSApplication = (function () {
 var iosApp = new IOSApplication();
 exports.ios = iosApp;
 application_common_1.setApplication(iosApp);
+global.__onLiveSyncCore = function () {
+    iosApp._onLivesync();
+};
 var mainEntry;
 function createRootView(v) {
     var rootView = v;
-    var frame;
-    var main;
     if (!rootView) {
-        main = mainEntry;
-        if (main) {
-            frame = new frame_1.Frame();
-            frame.navigate(main);
+        if (mainEntry) {
+            if (createRootFrame.value) {
+                var frame = rootView = new frame_1.Frame();
+                frame.navigate(mainEntry);
+            }
+            else {
+                rootView = builder_1.createViewFromEntry(mainEntry);
+            }
         }
         else {
             throw new Error("A Frame must be used to navigate to a Page.");
         }
-        rootView = frame;
     }
-    rootView._setupAsRootView({});
     return rootView;
 }
 function getMainEntry() {
     return mainEntry;
 }
 exports.getMainEntry = getMainEntry;
+function getRootView() {
+    return iosApp.rootView;
+}
+exports.getRootView = getRootView;
+var createRootFrame = { value: true };
 var started = false;
 function start(entry) {
     mainEntry = typeof entry === "string" ? { moduleName: entry } : entry;
@@ -260,22 +266,50 @@ function start(entry) {
     else {
         var rootView = createRootView();
         if (rootView) {
-            var window = iosApp.nativeApp.keyWindow || (iosApp.nativeApp.windows.count > 0 && iosApp.nativeApp.windows[0]);
-            if (window) {
-                var rootController = window.rootViewController;
+            var window_1 = iosApp.nativeApp.keyWindow || (iosApp.nativeApp.windows.count > 0 && iosApp.nativeApp.windows[0]);
+            if (window_1) {
+                var rootController = window_1.rootViewController;
                 if (rootController) {
-                    rootController.presentViewControllerAnimatedCompletion(rootView.ios.controller, true, null);
-                    utils_1.ios._layoutRootView(rootView, utils.ios.getter(UIScreen, UIScreen.mainScreen).bounds);
+                    var controller = getViewController(rootView);
+                    rootView._setupAsRootView({});
+                    rootController.presentViewControllerAnimatedCompletion(controller, true, null);
                 }
             }
         }
     }
 }
 exports.start = start;
+function run(entry) {
+    createRootFrame.value = false;
+    start(entry);
+}
+exports.run = run;
+function _resetRootView(entry) {
+    createRootFrame.value = false;
+    mainEntry = typeof entry === "string" ? { moduleName: entry } : entry;
+    iosApp.setWindowContent();
+}
+exports._resetRootView = _resetRootView;
 function getNativeApplication() {
     return iosApp.nativeApp;
 }
 exports.getNativeApplication = getNativeApplication;
+function getViewController(view) {
+    var viewController = view.viewController || view.ios;
+    if (viewController instanceof UIViewController) {
+        return viewController;
+    }
+    else {
+        var nativeView = view.ios || view.nativeViewProtected;
+        if (nativeView instanceof UIView) {
+            viewController = view_1.ios.UILayoutViewController.initWithOwner(new WeakRef(view));
+            viewController.view.addSubview(nativeView);
+            view.viewController = viewController;
+            return viewController;
+        }
+    }
+    throw new Error("Root should be either UIViewController or UIView");
+}
 global.__onLiveSync = function () {
     if (!started) {
         return;

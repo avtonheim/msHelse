@@ -99,7 +99,7 @@ var UIDatePickerChangeHandlerImpl = (function (_super) {
         }
     };
     UIDatePickerChangeHandlerImpl.ObjCExposedMethods = {
-        'valueChanged': { returns: interop.types.void, params: [UIDatePicker] }
+        "valueChanged": { returns: interop.types.void, params: [UIDatePicker] }
     };
     return UIDatePickerChangeHandlerImpl;
 }(NSObject));

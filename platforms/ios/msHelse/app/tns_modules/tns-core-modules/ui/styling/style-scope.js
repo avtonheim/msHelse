@@ -186,7 +186,6 @@ var CSSSource = (function () {
     CSSSource.prototype.toString = function () {
         return this._file || this._url || "(in-memory)";
     };
-    CSSSource.cssFilesCache = {};
     __decorate([
         profiling_1.profile
     ], CSSSource.prototype, "load", null);
@@ -204,7 +203,7 @@ var CSSSource = (function () {
     ], CSSSource, "resolveCSSPathFromURL", null);
     return CSSSource;
 }());
-var onCssChanged = profiling_1.profile('"style-scope".onCssChanged', function (args) {
+var onCssChanged = profiling_1.profile("\"style-scope\".onCssChanged", function (args) {
     if (args.cssText) {
         var parsed = CSSSource.fromSource(args.cssText, applicationKeyframes, args.cssFile).selectors;
         if (parsed) {
@@ -231,7 +230,7 @@ var loadCss = profiling_1.profile("\"style-scope\".loadCss", function (cssFile) 
 });
 applicationCommon.on("cssChanged", onCssChanged);
 applicationCommon.on("livesync", onLiveSync);
-exports.loadAppCSS = profiling_1.profile('"style-scope".loadAppCSS', function (args) {
+exports.loadAppCSS = profiling_1.profile("\"style-scope\".loadAppCSS", function (args) {
     loadCss(args.cssFile);
     applicationCommon.off("loadAppCss", exports.loadAppCSS);
 });
@@ -420,8 +419,6 @@ CssState.prototype._appliedAnimations = CssState.emptyAnimationArray;
 CssState.prototype._matchInvalid = true;
 var StyleScope = (function () {
     function StyleScope() {
-        this._statesByKey = {};
-        this._viewIdToKey = {};
         this._css = "";
         this._localCssSelectors = [];
         this._localCssSelectorVersion = 0;
@@ -434,7 +431,6 @@ var StyleScope = (function () {
             return this._css;
         },
         set: function (value) {
-            this._cssFileName = undefined;
             this.setCss(value);
         },
         enumerable: true,
@@ -448,7 +444,6 @@ var StyleScope = (function () {
     };
     StyleScope.prototype.setCss = function (cssString, cssFileName) {
         this._css = cssString;
-        this._reset();
         var cssFile = CSSSource.fromSource(cssString, this._keyframes, cssFileName);
         this._localCssSelectors = cssFile.selectors;
         this._localCssSelectorVersion++;
@@ -458,7 +453,6 @@ var StyleScope = (function () {
         if (!cssString && !cssFileName) {
             return;
         }
-        this._reset();
         var parsedCssSelectors = cssString ? CSSSource.fromSource(cssString, this._keyframes, cssFileName) : CSSSource.fromURI(cssFileName, this._keyframes);
         this._css = this._css + parsedCssSelectors.source;
         this._localCssSelectors.push.apply(this._localCssSelectors, parsedCssSelectors.selectors);
@@ -507,10 +501,6 @@ var StyleScope = (function () {
     StyleScope.prototype.query = function (node) {
         this.ensureSelectors();
         return this._selectors.query(node).selectors;
-    };
-    StyleScope.prototype._reset = function () {
-        this._statesByKey = {};
-        this._viewIdToKey = {};
     };
     StyleScope.prototype._getSelectorsVersion = function () {
         return 100000 * this._applicationCssSelectorsAppliedVersion + this._localCssSelectorsAppliedVersion;
@@ -594,14 +584,4 @@ exports.applyInlineStyle = profiling_1.profile(function applyInlineStyle(view, s
 function isKeyframe(node) {
     return node.type === "keyframes";
 }
-var InlineSelector = (function () {
-    function InlineSelector(ruleSet) {
-        this.specificity = 0x01000000;
-        this.rarity = 0;
-        this.dynamic = false;
-        this.ruleset = ruleSet;
-    }
-    InlineSelector.prototype.match = function (node) { return true; };
-    return InlineSelector;
-}());
 //# sourceMappingURL=style-scope.js.map

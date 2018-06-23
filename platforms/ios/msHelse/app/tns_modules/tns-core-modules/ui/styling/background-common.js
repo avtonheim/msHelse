@@ -1,4 +1,5 @@
 Object.defineProperty(exports, "__esModule", { value: true });
+var linear_gradient_1 = require("./linear-gradient");
 var color_1 = require("../../color");
 var Background = (function () {
     function Background() {
@@ -137,8 +138,15 @@ var Background = (function () {
         if (!value1 || !value2) {
             return false;
         }
+        var imagesEqual = false;
+        if (value1 instanceof linear_gradient_1.LinearGradient && value2 instanceof linear_gradient_1.LinearGradient) {
+            imagesEqual = linear_gradient_1.LinearGradient.equals(value1, value2);
+        }
+        else {
+            imagesEqual = value1.image === value2.image;
+        }
         return color_1.Color.equals(value1.color, value2.color)
-            && value1.image === value2.image
+            && imagesEqual
             && value1.position === value2.position
             && value1.repeat === value2.repeat
             && value1.size === value2.size

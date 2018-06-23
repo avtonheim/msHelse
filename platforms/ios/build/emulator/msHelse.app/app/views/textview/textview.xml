@@ -1,0 +1,26 @@
+<Page loaded="onLoad">
+  <Page.actionBar>
+       <ActionBar class="action-bar">
+         <StackLayout>
+            <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
+         </StackLayout>
+       </ActionBar>
+   </Page.actionBar>
+      <StackLayout>
+        <StackLayout class="p-20">
+           <Label class="h1" text="Oversikt over alt"></Label>
+           <Label class="body" textWrap="true" text="Dette er ein totaloversikt"></Label>
+        </StackLayout>
+     <StackLayout>
+           <ListView items="{{ Texts }}" style="height: 100%;">
+            <ListView.itemTemplate>
+              <StackLayout>
+                 <Label class="timeDay" text="{{ timestamp }}"></Label>
+                 <Label class="question" horizontalAlignment="left" text="Kva har du gjort i dag?"></Label>
+                 <Label class="response" horizontalAlignment="right" text="{{ content }}" textWrap="true"></Label>
+              </StackLayout>
+             </ListView.itemTemplate>
+           </ListView>
+      </StackLayout>
+</StackLayout>
+</Page>

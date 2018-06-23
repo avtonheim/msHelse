@@ -1,0 +1,32 @@
+<Page navigatingTo="onNavigatingTo">
+  <Page.actionBar>
+         <ActionBar title="mHelse" class="action-bar">
+           <StackLayout>
+              <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
+           </StackLayout>
+           <ActionItem text="Neste" tap="navSymptom" ios.position="right"/>
+           <ActionItem text="Avbryt" tap="tapHome" ios.position="left"/>
+           </ActionBar>
+     </Page.actionBar>
+    <StackLayout class="diaryComp">
+      <Progress value="33" />
+          <StackLayout class="marginMood">
+            <Label class="titleMain" text="Korleis har du hatt det sidan sist registrering?" textWrap="true"/>
+            <Label class="body" text="Klikk på valgt knapp for å registrere."/>
+          </StackLayout>
+        <StackLayout>
+          <StackLayout class="btnRegister" value="10" tap="{{ insert }}">
+            <Image src="~/images/cheering.png" height="200px" width="200px"/>
+            <Label text="Bra"/>
+          </StackLayout>
+          <StackLayout class="btnRegister" value="5" tap="{{ insert }}">
+            <Image src="~/images/happy.png" height="200px" width="200px"/>
+            <Label text="Middels"/>
+          </StackLayout>
+          <StackLayout class="btnRegister" value="0" tap="{{ insert }}">
+            <Image src="~/images/sad.png" height="200px" width="200px"/>
+            <Label text="Dårleg"/>
+          </StackLayout>
+        </StackLayout>
+    </StackLayout>
+</Page>

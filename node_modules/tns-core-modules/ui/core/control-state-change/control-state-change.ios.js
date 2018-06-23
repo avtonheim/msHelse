@@ -4,7 +4,7 @@ var ObserverClass = (function (_super) {
     function ObserverClass() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    ObserverClass.prototype.observeValueForKeyPathOfObjectChangeContext = function (path, obj, change, context) {
+    ObserverClass.prototype.observeValueForKeyPathOfObjectChangeContext = function (path) {
         if (path === "selected") {
             this["_owner"]._onSelectedChanged();
         }

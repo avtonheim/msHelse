@@ -14,6 +14,16 @@ var FileSystemAccess = (function () {
             return new Date();
         }
     };
+    FileSystemAccess.prototype.getFileSize = function (path) {
+        var fileManager = utils_1.ios.getter(NSFileManager, NSFileManager.defaultManager);
+        var attributes = fileManager.attributesOfItemAtPathError(path);
+        if (attributes) {
+            return attributes.objectForKey("NSFileSize");
+        }
+        else {
+            return 0;
+        }
+    };
     FileSystemAccess.prototype.getParent = function (path, onError) {
         try {
             var fileManager = utils_1.ios.getter(NSFileManager, NSFileManager.defaultManager);
@@ -285,7 +295,7 @@ var FileSystemAccess = (function () {
                 var info = {
                     path: this.concatPath(path, file),
                     name: file,
-                    extension: ''
+                    extension: ""
                 };
                 if (!this.folderExists(this.joinPath(path, file))) {
                     info.extension = this.getFileExtension(info.path);

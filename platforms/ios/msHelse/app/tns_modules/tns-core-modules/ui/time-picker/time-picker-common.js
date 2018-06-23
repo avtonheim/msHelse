@@ -72,6 +72,9 @@ var TimePickerBase = (function (_super) {
     function TimePickerBase() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    TimePickerBase = __decorate([
+        view_1.CSSType("TimePicker")
+    ], TimePickerBase);
     return TimePickerBase;
 }(view_1.View));
 exports.TimePickerBase = TimePickerBase;

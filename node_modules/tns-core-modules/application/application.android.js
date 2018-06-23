@@ -19,6 +19,7 @@ var AndroidApplication = (function (_super) {
     __extends(AndroidApplication, _super);
     function AndroidApplication() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.callbacks = {};
         _this._registeredReceivers = {};
         _this._pendingReceiverRegistrations = new Array();
         return _this;
@@ -40,10 +41,10 @@ var AndroidApplication = (function (_super) {
         this.nativeApp = nativeApp;
         this.packageName = nativeApp.getPackageName();
         this.context = nativeApp.getApplicationContext();
-        var lifecycleCallbacks = initLifecycleCallbacks();
-        var componentCallbacks = initComponentCallbacks();
-        this.nativeApp.registerActivityLifecycleCallbacks(lifecycleCallbacks);
-        this.nativeApp.registerComponentCallbacks(componentCallbacks);
+        this.callbacks.lifecycleCallbacks = initLifecycleCallbacks();
+        this.callbacks.componentCallbacks = initComponentCallbacks();
+        this.nativeApp.registerActivityLifecycleCallbacks(this.callbacks.lifecycleCallbacks);
+        this.nativeApp.registerComponentCallbacks(this.callbacks.componentCallbacks);
         this._registerPendingReceivers();
     };
     AndroidApplication.prototype._registerPendingReceivers = function () {
@@ -92,6 +93,7 @@ exports.android = androidApp;
 application_common_1.setApplication(androidApp);
 var mainEntry;
 var started = false;
+var createRootFrame = { value: true };
 function start(entry) {
     if (started) {
         throw new Error("Application is already started.");
@@ -104,10 +106,40 @@ function start(entry) {
     }
 }
 exports.start = start;
+function shouldCreateRootFrame() {
+    return createRootFrame.value;
+}
+exports.shouldCreateRootFrame = shouldCreateRootFrame;
+function run(entry) {
+    createRootFrame.value = false;
+    start(entry);
+}
+exports.run = run;
+var CALLBACKS = "_callbacks";
+function _resetRootView(entry) {
+    var activity = androidApp.foregroundActivity;
+    if (!activity) {
+        throw new Error("Cannot find android activity.");
+    }
+    createRootFrame.value = false;
+    mainEntry = typeof entry === "string" ? { moduleName: entry } : entry;
+    var callbacks = activity[CALLBACKS];
+    callbacks.resetActivityContent(activity);
+}
+exports._resetRootView = _resetRootView;
 function getMainEntry() {
     return mainEntry;
 }
 exports.getMainEntry = getMainEntry;
+function getRootView() {
+    var activity = androidApp.foregroundActivity || androidApp.startActivity;
+    if (!activity) {
+        return undefined;
+    }
+    var callbacks = activity[CALLBACKS];
+    return callbacks ? callbacks.getRootView() : undefined;
+}
+exports.getRootView = getRootView;
 function getNativeApplication() {
     var nativeApp = androidApp.nativeApp;
     if (!nativeApp) {
@@ -151,14 +183,14 @@ function initLifecycleCallbacks() {
     });
     var subscribeForGlobalLayout = profiling_1.profile("subscribeForGlobalLayout", function (activity) {
         var rootView = activity.getWindow().getDecorView().getRootView();
-        var onGlobalLayoutListener = new android.view.ViewTreeObserver.OnGlobalLayoutListener({
+        this.onGlobalLayoutListener = new android.view.ViewTreeObserver.OnGlobalLayoutListener({
             onGlobalLayout: function () {
                 application_common_1.notify({ eventName: application_common_1.displayedEvent, object: androidApp, activity: activity });
                 var viewTreeObserver = rootView.getViewTreeObserver();
-                viewTreeObserver.removeOnGlobalLayoutListener(onGlobalLayoutListener);
+                viewTreeObserver.removeOnGlobalLayoutListener(this.onGlobalLayoutListener);
             }
         });
-        rootView.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(this.onGlobalLayoutListener);
     });
     var lifecycleCallbacks = new android.app.Application.ActivityLifecycleCallbacks({
         onActivityCreated: profiling_1.profile("onActivityCreated", function (activity, savedInstanceState) {

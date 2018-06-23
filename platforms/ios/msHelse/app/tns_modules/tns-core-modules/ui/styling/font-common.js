@@ -69,7 +69,7 @@ function parseFontFamily(value) {
     }
     var split = value.split(",");
     for (var i = 0; i < split.length; i++) {
-        var str = split[i].trim().replace(/['"]+/g, '');
+        var str = split[i].trim().replace(/['"]+/g, "");
         if (str) {
             result.push(str);
         }

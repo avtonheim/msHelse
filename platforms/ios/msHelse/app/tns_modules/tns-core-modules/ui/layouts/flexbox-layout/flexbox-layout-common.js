@@ -205,6 +205,9 @@ var FlexboxLayoutBase = (function (_super) {
     FlexboxLayoutBase.getFlexWrapBefore = function (view) {
         return validateArgs(view).style.flexWrapBefore;
     };
+    FlexboxLayoutBase = __decorate([
+        layout_base_1.CSSType("FlexboxLayout")
+    ], FlexboxLayoutBase);
     return FlexboxLayoutBase;
 }(layout_base_1.LayoutBase));
 exports.FlexboxLayoutBase = FlexboxLayoutBase;

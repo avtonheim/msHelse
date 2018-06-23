@@ -155,7 +155,7 @@ var SearchBar = (function (_super) {
         return "";
     };
     SearchBar.prototype[search_bar_common_1.textProperty.setNative] = function (value) {
-        var text = (value === null || value === undefined) ? '' : value.toString();
+        var text = (value === null || value === undefined) ? "" : value.toString();
         this.nativeViewProtected.setQuery(text, false);
     };
     SearchBar.prototype[search_bar_common_1.hintProperty.getDefault] = function () {

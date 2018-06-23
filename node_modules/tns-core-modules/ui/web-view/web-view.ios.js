@@ -55,9 +55,6 @@ var WKNavigationDelegateImpl = (function (_super) {
         }
         var owner = this._owner.get();
         if (owner) {
-            webView.evaluateJavaScriptCompletionHandler("document.body.height", function (val, err) {
-                console.log(val);
-            });
             var src = owner.src;
             if (webView.URL) {
                 src = webView.URL.absoluteString;
@@ -92,7 +89,7 @@ var WebView = (function (_super) {
         var wkUController = WKUserContentController.new();
         wkUController.addUserScript(wkUScript);
         configuration.userContentController = wkUController;
-        configuration.preferences.setValueForKey(true, 'allowFileAccessFromFileURLs');
+        configuration.preferences.setValueForKey(true, "allowFileAccessFromFileURLs");
         _this.nativeViewProtected = _this._ios = new WKWebView({
             frame: CGRectZero,
             configuration: configuration
@@ -118,7 +115,7 @@ var WebView = (function (_super) {
         this._ios.stopLoading();
     };
     WebView.prototype._loadUrl = function (src) {
-        if (src.startsWith('file:///')) {
+        if (src.startsWith("file:///")) {
             this._ios.loadFileURLAllowingReadAccessToURL(NSURL.URLWithString(src), NSURL.URLWithString(src));
         }
         else {

@@ -21,7 +21,7 @@ var SliderChangeHandlerImpl = (function (_super) {
         }
     };
     SliderChangeHandlerImpl.ObjCExposedMethods = {
-        'sliderValueChanged': { returns: interop.types.void, params: [UISlider] }
+        "sliderValueChanged": { returns: interop.types.void, params: [UISlider] }
     };
     return SliderChangeHandlerImpl;
 }(NSObject));

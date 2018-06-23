@@ -36,9 +36,8 @@ function showDialog(builder) {
             }
         }
     }
-    var buttonColor = dialogs_common_1.getButtonColor();
-    var buttonBackgroundColor = dialogs_common_1.getButtonBackgroundColor();
-    if (buttonColor) {
+    var _a = dialogs_common_1.getButtonColors(), color = _a.color, backgroundColor = _a.backgroundColor;
+    if (color) {
         var buttons = [];
         for (var i = 0; i < 3; i++) {
             var id = dlg.getContext().getResources().getIdentifier("android:id/button" + i, null, null);
@@ -46,11 +45,11 @@ function showDialog(builder) {
         }
         buttons.forEach(function (button) {
             if (button) {
-                if (buttonColor) {
-                    button.setTextColor(buttonColor.android);
+                if (color) {
+                    button.setTextColor(color.android);
                 }
-                if (buttonBackgroundColor) {
-                    button.setBackgroundColor(buttonBackgroundColor.android);
+                if (backgroundColor) {
+                    button.setBackgroundColor(backgroundColor.android);
                 }
             }
         });

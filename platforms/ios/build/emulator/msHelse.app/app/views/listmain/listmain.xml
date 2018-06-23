@@ -1,0 +1,22 @@
+<Page loaded="onLoaded">
+  <Page.actionBar>
+         <ActionBar class="action-bar">
+           <StackLayout>
+              <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
+           </StackLayout>
+           <ActionItem text="Tilbake" tap="tapHome" ios.position="left"/>
+         </ActionBar>
+     </Page.actionBar>
+  <StackLayout>
+    <StackLayout class="content">
+    <Image class="mainComp" src="~/images/gjoremal_ny.png" height="400px" width="400px"/>
+    <Label class="titleMain" text="Gjøremål"/>
+    </StackLayout>
+    <StackLayout class="navButton" style="background-color:#DE8282;" tap="navList">
+      <Label text="Planlegg noko kjekt!"/>
+    </StackLayout>
+    <StackLayout class="navButton" style="background-color:#DE8282;" tap="navList">
+      <Label text="Sjå fullførte mål"/>
+    </StackLayout>
+  </StackLayout>
+</Page>

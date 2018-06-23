@@ -8,6 +8,7 @@ var platform_1 = require("../../platform");
 var number_utils_1 = require("../../utils/number-utils");
 var matrix_1 = require("../../matrix");
 var parser = require("../../css/parser");
+var linear_gradient_1 = require("./linear-gradient");
 function equalsCommon(a, b) {
     if (a == "auto") {
         return b == "auto";
@@ -483,6 +484,24 @@ exports.backgroundImageProperty = new properties_1.CssProperty({
     name: "backgroundImage", cssName: "background-image", valueChanged: function (target, oldValue, newValue) {
         var background = target.backgroundInternal.withImage(newValue);
         target.backgroundInternal = background;
+    },
+    equalityComparer: function (value1, value2) {
+        if (value1 instanceof linear_gradient_1.LinearGradient && value2 instanceof linear_gradient_1.LinearGradient) {
+            return linear_gradient_1.LinearGradient.equals(value1, value2);
+        }
+        else {
+            return value1 === value2;
+        }
+    },
+    valueConverter: function (value) {
+        if (typeof value === "string") {
+            var parsed = parser.parseBackground(value);
+            if (parsed) {
+                var background = parsed.value;
+                value = (typeof background.image === "object") ? linear_gradient_1.LinearGradient.parse(background.image) : value;
+            }
+        }
+        return value;
     }
 });
 exports.backgroundImageProperty.register(properties_1.Style);
@@ -528,7 +547,13 @@ function convertToBackgrounds(value) {
     if (typeof value === "string") {
         var backgrounds = parser.parseBackground(value).value;
         var backgroundColor = backgrounds.color ? new color_1.Color(backgrounds.color) : properties_1.unsetValue;
-        var backgroundImage = backgrounds.image || properties_1.unsetValue;
+        var backgroundImage = void 0;
+        if (typeof backgrounds.image === "object" && backgrounds.image) {
+            backgroundImage = linear_gradient_1.LinearGradient.parse(backgrounds.image);
+        }
+        else {
+            backgroundImage = backgrounds.image || properties_1.unsetValue;
+        }
         var backgroundRepeat = backgrounds.repeat || properties_1.unsetValue;
         var backgroundPosition = backgrounds.position ? backgrounds.position.text : properties_1.unsetValue;
         return [

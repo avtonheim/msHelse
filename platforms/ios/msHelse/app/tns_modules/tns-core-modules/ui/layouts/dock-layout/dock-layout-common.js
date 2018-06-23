@@ -23,6 +23,9 @@ var DockLayoutBase = (function (_super) {
     };
     DockLayoutBase.prototype.onDockChanged = function (view, oldValue, newValue) {
     };
+    DockLayoutBase = __decorate([
+        layout_base_1.CSSType("DockLayout")
+    ], DockLayoutBase);
     return DockLayoutBase;
 }(layout_base_1.LayoutBase));
 exports.DockLayoutBase = DockLayoutBase;

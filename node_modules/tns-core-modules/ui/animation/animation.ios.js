@@ -159,6 +159,9 @@ var Animation = (function (_super) {
         return _this;
     }
     Animation.prototype.play = function () {
+        if (this.isPlaying) {
+            return this._rejectAlreadyPlaying();
+        }
         var animationFinishedPromise = _super.prototype.play.call(this);
         this._finishedAnimations = 0;
         this._cancelledAnimations = 0;
@@ -166,7 +169,10 @@ var Animation = (function (_super) {
         return animationFinishedPromise;
     };
     Animation.prototype.cancel = function () {
-        _super.prototype.cancel.call(this);
+        if (!this.isPlaying) {
+            animation_common_1.traceWrite("Animation is not currently playing.", animation_common_1.traceCategories.Animation, animation_common_1.traceType.warn);
+            return;
+        }
         var i = 0;
         var length = this._mergedPropertyAnimations.length;
         for (; i < length; i++) {

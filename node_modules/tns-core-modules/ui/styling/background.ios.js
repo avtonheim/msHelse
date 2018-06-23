@@ -2,6 +2,7 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
+var linear_gradient_1 = require("./linear-gradient");
 var color_1 = require("../../color");
 var utils_1 = require("../../utils/utils");
 var image_source_1 = require("../../image-source");
@@ -17,6 +18,10 @@ var ios;
         if (nativeView.hasNonUniformBorder) {
             unsubscribeFromScrollNotifications(view);
             clearNonUniformBorders(nativeView);
+        }
+        clearGradient(nativeView);
+        if (background.image instanceof linear_gradient_1.LinearGradient) {
+            drawGradient(nativeView, background.image);
         }
         var hasNonUniformBorderWidths = background.hasBorderWidth() && !background.hasUniformBorder();
         var hasNonUniformBorderRadiuses = background.hasBorderRadius() && !background.hasUniformBorderRadius();
@@ -40,7 +45,7 @@ var ios;
         if (background.clipPath) {
             drawClipPath(nativeView, background);
         }
-        if (!background.image) {
+        if (!background.image || background.image instanceof linear_gradient_1.LinearGradient) {
             var uiColor = background.color ? background.color.ios : undefined;
             callback(uiColor);
         }
@@ -529,6 +534,38 @@ function drawNoRadiusNonUniformBorders(nativeView, background) {
         hasNonUniformBorder = true;
     }
     nativeView.hasNonUniformBorder = hasNonUniformBorder;
+}
+function drawGradient(nativeView, gradient) {
+    var gradientLayer = CAGradientLayer.layer();
+    gradientLayer.frame = nativeView.bounds;
+    nativeView.gradientLayer = gradientLayer;
+    var iosColors = NSMutableArray.alloc().initWithCapacity(gradient.colorStops.length);
+    var iosStops = NSMutableArray.alloc().initWithCapacity(gradient.colorStops.length);
+    var hasStops = false;
+    gradient.colorStops.forEach(function (stop) {
+        iosColors.addObject(stop.color.ios.CGColor);
+        if (stop.offset) {
+            iosStops.addObject(stop.offset.value);
+            hasStops = true;
+        }
+    });
+    gradientLayer.colors = iosColors;
+    if (hasStops) {
+        gradientLayer.locations = iosStops;
+    }
+    var alpha = gradient.angle / (Math.PI * 2);
+    var startX = Math.pow(Math.sin(Math.PI * (alpha + 0.75)), 2);
+    var startY = Math.pow(Math.sin(Math.PI * (alpha + 0.5)), 2);
+    var endX = Math.pow(Math.sin(Math.PI * (alpha + 0.25)), 2);
+    var endY = Math.pow(Math.sin(Math.PI * alpha), 2);
+    gradientLayer.startPoint = { x: startX, y: startY };
+    gradientLayer.endPoint = { x: endX, y: endY };
+    nativeView.layer.insertSublayerAtIndex(gradientLayer, 0);
+}
+function clearGradient(nativeView) {
+    if (nativeView.gradientLayer) {
+        nativeView.gradientLayer.removeFromSuperlayer();
+    }
 }
 function drawClipPath(nativeView, background) {
     var layer = nativeView.layer;

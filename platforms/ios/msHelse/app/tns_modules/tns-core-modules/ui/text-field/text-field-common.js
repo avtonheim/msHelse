@@ -10,6 +10,9 @@ var TextFieldBase = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     TextFieldBase.returnPressEvent = "returnPress";
+    TextFieldBase = __decorate([
+        editable_text_base_1.CSSType("TextField")
+    ], TextFieldBase);
     return TextFieldBase;
 }(editable_text_base_1.EditableTextBase));
 exports.TextFieldBase = TextFieldBase;

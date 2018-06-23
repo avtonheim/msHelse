@@ -36,7 +36,8 @@ var Border = (function (_super) {
         content_view_1.View.layoutChild(this, this.layoutView, this.effectiveBorderLeftWidth, this.effectiveBorderTopWidth, right - left - horizontalBorderLength, bottom - top - verticalBorderLength);
     };
     Border = __decorate([
-        Deprecated
+        Deprecated,
+        content_view_1.CSSType("Border")
     ], Border);
     return Border;
 }(content_view_1.ContentView));

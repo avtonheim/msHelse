@@ -2,6 +2,7 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
+var linear_gradient_1 = require("./linear-gradient");
 var utils_1 = require("../../utils/utils");
 var css_value_1 = require("../../css-value");
 var file_system_1 = require("../../file-system");
@@ -85,6 +86,24 @@ function fromBase64(source) {
     var bytes = android.util.Base64.decode(source, android.util.Base64.DEFAULT);
     return android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 }
+function fromGradient(gradient) {
+    var colors = Array.create("int", gradient.colorStops.length);
+    var stops = Array.create("float", gradient.colorStops.length);
+    var hasStops = false;
+    gradient.colorStops.forEach(function (stop, index) {
+        colors[index] = stop.color.android;
+        if (stop.offset) {
+            stops[index] = stop.offset.value;
+            hasStops = true;
+        }
+    });
+    var alpha = gradient.angle / (Math.PI * 2);
+    var startX = Math.pow(Math.sin(Math.PI * (alpha + 0.75)), 2);
+    var startY = Math.pow(Math.sin(Math.PI * (alpha + 0.5)), 2);
+    var endX = Math.pow(Math.sin(Math.PI * (alpha + 0.25)), 2);
+    var endY = Math.pow(Math.sin(Math.PI * alpha), 2);
+    return new org.nativescript.widgets.LinearGradientDefinition(startX, startY, endX, endY, colors, hasStops ? stops : null);
+}
 var pattern = /url\(('|")(.*?)\1\)/;
 function refreshBorderDrawable(view, borderDrawable) {
     var nativeView = view.nativeViewProtected;
@@ -94,8 +113,9 @@ function refreshBorderDrawable(view, borderDrawable) {
         var backgroundPositionParsedCSSValues = createNativeCSSValueArray(background.position);
         var backgroundSizeParsedCSSValues = createNativeCSSValueArray(background.size);
         var blackColor = -16777216;
-        var imageUri = background.image;
-        if (imageUri) {
+        var imageUri = void 0;
+        if (background.image && typeof background.image === "string") {
+            imageUri = background.image;
             var match = imageUri.match(pattern);
             if (match && match[2]) {
                 imageUri = match[2];
@@ -118,7 +138,11 @@ function refreshBorderDrawable(view, borderDrawable) {
                 imageUri = utils_1.FILE_PREFIX + fileName;
             }
         }
-        borderDrawable.refresh(background.borderTopColor ? background.borderTopColor.android : blackColor, background.borderRightColor ? background.borderRightColor.android : blackColor, background.borderBottomColor ? background.borderBottomColor.android : blackColor, background.borderLeftColor ? background.borderLeftColor.android : blackColor, background.borderTopWidth, background.borderRightWidth, background.borderBottomWidth, background.borderLeftWidth, background.borderTopLeftRadius, background.borderTopRightRadius, background.borderBottomRightRadius, background.borderBottomLeftRadius, background.clipPath, background.color ? background.color.android : 0, imageUri, bitmap, context, background.repeat, background.position, backgroundPositionParsedCSSValues, background.size, backgroundSizeParsedCSSValues);
+        var gradient = null;
+        if (background.image && background.image instanceof linear_gradient_1.LinearGradient) {
+            gradient = fromGradient(background.image);
+        }
+        borderDrawable.refresh(background.borderTopColor ? background.borderTopColor.android : blackColor, background.borderRightColor ? background.borderRightColor.android : blackColor, background.borderBottomColor ? background.borderBottomColor.android : blackColor, background.borderLeftColor ? background.borderLeftColor.android : blackColor, background.borderTopWidth, background.borderRightWidth, background.borderBottomWidth, background.borderLeftWidth, background.borderTopLeftRadius, background.borderTopRightRadius, background.borderBottomRightRadius, background.borderBottomLeftRadius, background.clipPath, background.color ? background.color.android : 0, imageUri, bitmap, gradient, context, background.repeat, background.position, backgroundPositionParsedCSSValues, background.size, backgroundSizeParsedCSSValues);
     }
 }
 function createNativeCSSValueArray(css) {

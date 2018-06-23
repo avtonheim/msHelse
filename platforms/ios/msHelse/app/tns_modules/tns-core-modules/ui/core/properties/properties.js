@@ -76,6 +76,9 @@ var Property = (function () {
             var oldValue = key in this ? this[key] : defaultValue;
             var changed = equalityComparer ? !equalityComparer(oldValue, value) : oldValue !== value;
             if (wrapped || changed) {
+                if (affectsLayout) {
+                    this.requestLayout();
+                }
                 if (reset) {
                     delete this[key];
                     if (valueChanged) {
@@ -119,9 +122,6 @@ var Property = (function () {
                 }
                 if (this.hasListeners(eventName)) {
                     this.notify({ object: this, eventName: eventName, propertyName: propertyName, value: value, oldValue: oldValue });
-                }
-                if (affectsLayout) {
-                    this.requestLayout();
                 }
                 if (this.domNode) {
                     if (reset) {
@@ -536,7 +536,6 @@ exports.CssProperty = CssProperty;
 CssProperty.prototype.isStyleProperty = true;
 var CssAnimationProperty = (function () {
     function CssAnimationProperty(options) {
-        this.options = options;
         var valueConverter = options.valueConverter, equalityComparer = options.equalityComparer, valueChanged = options.valueChanged, defaultValue = options.defaultValue;
         var propertyName = options.name;
         this.name = propertyName;
@@ -897,7 +896,7 @@ function inheritableCssPropertyValuesOn(style) {
     }
     return array;
 }
-exports.initNativeView = profiling_1.profile('"properties".initNativeView', function initNativeView(view) {
+exports.initNativeView = profiling_1.profile("\"properties\".initNativeView", function initNativeView(view) {
     if (view._suspendedUpdates) {
         applyPendingNativeSetters(view);
     }

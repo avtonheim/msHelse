@@ -133,6 +133,9 @@ var ActionBarBase = (function (_super) {
         }
         return true;
     };
+    ActionBarBase = __decorate([
+        view_1.CSSType("ActionBar")
+    ], ActionBarBase);
     return ActionBarBase;
 }(view_1.View));
 exports.ActionBarBase = ActionBarBase;
@@ -251,6 +254,11 @@ var ActionItemBase = (function (_super) {
     ActionItemBase.prototype._addChildFromBuilder = function (name, value) {
         this.actionView = value;
     };
+    ActionItemBase.prototype._onVisibilityChanged = function (visibility) {
+        if (this.actionBar) {
+            this.actionBar.update();
+        }
+    };
     ActionItemBase.prototype.eachChild = function (callback) {
         if (this._actionView) {
             callback(this._actionView);
@@ -270,19 +278,22 @@ exports.isVisible = isVisible;
 function onTitlePropertyChanged(actionBar, oldValue, newValue) {
     actionBar._onTitlePropertyChanged();
 }
-var titleProperty = new view_1.Property({ name: "title", valueChanged: onTitlePropertyChanged });
-titleProperty.register(ActionBarBase);
+exports.titleProperty = new view_1.Property({ name: "title", valueChanged: onTitlePropertyChanged });
+exports.titleProperty.register(ActionBarBase);
 function onItemChanged(item, oldValue, newValue) {
     if (item.actionBar) {
         item.actionBar.update();
     }
 }
-var textProperty = new view_1.Property({ name: "text", defaultValue: "", valueChanged: onItemChanged });
-textProperty.register(ActionItemBase);
-var iconProperty = new view_1.Property({ name: "icon", valueChanged: onItemChanged });
-iconProperty.register(ActionItemBase);
-var visibilityProperty = new view_1.Property({ name: "visibility", defaultValue: "visible", valueChanged: onItemChanged });
-visibilityProperty.register(ActionItemBase);
+function onVisibilityChanged(item, oldValue, newValue) {
+    item._onVisibilityChanged(newValue);
+}
+exports.textProperty = new view_1.Property({ name: "text", defaultValue: "", valueChanged: onItemChanged });
+exports.textProperty.register(ActionItemBase);
+exports.iconProperty = new view_1.Property({ name: "icon", valueChanged: onItemChanged });
+exports.iconProperty.register(ActionItemBase);
+exports.visibilityProperty = new view_1.Property({ name: "visibility", defaultValue: "visible", valueChanged: onVisibilityChanged });
+exports.visibilityProperty.register(ActionItemBase);
 exports.flatProperty = new view_1.Property({ name: "flat", defaultValue: false, valueConverter: view_1.booleanConverter });
 exports.flatProperty.register(ActionBarBase);
 //# sourceMappingURL=action-bar-common.js.map

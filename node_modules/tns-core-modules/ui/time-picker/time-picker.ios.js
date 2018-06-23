@@ -124,7 +124,7 @@ var UITimePickerChangeHandlerImpl = (function (_super) {
         }
     };
     UITimePickerChangeHandlerImpl.ObjCExposedMethods = {
-        'valueChanged': { returns: interop.types.void, params: [UIDatePicker] }
+        "valueChanged": { returns: interop.types.void, params: [UIDatePicker] }
     };
     return UITimePickerChangeHandlerImpl;
 }(NSObject));

@@ -1,0 +1,17 @@
+.graphContainer{
+  background-color: #EBA0A0;
+  border-radius: 15px;
+  margin-top: 20px;
+  padding: 10px;
+}
+.graphBox{
+  background-color: #EBA0A0;
+  height: 300px;
+}
+.h2{
+  margin-top: 40px;
+  padding-left: 20px;
+}
+.body{
+  margin-bottom: 10px;
+}

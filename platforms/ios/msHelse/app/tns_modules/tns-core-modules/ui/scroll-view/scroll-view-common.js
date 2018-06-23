@@ -12,16 +12,17 @@ var ScrollViewBase = (function (_super) {
         _this._scrollChangeCount = 0;
         return _this;
     }
+    ScrollViewBase_1 = ScrollViewBase;
     ScrollViewBase.prototype.addEventListener = function (arg, callback, thisArg) {
         _super.prototype.addEventListener.call(this, arg, callback, thisArg);
-        if (arg === ScrollViewBase.scrollEvent) {
+        if (arg === ScrollViewBase_1.scrollEvent) {
             this._scrollChangeCount++;
             this.attach();
         }
     };
     ScrollViewBase.prototype.removeEventListener = function (arg, callback, thisArg) {
         _super.prototype.removeEventListener.call(this, arg, callback, thisArg);
-        if (arg === ScrollViewBase.scrollEvent) {
+        if (arg === ScrollViewBase_1.scrollEvent) {
             this._scrollChangeCount--;
             this.dettach();
         }
@@ -80,7 +81,11 @@ var ScrollViewBase = (function (_super) {
     __decorate([
         profiling_1.profile
     ], ScrollViewBase.prototype, "onLoaded", null);
+    ScrollViewBase = ScrollViewBase_1 = __decorate([
+        content_view_1.CSSType("ScrollView")
+    ], ScrollViewBase);
     return ScrollViewBase;
+    var ScrollViewBase_1;
 }(content_view_1.ContentView));
 exports.ScrollViewBase = ScrollViewBase;
 var converter = content_view_1.makeParser(content_view_1.makeValidator("horizontal", "vertical"));

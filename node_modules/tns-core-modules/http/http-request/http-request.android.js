@@ -185,7 +185,7 @@ exports.request = request;
 function decodeResponse(raw, encoding) {
     var charsetName = "UTF-8";
     if (encoding === HttpResponseEncoding.GBK) {
-        charsetName = 'GBK';
+        charsetName = "GBK";
     }
     return raw.toString(charsetName);
 }

@@ -11,6 +11,9 @@ var SearchBarBase = (function (_super) {
     }
     SearchBarBase.submitEvent = "submit";
     SearchBarBase.clearEvent = "clear";
+    SearchBarBase = __decorate([
+        view_1.CSSType("SearchBar")
+    ], SearchBarBase);
     return SearchBarBase;
 }(view_1.View));
 exports.SearchBarBase = SearchBarBase;

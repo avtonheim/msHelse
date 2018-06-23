@@ -7,17 +7,8 @@ __export(require("./layout-base"));
 var Layout = (function (_super) {
     __extends(Layout, _super);
     function Layout() {
-        var _this = _super.call(this) || this;
-        _this.nativeViewProtected = UIView.new();
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(Layout.prototype, "ios", {
-        get: function () {
-            return this.nativeViewProtected;
-        },
-        enumerable: true,
-        configurable: true
-    });
     Layout.prototype.onMeasure = function (widthMeasureSpec, heightMeasureSpec) {
     };
     return Layout;

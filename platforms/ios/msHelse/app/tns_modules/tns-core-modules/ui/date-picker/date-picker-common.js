@@ -11,6 +11,9 @@ var DatePickerBase = (function (_super) {
     function DatePickerBase() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    DatePickerBase = __decorate([
+        view_1.CSSType("DatePicker")
+    ], DatePickerBase);
     return DatePickerBase;
 }(view_1.View));
 exports.DatePickerBase = DatePickerBase;

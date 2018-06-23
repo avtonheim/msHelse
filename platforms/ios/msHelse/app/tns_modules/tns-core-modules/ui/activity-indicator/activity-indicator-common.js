@@ -9,6 +9,9 @@ var ActivityIndicatorBase = (function (_super) {
     function ActivityIndicatorBase() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    ActivityIndicatorBase = __decorate([
+        view_1.CSSType("ActivityIndicator")
+    ], ActivityIndicatorBase);
     return ActivityIndicatorBase;
 }(view_1.View));
 exports.ActivityIndicatorBase = ActivityIndicatorBase;

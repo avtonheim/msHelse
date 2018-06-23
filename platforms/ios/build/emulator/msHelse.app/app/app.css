@@ -1,0 +1,141 @@
+﻿/*
+In NativeScript, the app.css file is where you place CSS rules that
+you would like to apply to your entire application. Check out
+http://docs.nativescript.org/ui/styling for a full list of the CSS
+selectors and properties you can use to style UI components.
+
+/*
+In many cases you may want to use the NativeScript core theme instead
+of writing your own CSS rules. For a full list of class names in the theme
+refer to http://docs.nativescript.org/ui/theme.
+The imported CSS rules must precede all other types of rules.
+*/
+@import '~/nativescript-theme-core/css/sky.css';
+
+/*
+The following CSS rule changes the font size of all UI
+components that have the btn class name.
+*/
+.btn {
+    font-size: 18;
+}
+.content{
+  margin: 20px;
+  text-align: center;
+}
+/*Next button in the whole app*/
+.nxtBtn{
+  font-size: 17px;
+  horizontal-align: right;
+  margin-right: 30px;
+  margin-top: 30px;
+}
+.title{
+  font-size: 20pt;
+  font-weight: bold;
+}
+/*Title in each component*/
+.titleMain{
+  font-size: 50pt;
+  margin-top: 20px;
+}
+/*Image in each component*/
+.mainComp{
+  width: 300px;
+  height: 300px;
+  margin-top: 30px;
+}
+.listLayout{
+  margin: 20px;
+}
+.listItems{
+  font-size: 25pt;
+  text-align: center;
+}
+/*Start and end button in diary component*/
+.startEndBtn{
+  margin-top: 20px;
+  width: 500px;
+  height: 100px;
+  border-radius: 15px;
+  background-color: green;
+  color: white;
+  font-size: 20pt;
+}
+/*App icon*/
+.iconTitle{
+  text-align: center;
+  width: 200px;
+}
+/*Todo-list*/
+.list-view-item {
+  height: 48;
+  font-size: 20;
+  color: #212121;
+  background-color: #FFFFFF;
+  padding-top: 16;
+  padding-bottom: 16;
+  padding-left: 16;
+  padding-right: 16;
+}
+.graph{
+  background-color: blue;
+  text-align: center;
+  color: white;
+  margin-bottom: 10px;
+}
+.navButton{
+  height: 140px;
+  width: 90%;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  margin-top: 20px;
+  background-color:#78DD8C;
+  border-radius: 15px;
+}
+.navButton Label{
+  margin-top: 40%;
+}
+.diaryComp{
+  text-align: center;
+}
+.graphBox{
+  width: 100%;
+}
+.question{
+  background-color: #6CE3FF;
+  color: white;
+  font-weight: bold;
+  width: 580px;
+  height: 150px;
+  border-radius: 0px 30px 30px 30px;
+  padding: 30px;
+  font-size: 18pt;
+}
+.response{
+  padding: 30px;
+  border-radius: 30px 30px 0px 30px;
+  margin-top: 20px;
+  background-color: #80CEBF;
+  width: 580px;
+  height: auto;
+}
+#subject{
+  color: white;
+  font-size: 16pt;
+  background-color: #80CEBF;
+  height: 200px;
+}
+.textInBox{
+  color: white;
+  font-size: 14pt;
+  font-weight: bold;
+  text-align: center;
+  margin: 20px;
+}
+.textExpl{
+  color: white;
+  font-size: 18pt;
+  padding: 20px;
+}

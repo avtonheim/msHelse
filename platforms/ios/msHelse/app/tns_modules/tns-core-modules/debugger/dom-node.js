@@ -180,7 +180,8 @@ var DOMNode = (function () {
             localName: this.localName,
             nodeValue: this.nodeValue,
             children: this.children.map(function (c) { return c.toObject(); }),
-            attributes: this.attributes
+            attributes: this.attributes,
+            backendNodeId: 0
         };
     };
     return DOMNode;

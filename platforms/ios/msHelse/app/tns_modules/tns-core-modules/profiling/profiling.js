@@ -28,6 +28,7 @@ function start(name) {
             runCount: 1
         };
         timers[name] = info;
+        profileNames.push(name);
     }
 }
 exports.start = start;

@@ -9,32 +9,26 @@ var Image = (function (_super) {
     function Image() {
         var _this = _super.call(this) || this;
         _this._imageSourceAffectsLayout = true;
-        _this.nativeViewProtected = _this._ios = UIImageView.new();
-        _this._ios.contentMode = 1;
-        _this._ios.userInteractionEnabled = true;
+        var imageView = UIImageView.new();
+        imageView.contentMode = 1;
+        imageView.userInteractionEnabled = true;
+        _this.nativeViewProtected = imageView;
         _this._setNativeClipToBounds();
         return _this;
     }
-    Object.defineProperty(Image.prototype, "ios", {
-        get: function () {
-            return this._ios;
-        },
-        enumerable: true,
-        configurable: true
-    });
     Image.prototype.setTintColor = function (value) {
-        if (value && this._ios.image && !this._templateImageWasCreated) {
-            this._ios.image = this._ios.image.imageWithRenderingMode(2);
+        if (value && this.nativeViewProtected.image && !this._templateImageWasCreated) {
+            this.nativeViewProtected.image = this.nativeViewProtected.image.imageWithRenderingMode(2);
             this._templateImageWasCreated = true;
         }
-        else if (this._ios.image && this._templateImageWasCreated) {
+        else if (!value && this.nativeViewProtected.image && this._templateImageWasCreated) {
             this._templateImageWasCreated = false;
-            this._ios.image = this._ios.image.imageWithRenderingMode(0);
+            this.nativeViewProtected.image = this.nativeViewProtected.image.imageWithRenderingMode(0);
         }
-        this._ios.tintColor = value ? value.ios : null;
+        this.nativeViewProtected.tintColor = value ? value.ios : null;
     };
     Image.prototype._setNativeImage = function (nativeImage) {
-        this.ios.image = nativeImage;
+        this.nativeViewProtected.image = nativeImage;
         this._templateImageWasCreated = false;
         this.setTintColor(this.style.tintColor);
         if (this._imageSourceAffectsLayout) {
@@ -42,7 +36,7 @@ var Image = (function (_super) {
         }
     };
     Image.prototype._setNativeClipToBounds = function () {
-        this._ios.clipsToBounds = true;
+        this.nativeViewProtected.clipsToBounds = true;
     };
     Image.prototype.onMeasure = function (widthMeasureSpec, heightMeasureSpec) {
         var width = image_common_1.layout.getMeasureSpecSize(widthMeasureSpec);
@@ -100,40 +94,28 @@ var Image = (function (_super) {
         }
         return { width: scaleW, height: scaleH };
     };
-    Image.prototype[image_common_1.stretchProperty.getDefault] = function () {
-        return "aspectFit";
-    };
     Image.prototype[image_common_1.stretchProperty.setNative] = function (value) {
         switch (value) {
             case "aspectFit":
-                this._ios.contentMode = 1;
+                this.nativeViewProtected.contentMode = 1;
                 break;
             case "aspectFill":
-                this._ios.contentMode = 2;
+                this.nativeViewProtected.contentMode = 2;
                 break;
             case "fill":
-                this._ios.contentMode = 0;
+                this.nativeViewProtected.contentMode = 0;
                 break;
             case "none":
             default:
-                this._ios.contentMode = 9;
+                this.nativeViewProtected.contentMode = 9;
                 break;
         }
-    };
-    Image.prototype[image_common_1.tintColorProperty.getDefault] = function () {
-        return undefined;
     };
     Image.prototype[image_common_1.tintColorProperty.setNative] = function (value) {
         this.setTintColor(value);
     };
-    Image.prototype[image_common_1.imageSourceProperty.getDefault] = function () {
-        return undefined;
-    };
     Image.prototype[image_common_1.imageSourceProperty.setNative] = function (value) {
         this._setNativeImage(value ? value.ios : null);
-    };
-    Image.prototype[image_common_1.srcProperty.getDefault] = function () {
-        return undefined;
     };
     Image.prototype[image_common_1.srcProperty.setNative] = function (value) {
         this._createImageSourceFromSrc(value);

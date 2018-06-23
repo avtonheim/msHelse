@@ -4,7 +4,10 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var action_bar_common_1 = require("./action-bar-common");
 var image_source_1 = require("../../image-source");
+var utils_1 = require("../../utils/utils");
 __export(require("./action-bar-common"));
+var majorVersion = utils_1.ios.MajorVersion;
+var UNSPECIFIED = action_bar_common_1.layout.makeMeasureSpec(0, action_bar_common_1.layout.UNSPECIFIED);
 var TapBarItemHandlerImpl = (function (_super) {
     __extends(TapBarItemHandlerImpl, _super);
     function TapBarItemHandlerImpl() {
@@ -54,15 +57,19 @@ var NavigationButton = (function (_super) {
     function NavigationButton() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    NavigationButton.prototype._onVisibilityChanged = function (visibility) {
+        if (this._navigationItem) {
+            var visible = visibility === "visible";
+            this._navigationItem.setHidesBackButtonAnimated(!visible, true);
+        }
+    };
     return NavigationButton;
 }(ActionItem));
 exports.NavigationButton = NavigationButton;
 var ActionBar = (function (_super) {
     __extends(ActionBar, _super);
     function ActionBar() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this._navigationBarHeight = 0;
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(ActionBar.prototype, "ios", {
         get: function () {
@@ -93,25 +100,48 @@ var ActionBar = (function (_super) {
             this.titleView = value;
         }
     };
+    Object.defineProperty(ActionBar.prototype, "_getActualSize", {
+        get: function () {
+            var navBar = this.ios;
+            if (!navBar) {
+                return { width: 0, height: 0 };
+            }
+            var frame = navBar.frame;
+            var size = frame.size;
+            var width = action_bar_common_1.layout.toDevicePixels(size.width);
+            var height = action_bar_common_1.layout.toDevicePixels(size.height);
+            return { width: width, height: height };
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ActionBar.prototype.layoutInternal = function () {
+        var _a = this._getActualSize, width = _a.width, height = _a.height;
+        var widthSpec = action_bar_common_1.layout.makeMeasureSpec(width, action_bar_common_1.layout.EXACTLY);
+        var heightSpec = action_bar_common_1.layout.makeMeasureSpec(height, action_bar_common_1.layout.EXACTLY);
+        this.measure(widthSpec, heightSpec);
+        this.layout(0, 0, width, height, false);
+    };
     ActionBar.prototype.update = function () {
         var page = this.page;
-        if (!page || !page.parent) {
+        if (!page || !page.frame) {
             return;
         }
         var viewController = page.ios;
         var navigationItem = viewController.navigationItem;
-        var navController = page.frame.ios.controller;
+        var navController = viewController.navigationController;
         var navigationBar = navController ? navController.navigationBar : null;
         var previousController;
         navigationItem.title = this.title;
-        if (this.titleView && this.titleView.ios) {
-            navigationItem.titleView = this.titleView.ios;
+        var titleView = this.titleView;
+        if (titleView && titleView.ios) {
+            navigationItem.titleView = titleView.ios;
         }
         else {
             navigationItem.titleView = null;
         }
         var indexOfViewController = navController.viewControllers.indexOfObject(viewController);
-        if (indexOfViewController < navController.viewControllers.count && indexOfViewController > 0) {
+        if (indexOfViewController > 0 && indexOfViewController < navController.viewControllers.count) {
             previousController = navController.viewControllers[indexOfViewController - 1];
         }
         if (previousController) {
@@ -138,11 +168,15 @@ var ActionBar = (function (_super) {
             navigationBar.backIndicatorTransitionMaskImage = null;
         }
         if (this.navigationButton) {
-            navigationItem.setHidesBackButtonAnimated(!action_bar_common_1.isVisible(this.navigationButton), true);
+            this.navigationButton._navigationItem = navigationItem;
+            navigationItem.setHidesBackButtonAnimated(!action_bar_common_1.isVisible(this.navigationButton), false);
         }
         this.populateMenuItems(navigationItem);
         this.updateColors(navigationBar);
         this.updateFlatness(navigationBar);
+        if (!this.isLayoutValid) {
+            this.layoutInternal();
+        }
     };
     ActionBar.prototype.populateMenuItems = function (navigationItem) {
         var items = this.actionItems.getVisibleItems();
@@ -238,46 +272,38 @@ var ActionBar = (function (_super) {
     ActionBar.prototype.onMeasure = function (widthMeasureSpec, heightMeasureSpec) {
         var _this = this;
         var width = action_bar_common_1.layout.getMeasureSpecSize(widthMeasureSpec);
-        var widthMode = action_bar_common_1.layout.getMeasureSpecMode(widthMeasureSpec);
         var height = action_bar_common_1.layout.getMeasureSpecSize(heightMeasureSpec);
-        var heightMode = action_bar_common_1.layout.getMeasureSpecMode(heightMeasureSpec);
-        var navBarWidth = 0;
-        var navBarHeight = 0;
-        var frame = this.page.frame;
-        if (frame) {
-            var navBar = frame.ios.controller.navigationBar;
-            if (!navBar.hidden) {
-                var desiredSize = action_bar_common_1.layout.measureNativeView(navBar, width, widthMode, height, heightMode);
-                navBarWidth = desiredSize.width;
-                navBarHeight = desiredSize.height;
-            }
-        }
-        this._navigationBarHeight = navBarHeight;
         if (this.titleView) {
-            action_bar_common_1.View.measureChild(this, this.titleView, action_bar_common_1.layout.makeMeasureSpec(width, action_bar_common_1.layout.AT_MOST), action_bar_common_1.layout.makeMeasureSpec(navBarHeight, action_bar_common_1.layout.AT_MOST));
+            action_bar_common_1.View.measureChild(this, this.titleView, UNSPECIFIED, UNSPECIFIED);
         }
         this.actionItems.getItems().forEach(function (actionItem) {
-            if (actionItem.actionView) {
-                action_bar_common_1.View.measureChild(_this, actionItem.actionView, action_bar_common_1.layout.makeMeasureSpec(width, action_bar_common_1.layout.AT_MOST), action_bar_common_1.layout.makeMeasureSpec(navBarHeight, action_bar_common_1.layout.AT_MOST));
+            var actionView = actionItem.actionView;
+            if (actionView) {
+                action_bar_common_1.View.measureChild(_this, actionView, UNSPECIFIED, UNSPECIFIED);
             }
         });
-        this.setMeasuredDimension(navBarWidth, navBarHeight);
+        this.setMeasuredDimension(width, height);
     };
     ActionBar.prototype.onLayout = function (left, top, right, bottom) {
         var _this = this;
-        action_bar_common_1.View.layoutChild(this, this.titleView, 0, 0, right - left, this._navigationBarHeight);
+        var titleView = this.titleView;
+        if (titleView) {
+            if (majorVersion > 10) {
+                action_bar_common_1.View.layoutChild(this, titleView, 0, 0, titleView.getMeasuredWidth(), titleView.getMeasuredHeight());
+            }
+            else {
+                action_bar_common_1.View.layoutChild(this, titleView, 0, 0, right - left, bottom - top);
+            }
+        }
         this.actionItems.getItems().forEach(function (actionItem) {
-            if (actionItem.actionView && actionItem.actionView.ios) {
-                var measuredWidth = actionItem.actionView.getMeasuredWidth();
-                var measuredHeight = actionItem.actionView.getMeasuredHeight();
-                action_bar_common_1.View.layoutChild(_this, actionItem.actionView, 0, 0, measuredWidth, measuredHeight);
+            var actionView = actionItem.actionView;
+            if (actionView && actionView.ios) {
+                var measuredWidth = actionView.getMeasuredWidth();
+                var measuredHeight = actionView.getMeasuredHeight();
+                action_bar_common_1.View.layoutChild(_this, actionView, 0, 0, measuredWidth, measuredHeight);
             }
         });
         _super.prototype.onLayout.call(this, left, top, right, bottom);
-        var navigationBar = this.ios;
-        if (navigationBar) {
-            navigationBar.setNeedsLayout();
-        }
     };
     ActionBar.prototype.layoutNativeView = function (left, top, right, bottom) {
         return;

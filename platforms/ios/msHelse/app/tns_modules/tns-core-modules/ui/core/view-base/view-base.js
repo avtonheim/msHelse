@@ -82,15 +82,41 @@ function eachDescendant(view, callback) {
 }
 exports.eachDescendant = eachDescendant;
 var viewIdCounter = 1;
+var Flags;
+(function (Flags) {
+    Flags["superOnLoadedCalled"] = "Loaded";
+    Flags["superOnUnloadedCalled"] = "Unloaded";
+})(Flags || (Flags = {}));
+var SuspendType;
+(function (SuspendType) {
+    SuspendType[SuspendType["Incremental"] = 0] = "Incremental";
+    SuspendType[SuspendType["Loaded"] = 1048576] = "Loaded";
+    SuspendType[SuspendType["NativeView"] = 2097152] = "NativeView";
+    SuspendType[SuspendType["UISetup"] = 4194304] = "UISetup";
+    SuspendType[SuspendType["IncrementalCountMask"] = -7340033] = "IncrementalCountMask";
+})(SuspendType || (SuspendType = {}));
+(function (SuspendType) {
+    function toString(type) {
+        return (type ? "suspended" : "resumed") + "(" +
+            "Incremental: " + (type & SuspendType.IncrementalCountMask) + ", " +
+            "Loaded: " + !(type & SuspendType.Loaded) + ", " +
+            "NativeView: " + !(type & SuspendType.NativeView) + ", " +
+            "UISetup: " + !(type & SuspendType.UISetup) +
+            ")";
+    }
+    SuspendType.toString = toString;
+})(SuspendType || (SuspendType = {}));
 var ViewBase = (function (_super) {
     __extends(ViewBase, _super);
     function ViewBase() {
         var _this = _super.call(this) || this;
+        _this._onLoadedCalled = false;
+        _this._onUnloadedCalled = false;
         _this._cssState = new ssm.CssState(_this);
         _this.pseudoClassAliases = {
-            'highlighted': [
-                'active',
-                'pressed'
+            "highlighted": [
+                "active",
+                "pressed"
             ]
         };
         _this.cssClasses = new Set();
@@ -195,50 +221,98 @@ var ViewBase = (function (_super) {
         this[name] = bindable_1.WrappedValue.unwrap(value);
     };
     ViewBase.prototype.onLoaded = function () {
+        var _this = this;
+        this.setFlag(Flags.superOnLoadedCalled, true);
+        if (this._isLoaded) {
+            return;
+        }
         this._isLoaded = true;
         this._cssState.onLoaded();
-        this._resumeNativeUpdates();
-        this._loadEachChild();
-        this._emit("loaded");
-    };
-    ViewBase.prototype._loadEachChild = function () {
+        this._resumeNativeUpdates(SuspendType.Loaded);
         this.eachChild(function (child) {
-            child.onLoaded();
+            _this.loadView(child);
             return true;
         });
+        this._emit("loaded");
     };
     ViewBase.prototype.onUnloaded = function () {
-        this._suspendNativeUpdates();
-        this._unloadEachChild();
+        var _this = this;
+        this.setFlag(Flags.superOnUnloadedCalled, true);
+        if (!this._isLoaded) {
+            return;
+        }
+        this._suspendNativeUpdates(SuspendType.Loaded);
+        this.eachChild(function (child) {
+            _this.unloadView(child);
+            return true;
+        });
         this._isLoaded = false;
         this._cssState.onUnloaded();
         this._emit("unloaded");
     };
-    ViewBase.prototype._suspendNativeUpdates = function () {
-        this._suspendNativeUpdatesCount++;
+    ViewBase.prototype._suspendNativeUpdates = function (type) {
+        if (type) {
+            this._suspendNativeUpdatesCount = this._suspendNativeUpdatesCount | type;
+        }
+        else {
+            this._suspendNativeUpdatesCount++;
+        }
     };
-    ViewBase.prototype._resumeNativeUpdates = function () {
-        this._suspendNativeUpdatesCount--;
+    ViewBase.prototype._resumeNativeUpdates = function (type) {
+        if (type) {
+            this._suspendNativeUpdatesCount = this._suspendNativeUpdatesCount & ~type;
+        }
+        else {
+            if ((this._suspendNativeUpdatesCount & SuspendType.IncrementalCountMask) === 0) {
+                throw new Error("Invalid call to " + this + "._resumeNativeUpdates");
+            }
+            this._suspendNativeUpdatesCount--;
+        }
         if (!this._suspendNativeUpdatesCount) {
             this.onResumeNativeUpdates();
         }
     };
     ViewBase.prototype._batchUpdate = function (callback) {
         try {
-            this._suspendNativeUpdates();
+            this._suspendNativeUpdates(SuspendType.Incremental);
             return callback();
         }
         finally {
-            this._resumeNativeUpdates();
+            this._resumeNativeUpdates(SuspendType.Incremental);
         }
     };
-    ViewBase.prototype._unloadEachChild = function () {
-        this.eachChild(function (child) {
-            if (child.isLoaded) {
-                child.onUnloaded();
-            }
-            return true;
-        });
+    ViewBase.prototype.setFlag = function (flag, value) {
+        switch (flag) {
+            case Flags.superOnLoadedCalled:
+                this._onLoadedCalled = value;
+                break;
+            case Flags.superOnUnloadedCalled:
+                this._onUnloadedCalled = value;
+                break;
+        }
+    };
+    ViewBase.prototype.isFlagSet = function (flag) {
+        switch (flag) {
+            case Flags.superOnLoadedCalled:
+                return this._onLoadedCalled;
+            case Flags.superOnUnloadedCalled:
+                return this._onUnloadedCalled;
+        }
+    };
+    ViewBase.prototype.callFunctionWithSuper = function (flag, func) {
+        this.setFlag(flag, false);
+        func();
+        if (!this.isFlagSet(flag)) {
+            throw new Error("super." + flag + " not called in " + this);
+        }
+    };
+    ViewBase.prototype.callLoaded = function () {
+        var _this = this;
+        this.callFunctionWithSuper(Flags.superOnLoadedCalled, function () { return _this.onLoaded(); });
+    };
+    ViewBase.prototype.callUnloaded = function () {
+        var _this = this;
+        this.callFunctionWithSuper(Flags.superOnUnloadedCalled, function () { return _this.onUnloaded(); });
     };
     ViewBase.prototype.notifyPseudoClassChanged = function (pseudoClass) {
         this.notify({ eventName: ":" + pseudoClass, object: this });
@@ -357,7 +431,17 @@ var ViewBase = (function (_super) {
             view._setupUI(this._context, atIndex);
         }
         if (this._isLoaded) {
-            view.onLoaded();
+            this.loadView(view);
+        }
+    };
+    ViewBase.prototype.loadView = function (view) {
+        if (!view.isLoaded) {
+            view.callLoaded();
+        }
+    };
+    ViewBase.prototype.unloadView = function (view) {
+        if (view.isLoaded) {
+            view.callUnloaded();
         }
     };
     ViewBase.prototype._removeView = function (view) {
@@ -375,9 +459,7 @@ var ViewBase = (function (_super) {
         view._parentChanged(this);
     };
     ViewBase.prototype._removeViewCore = function (view) {
-        if (view.isLoaded) {
-            view.onUnloaded();
-        }
+        this.unloadView(view);
         if (view._context) {
             view._tearDownUI();
         }
@@ -397,15 +479,13 @@ var ViewBase = (function (_super) {
         this._setupUI(context);
     };
     ViewBase.prototype._setupUI = function (context, atIndex, parentIsLoaded) {
-        bindable_1.traceNotifyEvent(this, "_setupUI");
-        if (bindable_1.traceEnabled()) {
-            bindable_1.traceWrite(this + "._setupUI(" + context + ")", bindable_1.traceCategories.VisualTreeEvents);
-        }
         if (this._context === context) {
             return;
         }
+        else if (this._context) {
+            this._tearDownUI(true);
+        }
         this._context = context;
-        bindable_1.traceNotifyEvent(this, "_onContextChanged");
         var nativeView;
         if (platform_1.isAndroid) {
             if (!nativeView) {
@@ -442,16 +522,14 @@ var ViewBase = (function (_super) {
         }
         else {
             nativeView = this.createNativeView();
-            if (nativeView) {
-                this._iosView = nativeView;
-            }
+            this._iosView = nativeView || this.nativeViewProtected;
         }
         this.setNativeView(nativeView || this.nativeViewProtected);
         if (this.parent) {
             var nativeIndex = this.parent._childIndexToNativeChildIndex(atIndex);
             this._isAddedToNativeVisualTree = this.parent._addViewToNativeVisualTree(this, nativeIndex);
         }
-        this._resumeNativeUpdates();
+        this._resumeNativeUpdates(SuspendType.UISetup);
         this.eachChild(function (child) {
             child._setupUI(context);
             return true;
@@ -462,19 +540,16 @@ var ViewBase = (function (_super) {
             return;
         }
         if (this.__nativeView) {
-            this._suspendNativeUpdates();
+            this._suspendNativeUpdates(SuspendType.NativeView);
         }
         this.__nativeView = this.nativeViewProtected = value;
         if (this.__nativeView) {
             this._suspendedUpdates = undefined;
             this.initNativeView();
-            this._resumeNativeUpdates();
+            this._resumeNativeUpdates(SuspendType.NativeView);
         }
     };
     ViewBase.prototype._tearDownUI = function (force) {
-        if (bindable_1.traceEnabled()) {
-            bindable_1.traceWrite(this + "._tearDownUI(" + force + ")", bindable_1.traceCategories.VisualTreeEvents);
-        }
         if (!this._context) {
             return;
         }
@@ -487,7 +562,7 @@ var ViewBase = (function (_super) {
             this.parent._removeViewFromNativeVisualTree(this);
         }
         this.disposeNativeView();
-        this._suspendNativeUpdates();
+        this._suspendNativeUpdates(SuspendType.UISetup);
         if (platform_1.isAndroid) {
             this.setNativeView(null);
             this._androidView = null;
@@ -497,8 +572,6 @@ var ViewBase = (function (_super) {
             this.domNode.dispose();
             this.domNode = undefined;
         }
-        bindable_1.traceNotifyEvent(this, "_onContextChanged");
-        bindable_1.traceNotifyEvent(this, "_tearDownUI");
     };
     ViewBase.prototype._childIndexToNativeChildIndex = function (index) {
         return index;
@@ -510,7 +583,6 @@ var ViewBase = (function (_super) {
         return true;
     };
     ViewBase.prototype._removeViewFromNativeVisualTree = function (view) {
-        bindable_1.traceNotifyEvent(view, "_removeViewFromNativeVisualTree");
         view._isAddedToNativeVisualTree = false;
     };
     ViewBase.prototype._goToVisualState = function (state) {
@@ -576,6 +648,9 @@ var ViewBase = (function (_super) {
         });
     };
     ViewBase.prototype._inheritStyleScope = function (styleScope) {
+        if (this._isStyleScopeHost) {
+            return;
+        }
         if (this._styleScope !== styleScope) {
             this._styleScope = styleScope;
             this._onCssStateChange();
@@ -584,6 +659,36 @@ var ViewBase = (function (_super) {
                 return true;
             });
         }
+    };
+    ViewBase.prototype.showModal = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        var parent = this.parent;
+        return parent && parent.showModal.apply(parent, args);
+    };
+    ViewBase.prototype.closeModal = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        var parent = this.parent;
+        if (parent) {
+            parent.closeModal.apply(parent, args);
+        }
+    };
+    ViewBase.prototype._dialogClosed = function () {
+        eachDescendant(this, function (child) {
+            child._dialogClosed();
+            return true;
+        });
+    };
+    ViewBase.prototype._onRootViewReset = function () {
+        eachDescendant(this, function (child) {
+            child._onRootViewReset();
+            return true;
+        });
     };
     ViewBase.loadedEvent = "loaded";
     ViewBase.unloadedEvent = "unloaded";
@@ -641,7 +746,10 @@ ViewBase.prototype._defaultPaddingBottom = 0;
 ViewBase.prototype._defaultPaddingLeft = 0;
 ViewBase.prototype._isViewBase = true;
 ViewBase.prototype.recycleNativeView = "never";
-ViewBase.prototype._suspendNativeUpdatesCount = 3;
+ViewBase.prototype._suspendNativeUpdatesCount =
+    SuspendType.Loaded |
+        SuspendType.NativeView |
+        SuspendType.UISetup;
 exports.bindingContextProperty = new properties_1.InheritedProperty({ name: "bindingContext" });
 exports.bindingContextProperty.register(ViewBase);
 exports.classNameProperty = new properties_1.Property({
@@ -659,7 +767,7 @@ exports.classNameProperty.register(ViewBase);
 exports.idProperty = new properties_1.Property({ name: "id", valueChanged: function (view, oldValue, newValue) { return view._onCssStateChange(); } });
 exports.idProperty.register(ViewBase);
 function booleanConverter(v) {
-    var lowercase = (v + '').toLowerCase();
+    var lowercase = (v + "").toLowerCase();
     if (lowercase === "true") {
         return true;
     }

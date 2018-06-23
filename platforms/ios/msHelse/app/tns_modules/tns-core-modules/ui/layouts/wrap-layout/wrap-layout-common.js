@@ -9,6 +9,9 @@ var WrapLayoutBase = (function (_super) {
     function WrapLayoutBase() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    WrapLayoutBase = __decorate([
+        layout_base_1.CSSType("WrapLayout")
+    ], WrapLayoutBase);
     return WrapLayoutBase;
 }(layout_base_1.LayoutBase));
 exports.WrapLayoutBase = WrapLayoutBase;

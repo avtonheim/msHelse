@@ -143,11 +143,13 @@ var applyComponentAttributes = profiling_1.profile("applyComponentAttributes", f
         }
     }
 });
-function getComponentModule(elementName, namespace, attributes, moduleExports, moduleNamePath) {
+function getComponentModule(elementName, namespace, attributes, moduleExports, moduleNamePath, isRootComponent) {
     elementName = elementName.split("-").map(function (s) { return s[0].toUpperCase() + s.substring(1); }).join("");
     var _a = createComponentInstance(elementName, namespace), instance = _a.instance, instanceModule = _a.instanceModule;
     moduleExports = getComponentModuleExports(instance, moduleExports, attributes);
-    applyComponentCss(instance, moduleNamePath, attributes);
+    if (isRootComponent) {
+        applyComponentCss(instance, moduleNamePath, attributes);
+    }
     applyComponentAttributes(instance, instanceModule, moduleExports, attributes);
     var componentModule;
     if (instance && instanceModule) {

@@ -1,0 +1,43 @@
+Page{
+  background-image: ~/images/bakgrunn.png;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.homeBox{
+  border-radius: 15px;
+  width: 95%;
+  margin: 10px;
+  color: white;
+}
+.smallBox{
+  width: 45%;
+  height: 180px;
+  background-color: #2AC0FF;
+  border-radius: 15px;
+  margin-top: 10px;
+  color: white;
+}
+.smallBox Label{
+  font-size: 15pt;
+}
+.homeBox Label{
+  font-size: 20pt;
+}
+.homeBox Image{
+  margin: 15px;
+}
+#diary{
+  margin-top: 100px;
+  height: 200px;
+  background-color: #2AC0FF;
+}
+#visual{
+  height: 430px;
+  background-color: #82DBDE;
+}
+.graphBox{
+  width: 95%;
+  background-color: #82DBDE;
+}

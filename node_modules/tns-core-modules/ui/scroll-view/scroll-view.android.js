@@ -93,12 +93,13 @@ var ScrollView = (function (_super) {
         }
     };
     ScrollView.prototype.createNativeView = function () {
-        var nativeView = this.orientation === "horizontal" ? new org.nativescript.widgets.HorizontalScrollView(this._context) : new org.nativescript.widgets.VerticalScrollView(this._context);
+        return this.orientation === "horizontal" ? new org.nativescript.widgets.HorizontalScrollView(this._context) : new org.nativescript.widgets.VerticalScrollView(this._context);
+    };
+    ScrollView.prototype.initNativeView = function () {
         if (this._androidViewId < 0) {
             this._androidViewId = android.view.View.generateViewId();
         }
-        nativeView.setId(this._androidViewId);
-        return nativeView;
+        this.nativeViewProtected.setId(this._androidViewId);
     };
     ScrollView.prototype._onOrientationChanged = function () {
         if (this.nativeViewProtected) {

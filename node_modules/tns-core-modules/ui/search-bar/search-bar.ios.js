@@ -4,7 +4,9 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var font_1 = require("../styling/font");
 var search_bar_common_1 = require("./search-bar-common");
+var utils_1 = require("../../utils/utils");
 __export(require("./search-bar-common"));
+var majorVersion = utils_1.ios.MajorVersion;
 var UISearchBarDelegateImpl = (function (_super) {
     __extends(UISearchBarDelegateImpl, _super);
     function UISearchBarDelegateImpl() {
@@ -44,11 +46,24 @@ var UISearchBarDelegateImpl = (function (_super) {
     UISearchBarDelegateImpl.ObjCProtocols = [UISearchBarDelegate];
     return UISearchBarDelegateImpl;
 }(NSObject));
+var UISearchBarImpl = (function (_super) {
+    __extends(UISearchBarImpl, _super);
+    function UISearchBarImpl() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    UISearchBarImpl.prototype.sizeThatFits = function (size) {
+        if (majorVersion >= 11 && size.width === Number.POSITIVE_INFINITY) {
+            size.width = 0;
+        }
+        return _super.prototype.sizeThatFits.call(this, size);
+    };
+    return UISearchBarImpl;
+}(UISearchBar));
 var SearchBar = (function (_super) {
     __extends(SearchBar, _super);
     function SearchBar() {
         var _this = _super.call(this) || this;
-        _this.nativeViewProtected = _this._ios = UISearchBar.new();
+        _this.nativeViewProtected = _this._ios = UISearchBarImpl.new();
         _this._delegate = UISearchBarDelegateImpl.initWithOwner(new WeakRef(_this));
         return _this;
     }
@@ -130,17 +145,17 @@ var SearchBar = (function (_super) {
     SearchBar.prototype[search_bar_common_1.backgroundInternalProperty.setNative] = function (value) {
     };
     SearchBar.prototype[search_bar_common_1.textProperty.getDefault] = function () {
-        return '';
+        return "";
     };
     SearchBar.prototype[search_bar_common_1.textProperty.setNative] = function (value) {
-        var text = (value === null || value === undefined) ? '' : value.toString();
+        var text = (value === null || value === undefined) ? "" : value.toString();
         this._ios.text = text;
     };
     SearchBar.prototype[search_bar_common_1.hintProperty.getDefault] = function () {
-        return '';
+        return "";
     };
     SearchBar.prototype[search_bar_common_1.hintProperty.setNative] = function (value) {
-        var text = (value === null || value === undefined) ? '' : value.toString();
+        var text = (value === null || value === undefined) ? "" : value.toString();
         this._ios.placeholder = text;
     };
     SearchBar.prototype[search_bar_common_1.textFieldBackgroundColorProperty.getDefault] = function () {

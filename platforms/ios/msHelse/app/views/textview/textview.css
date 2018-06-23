@@ -1,0 +1,13 @@
+.question{
+  margin: 20px;
+}
+.response{
+  margin: 20px;
+  min-height: 200px;
+}
+.timeDay{
+  font-size: 12pt;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}

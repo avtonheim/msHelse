@@ -48,7 +48,6 @@ var ListView = (function (_super) {
         initializeItemClickListener();
         var listView = new android.widget.ListView(this._context);
         listView.setDescendantFocusability(android.view.ViewGroup.FOCUS_AFTER_DESCENDANTS);
-        this.updateEffectiveRowHeight();
         listView.setCacheColorHint(android.graphics.Color.TRANSPARENT);
         ensureListViewAdapterClass();
         var adapter = new ListViewAdapterClass(this);
@@ -61,6 +60,7 @@ var ListView = (function (_super) {
     };
     ListView.prototype.initNativeView = function () {
         _super.prototype.initNativeView.call(this);
+        this.updateEffectiveRowHeight();
         var nativeView = this.nativeViewProtected;
         nativeView.itemClickListener.owner = this;
         var adapter = nativeView.adapter;
@@ -78,6 +78,10 @@ var ListView = (function (_super) {
         nativeView.adapter.owner = null;
         this.clearRealizedCells();
         _super.prototype.disposeNativeView.call(this);
+    };
+    ListView.prototype.onLoaded = function () {
+        _super.prototype.onLoaded.call(this);
+        this.requestLayout();
     };
     ListView.prototype.refresh = function () {
         var nativeView = this.nativeViewProtected;
@@ -138,6 +142,12 @@ var ListView = (function (_super) {
         });
         this._realizedItems.clear();
         this._realizedTemplates.clear();
+    };
+    ListView.prototype.isItemAtIndexVisible = function (index) {
+        var nativeView = this.nativeViewProtected;
+        var start = nativeView.getFirstVisiblePosition();
+        var end = nativeView.getLastVisiblePosition();
+        return (index >= start && index <= end);
     };
     ListView.prototype[list_view_common_1.separatorColorProperty.getDefault] = function () {
         var nativeView = this.nativeViewProtected;

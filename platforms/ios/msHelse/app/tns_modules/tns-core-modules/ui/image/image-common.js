@@ -108,6 +108,9 @@ var ImageBase = (function (_super) {
             this.isLoading = false;
         }
     };
+    ImageBase = __decorate([
+        view_1.CSSType("Image")
+    ], ImageBase);
     return ImageBase;
 }(view_1.View));
 exports.ImageBase = ImageBase;
@@ -124,4 +127,8 @@ exports.stretchProperty = new view_1.Property({ name: "stretch", defaultValue: "
 exports.stretchProperty.register(ImageBase);
 exports.tintColorProperty = new view_1.InheritedCssProperty({ name: "tintColor", cssName: "tint-color", equalityComparer: view_1.Color.equals, valueConverter: function (value) { return new view_1.Color(value); } });
 exports.tintColorProperty.register(view_1.Style);
+exports.decodeHeightProperty = new view_1.Property({ name: "decodeHeight", defaultValue: { value: 0, unit: "dip" }, valueConverter: view_1.Length.parse });
+exports.decodeHeightProperty.register(ImageBase);
+exports.decodeWidthProperty = new view_1.Property({ name: "decodeWidth", defaultValue: { value: 0, unit: "dip" }, valueConverter: view_1.Length.parse });
+exports.decodeWidthProperty.register(ImageBase);
 //# sourceMappingURL=image-common.js.map

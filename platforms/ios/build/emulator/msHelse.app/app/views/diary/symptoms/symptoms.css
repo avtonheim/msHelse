@@ -1,0 +1,56 @@
+GridLayout button{
+  color: white;
+  text-align: center;
+  background-color: gray;
+  margin: 20px;
+}
+.titleMain{
+  font-size: 35pt;
+  padding: 5px;
+}
+.symptomCont{
+  background-color: #82DBDE;
+  border-radius: 15px;
+  min-height: 140px;
+  width: 90%;
+  margin-top: 30px,
+}
+.symtomDetails{
+  padding: 20px;
+}
+.symtomDetails GridLayout{
+  margin-bottom: 5px;
+}
+.eventBtn{
+  height: 50px;
+  width: 200px;
+  background-color: white;
+  border-radius: 15px;
+  color: black;
+}
+.symptomHead{
+  margin-top: 30px;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  font-size: 25pt;
+}
+.specQuestion{
+  font-size: 18pt;
+  font-weight: bold;
+  color: white;
+  text-align: left;
+  margin: 15px;
+
+}
+#inputSelf{
+  color: white;
+  margin-top:10%;
+  margin-bottom:15%;
+}
+#uiFix{
+  padding-bottom: 20px;
+}
+#firstElement{
+  margin-top: 50px;
+}

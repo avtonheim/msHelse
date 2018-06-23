@@ -9,6 +9,9 @@ var SwitchBase = (function (_super) {
     function SwitchBase() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    SwitchBase = __decorate([
+        view_1.CSSType("Switch")
+    ], SwitchBase);
     return SwitchBase;
 }(view_1.View));
 exports.SwitchBase = SwitchBase;

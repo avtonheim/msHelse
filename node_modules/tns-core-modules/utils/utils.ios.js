@@ -3,6 +3,7 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 var trace_1 = require("../trace");
+var utils_common_1 = require("./utils-common");
 __export(require("./utils-common"));
 var mainScreenScale;
 function isOrientationLandscape(orientation) {
@@ -34,8 +35,8 @@ var layout;
             width: widthMode === 0 ? Number.POSITIVE_INFINITY : toDeviceIndependentPixels(width),
             height: heightMode === 0 ? Number.POSITIVE_INFINITY : toDeviceIndependentPixels(height)
         });
-        nativeSize.width = toDevicePixels(nativeSize.width);
-        nativeSize.height = toDevicePixels(nativeSize.height);
+        nativeSize.width = utils_common_1.layout.round(toDevicePixels(nativeSize.width));
+        nativeSize.height = utils_common_1.layout.round(toDevicePixels(nativeSize.height));
         return nativeSize;
     }
     layout.measureNativeView = measureNativeView;

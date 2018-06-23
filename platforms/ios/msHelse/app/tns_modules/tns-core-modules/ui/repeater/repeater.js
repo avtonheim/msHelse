@@ -97,6 +97,9 @@ var Repeater = (function (_super) {
     __decorate([
         profiling_1.profile
     ], Repeater.prototype, "onLoaded", null);
+    Repeater = __decorate([
+        layout_base_1.CSSType("Repeater")
+    ], Repeater);
     return Repeater;
 }(layout_base_1.CustomLayoutView));
 exports.Repeater = Repeater;

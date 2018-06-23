@@ -17,6 +17,9 @@ var TextView = (function (_super) {
         _super.prototype.resetNativeView.call(this);
         this.nativeViewProtected.setGravity(android.view.Gravity.TOP | android.view.Gravity.START);
     };
+    TextView = __decorate([
+        editable_text_base_1.CSSType("TextView")
+    ], TextView);
     return TextView;
 }(editable_text_base_1.EditableTextBase));
 exports.TextView = TextView;

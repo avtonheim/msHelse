@@ -216,8 +216,10 @@ var FlexboxLayout = (function (_super) {
     });
     FlexboxLayout.prototype._measureHorizontal = function (widthMeasureSpec, heightMeasureSpec) {
         var _this = this;
-        var widthMode = getMeasureSpecMode(widthMeasureSpec);
         var widthSize = getMeasureSpecSize(widthMeasureSpec);
+        var widthMode = getMeasureSpecMode(widthMeasureSpec);
+        var heightSize = getMeasureSpecSize(heightMeasureSpec);
+        var heightMode = getMeasureSpecMode(heightMeasureSpec);
         var childState = 0;
         this._flexLines.length = 0;
         (function () {
@@ -239,7 +241,7 @@ var FlexboxLayout = (function (_super) {
                     _this._addFlexLineIfLastFlexItem(i, childCount, flexLine);
                     continue;
                 }
-                child._updateEffectiveLayoutValues(_this);
+                child._updateEffectiveLayoutValues(widthSize, widthMode, heightSize, heightMode);
                 var lp = child;
                 if (FlexboxLayout.getAlignSelf(child) === "stretch") {
                     flexLine._indicesAlignSelfStretch.push(i);
@@ -311,8 +313,10 @@ var FlexboxLayout = (function (_super) {
         this._setMeasuredDimensionForFlex(this.flexDirection, widthMeasureSpec, heightMeasureSpec, childState);
     };
     FlexboxLayout.prototype._measureVertical = function (widthMeasureSpec, heightMeasureSpec) {
-        var heightMode = getMeasureSpecMode(heightMeasureSpec);
+        var widthSize = getMeasureSpecSize(widthMeasureSpec);
+        var widthMode = getMeasureSpecMode(widthMeasureSpec);
         var heightSize = getMeasureSpecSize(heightMeasureSpec);
+        var heightMode = getMeasureSpecMode(heightMeasureSpec);
         var childState = 0;
         this._flexLines.length = 0;
         var childCount = this.measureContext.childrenCount;
@@ -333,7 +337,7 @@ var FlexboxLayout = (function (_super) {
                 this._addFlexLineIfLastFlexItem(i, childCount, flexLine);
                 continue;
             }
-            child._updateEffectiveLayoutValues(this);
+            child._updateEffectiveLayoutValues(widthSize, widthMode, heightSize, heightMode);
             var lp = child;
             if (FlexboxLayout.getAlignSelf(child) === "stretch") {
                 flexLine._indicesAlignSelfStretch.push(i);
@@ -557,8 +561,12 @@ var FlexboxLayout = (function (_super) {
                     else {
                         accumulatedRoundError = rawCalculatedWidth - roundedCalculatedWidth;
                     }
-                    child.measure(makeMeasureSpec(roundedCalculatedWidth, EXACTLY), makeMeasureSpec(child.getMeasuredHeight(), EXACTLY));
+                    var childWidthMeasureSpec = makeMeasureSpec(roundedCalculatedWidth, EXACTLY);
+                    var childHeightMeasureSpec = FlexboxLayout.getChildMeasureSpec(this._currentHeightMeasureSpec, lp.effectivePaddingTop + lp.effectivePaddingBottom + lp.effectiveMarginTop
+                        + lp.effectiveMarginBottom, lp.effectiveHeight < 0 ? WRAP_CONTENT : lp.effectiveHeight);
+                    child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
                     child.effectiveMinWidth = minWidth;
+                    flexLine._crossSize = Math.max(flexLine._crossSize, child.getMeasuredHeight() + lp.effectiveMarginTop + lp.effectiveMarginBottom);
                 }
                 flexLine._mainSize += child.getMeasuredWidth() + lp.effectiveMarginLeft + lp.effectiveMarginRight;
             }
@@ -769,7 +777,14 @@ var FlexboxLayout = (function (_super) {
     FlexboxLayout.prototype._stretchViewVertically = function (view, crossSize) {
         var newHeight = crossSize - view.effectiveMarginTop - view.effectiveMarginBottom;
         newHeight = Math.max(newHeight, 0);
-        view.measure(makeMeasureSpec(view.getMeasuredWidth(), EXACTLY), makeMeasureSpec(newHeight, EXACTLY));
+        var originalMeasuredWidth = view.getMeasuredWidth();
+        var childWidthMeasureSpec = FlexboxLayout.getChildMeasureSpec(this._currentWidthMeasureSpec, view.effectivePaddingLeft + view.effectivePaddingRight + view.effectiveMarginLeft
+            + view.effectiveMarginRight, view.effectiveWidth < 0 ? WRAP_CONTENT : Math.min(view.effectiveWidth, originalMeasuredWidth));
+        view.measure(childWidthMeasureSpec, makeMeasureSpec(newHeight, EXACTLY));
+        if (originalMeasuredWidth > view.getMeasuredWidth()) {
+            childWidthMeasureSpec = makeMeasureSpec(originalMeasuredWidth, EXACTLY);
+            view.measure(childWidthMeasureSpec, makeMeasureSpec(newHeight, EXACTLY));
+        }
     };
     FlexboxLayout.prototype._stretchViewHorizontally = function (view, crossSize) {
         var newWidth = crossSize - view.effectiveMarginLeft - view.effectiveMarginRight;

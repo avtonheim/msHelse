@@ -5,51 +5,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var profiling_1 = require("../../profiling");
 var frame_common_1 = require("./frame-common");
 var fragment_transitions_1 = require("./fragment.transitions");
-var uiUtils = require("../../ui/utils");
 var utils = require("../../utils/utils");
 __export(require("./frame-common"));
+var majorVersion = utils.ios.MajorVersion;
 var ENTRY = "_entry";
 var NAV_DEPTH = "_navDepth";
 var TRANSITION = "_transition";
 var DELEGATE = "_delegate";
 var navDepth = -1;
-var NotificationObserver2 = (function (_super) {
-    __extends(NotificationObserver2, _super);
-    function NotificationObserver2() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    NotificationObserver2.initWithCallback = function (onReceiveCallback) {
-        var observer = _super.new.call(this);
-        observer._onReceiveCallback = onReceiveCallback;
-        return observer;
-    };
-    NotificationObserver2.prototype.onReceive = function (notification) {
-        this._onReceiveCallback(notification);
-    };
-    NotificationObserver2.ObjCExposedMethods = {
-        "onReceive": { returns: interop.types.void, params: [NSNotification] }
-    };
-    return NotificationObserver2;
-}(NSObject));
-exports.__observer = NotificationObserver2.initWithCallback(handleNotification);
-var notificationCenter = utils.ios.getter(NSNotificationCenter, NSNotificationCenter.defaultCenter);
-notificationCenter.addObserverSelectorNameObject(exports.__observer, "onReceive", UIApplicationDidChangeStatusBarFrameNotification, null);
-function handleNotification(notification) {
-    var frame = frame_common_1.topmost();
-    if (frame) {
-        frame._handleHigherInCallStatusBarIfNeeded();
-        if (frame.currentPage) {
-            frame.currentPage.requestLayout();
-        }
-    }
-}
 var Frame = (function (_super) {
     __extends(Frame, _super);
     function Frame() {
         var _this = _super.call(this) || this;
         _this._animatedDelegate = UINavigationControllerAnimatedDelegate.new();
-        _this._shouldSkipNativePop = false;
-        _this._isInitialNavigation = true;
         _this._ios = new iOSFrame(_this);
         _this.viewController = _this._ios.controller;
         _this.nativeViewProtected = _this._ios.controller.view;
@@ -62,6 +30,14 @@ var Frame = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Frame.prototype.setCurrent = function (entry, isBack) {
+        var current = this._currentEntry;
+        var currentEntryChanged = current !== entry;
+        if (currentEntryChanged) {
+            this._updateBackstack(entry, isBack);
+            _super.prototype.setCurrent.call(this, entry, isBack);
+        }
+    };
     Frame.prototype._navigateCore = function (backstackEntry) {
         _super.prototype._navigateCore.call(this, backstackEntry);
         var viewController = backstackEntry.resolvedPage.ios;
@@ -95,6 +71,10 @@ var Frame = (function (_super) {
         }
         backstackEntry[NAV_DEPTH] = navDepth;
         viewController[ENTRY] = backstackEntry;
+        if (!animated && majorVersion > 10) {
+            var barButtonItem = UIBarButtonItem.alloc().initWithTitleStyleTargetAction("", 0, null, null);
+            viewController.navigationItem.backBarButtonItem = barButtonItem;
+        }
         if (!this._currentEntry) {
             this._updateActionBar(backstackEntry.resolvedPage, true);
             this._ios.controller.pushViewControllerAnimated(viewController, animated);
@@ -141,15 +121,13 @@ var Frame = (function (_super) {
     Frame.prototype._goBackCore = function (backstackEntry) {
         _super.prototype._goBackCore.call(this, backstackEntry);
         navDepth = backstackEntry[NAV_DEPTH];
-        if (!this._shouldSkipNativePop) {
-            var controller = backstackEntry.resolvedPage.ios;
-            var animated = this._currentEntry ? this._getIsAnimatedNavigation(this._currentEntry.entry) : false;
-            this._updateActionBar(backstackEntry.resolvedPage);
-            if (frame_common_1.traceEnabled()) {
-                frame_common_1.traceWrite(this + ".popToViewControllerAnimated(" + controller + ", " + animated + "); depth = " + navDepth, frame_common_1.traceCategories.Navigation);
-            }
-            this._ios.controller.popToViewControllerAnimated(controller, animated);
+        var controller = backstackEntry.resolvedPage.ios;
+        var animated = this._currentEntry ? this._getIsAnimatedNavigation(this._currentEntry.entry) : false;
+        this._updateActionBar(backstackEntry.resolvedPage);
+        if (frame_common_1.traceEnabled()) {
+            frame_common_1.traceWrite(this + ".popToViewControllerAnimated(" + controller + ", " + animated + "); depth = " + navDepth, frame_common_1.traceCategories.Navigation);
         }
+        this._ios.controller.popToViewControllerAnimated(controller, animated);
     };
     Frame.prototype._updateActionBar = function (page, disableNavBarAnimation) {
         if (disableNavBarAnimation === void 0) { disableNavBarAnimation = false; }
@@ -209,91 +187,20 @@ var Frame = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Frame.prototype.requestLayout = function () {
-        _super.prototype.requestLayout.call(this);
-        var window = this.nativeViewProtected.window;
-        if (window) {
-            window.setNeedsLayout();
-        }
-    };
     Frame.prototype.onMeasure = function (widthMeasureSpec, heightMeasureSpec) {
         var width = frame_common_1.layout.getMeasureSpecSize(widthMeasureSpec);
         var widthMode = frame_common_1.layout.getMeasureSpecMode(widthMeasureSpec);
         var height = frame_common_1.layout.getMeasureSpecSize(heightMeasureSpec);
         var heightMode = frame_common_1.layout.getMeasureSpecMode(heightMeasureSpec);
-        this._widthMeasureSpec = widthMeasureSpec;
-        this._heightMeasureSpec = heightMeasureSpec;
-        var result = this.measurePage(this.currentPage);
-        var widthAndState = frame_common_1.View.resolveSizeAndState(result.measuredWidth, width, widthMode, 0);
-        var heightAndState = frame_common_1.View.resolveSizeAndState(result.measuredHeight, height, heightMode, 0);
+        var widthAndState = frame_common_1.View.resolveSizeAndState(width, width, widthMode, 0);
+        var heightAndState = frame_common_1.View.resolveSizeAndState(height, height, heightMode, 0);
         this.setMeasuredDimension(widthAndState, heightAndState);
     };
-    Frame.prototype.measurePage = function (page) {
-        var heightSpec = this._heightMeasureSpec;
-        if (page && !page.backgroundSpanUnderStatusBar && !this.parent) {
-            var height = frame_common_1.layout.getMeasureSpecSize(this._heightMeasureSpec);
-            var heightMode = frame_common_1.layout.getMeasureSpecMode(this._heightMeasureSpec);
-            var statusBarHeight = uiUtils.ios.getStatusBarHeight();
-            heightSpec = frame_common_1.layout.makeMeasureSpec(height - statusBarHeight, heightMode);
-        }
-        return frame_common_1.View.measureChild(this, page, this._widthMeasureSpec, heightSpec);
+    Frame.prototype.layoutNativeView = function (left, top, right, bottom) {
     };
-    Frame.prototype.onLayout = function (left, top, right, bottom) {
-        this._right = right;
-        this._bottom = bottom;
-        this._handleHigherInCallStatusBarIfNeeded();
-        this.layoutPage(this.currentPage);
-    };
-    Frame.prototype.layoutPage = function (page) {
-        if (page && page._viewWillDisappear) {
-            return;
-        }
-        var statusBarHeight = (page && !page.backgroundSpanUnderStatusBar && !this.parent) ? uiUtils.ios.getStatusBarHeight() : 0;
-        if (this._ios.showNavigationBar &&
-            !this._ios.controller.navigationBar.translucent &&
-            page && page._ios && !page._ios.shown) {
-            statusBarHeight = 0;
-        }
-        frame_common_1.View.layoutChild(this, page, 0, statusBarHeight, this._right, this._bottom);
-    };
-    Object.defineProperty(Frame.prototype, "navigationBarHeight", {
-        get: function () {
-            var navigationBar = this._ios.controller.navigationBar;
-            return (navigationBar && !this._ios.controller.navigationBarHidden) ? navigationBar.frame.size.height : 0;
-        },
-        enumerable: true,
-        configurable: true
-    });
     Frame.prototype._setNativeViewFrame = function (nativeView, frame) {
-        if (nativeView.frame.size.width === frame.size.width && nativeView.frame.size.height === frame.size.height) {
-            return;
-        }
-        _super.prototype._setNativeViewFrame.call(this, nativeView, frame);
-    };
-    Frame.prototype.remeasureFrame = function () {
-        this.requestLayout();
-        var window = this.nativeViewProtected.window;
-        if (window) {
-            window.layoutIfNeeded();
-        }
     };
     Frame.prototype._onNavigatingTo = function (backstackEntry, isBack) {
-    };
-    Frame.prototype._handleHigherInCallStatusBarIfNeeded = function () {
-        var statusBarHeight = uiUtils.ios.getStatusBarHeight();
-        if (!this._ios ||
-            !this._ios.controller ||
-            !this._ios.controller.navigationBar ||
-            this._ios.controller.navigationBar.hidden ||
-            utils.layout.toDevicePixels(this._ios.controller.navigationBar.frame.origin.y) === statusBarHeight) {
-            return;
-        }
-        if (frame_common_1.traceEnabled()) {
-            frame_common_1.traceWrite("Forcing navigationBar.frame.origin.y to " + statusBarHeight + " due to a higher in-call status-bar", frame_common_1.traceCategories.Layout);
-        }
-        this._ios.controller.navigationBar.autoresizingMask = 0;
-        this._ios.controller.navigationBar.removeConstraints(this._ios.controller.navigationBar.constraints);
-        this._ios.controller.navigationBar.frame = CGRectMake(this._ios.controller.navigationBar.frame.origin.x, utils.layout.toDeviceIndependentPixels(statusBarHeight), this._ios.controller.navigationBar.frame.size.width, this._ios.controller.navigationBar.frame.size.height);
     };
     __decorate([
         profiling_1.profile
@@ -394,23 +301,14 @@ var UINavigationControllerImpl = (function (_super) {
         _super.prototype.viewWillAppear.call(this, animated);
         var owner = this._owner.get();
         if (owner && !owner.isLoaded && !owner.parent) {
-            owner.onLoaded();
+            owner.callLoaded();
         }
     };
     UINavigationControllerImpl.prototype.viewDidDisappear = function (animated) {
         _super.prototype.viewDidDisappear.call(this, animated);
         var owner = this._owner.get();
-        if (owner && owner.isLoaded && !owner.parent) {
-            owner.onUnloaded();
-        }
-    };
-    UINavigationControllerImpl.prototype.viewDidLayoutSubviews = function () {
-        var owner = this._owner.get();
-        if (owner) {
-            if (frame_common_1.traceEnabled()) {
-                frame_common_1.traceWrite(this._owner + " viewDidLayoutSubviews, isLoaded = " + owner.isLoaded, frame_common_1.traceCategories.ViewHierarchy);
-            }
-            owner._updateLayout();
+        if (owner && owner.isLoaded && !owner.parent && !this.presentedViewController) {
+            owner.callUnloaded();
         }
     };
     UINavigationControllerImpl.prototype.animateWithDuration = function (navigationTransition, nativeTransition, transitionType, baseCallback) {
@@ -511,9 +409,6 @@ var UINavigationControllerImpl = (function (_super) {
     ], UINavigationControllerImpl.prototype, "viewDidDisappear", null);
     __decorate([
         profiling_1.profile
-    ], UINavigationControllerImpl.prototype, "viewDidLayoutSubviews", null);
-    __decorate([
-        profiling_1.profile
     ], UINavigationControllerImpl.prototype, "pushViewControllerAnimated", null);
     __decorate([
         profiling_1.profile
@@ -594,9 +489,7 @@ exports._getNativeCurve = _getNativeCurve;
 var iOSFrame = (function () {
     function iOSFrame(frame) {
         this._navBarVisibility = "auto";
-        this._frame = frame;
         this._controller = UINavigationControllerImpl.initWithOwner(new WeakRef(frame));
-        this._controller.automaticallyAdjustsScrollViewInsets = false;
     }
     Object.defineProperty(iOSFrame.prototype, "controller", {
         get: function () {
@@ -610,14 +503,8 @@ var iOSFrame = (function () {
             return this._showNavigationBar;
         },
         set: function (value) {
-            var change = this._showNavigationBar !== value;
             this._showNavigationBar = value;
-            var animated = !this._frame._isInitialNavigation && !this._disableNavBarAnimation;
-            this._controller.setNavigationBarHiddenAnimated(!value, animated);
-            var currentPage = this._controller.owner.currentPage;
-            if (currentPage && change) {
-                currentPage.requestLayout();
-            }
+            this._controller.setNavigationBarHiddenAnimated(!value, true);
         },
         enumerable: true,
         configurable: true

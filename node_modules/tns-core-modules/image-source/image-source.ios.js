@@ -108,14 +108,17 @@ var ImageSource = (function () {
         });
     };
     ImageSource.prototype.setNativeSource = function (source) {
-        if (source instanceof UIImage) {
-            this.ios = source;
+        if (source && !(source instanceof UIImage)) {
+            throw new Error("The method setNativeSource() expects UIImage instance.");
         }
-        return source != null;
+        this.ios = source;
     };
     ImageSource.prototype.saveToFile = function (path, format, quality) {
         if (!this.ios) {
             return false;
+        }
+        if (quality) {
+            quality = quality - 0 / (100 - 0);
         }
         var data = getImageData(this.ios, format, quality);
         if (data) {
@@ -127,6 +130,9 @@ var ImageSource = (function () {
         var res = null;
         if (!this.ios) {
             return res;
+        }
+        if (quality) {
+            quality = quality - 0 / (100 - 0);
         }
         var data = getImageData(this.ios, format, quality);
         if (data) {
@@ -178,7 +184,8 @@ function getImageData(instance, format, quality) {
         case "png":
             data = UIImagePNGRepresentation(instance);
             break;
-        case "jpeg" || "jpg":
+        case "jpeg":
+        case "jpg":
             data = UIImageJPEGRepresentation(instance, quality);
             break;
     }
@@ -210,8 +217,9 @@ function fromBase64(source) {
 }
 exports.fromBase64 = fromBase64;
 function fromNativeSource(source) {
-    var image = new ImageSource();
-    return image.setNativeSource(source) ? image : null;
+    var imageSource = new ImageSource();
+    imageSource.setNativeSource(source);
+    return imageSource;
 }
 exports.fromNativeSource = fromNativeSource;
 function fromUrl(url) {

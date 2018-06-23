@@ -117,7 +117,7 @@ var ad;
             var hashSet = new java.util.HashSet();
             if (str !== undefined) {
                 for (var element in str) {
-                    hashSet.add('' + str[element]);
+                    hashSet.add("" + str[element]);
                 }
             }
             return hashSet;
@@ -128,7 +128,7 @@ var ad;
             if (stringSet !== undefined) {
                 var it = stringSet.iterator();
                 while (it.hasNext()) {
-                    var element = '' + it.next();
+                    var element = "" + it.next();
                     arr.push(element);
                 }
             }

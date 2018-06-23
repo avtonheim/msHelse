@@ -34,6 +34,10 @@ var GridLayout = (function (_super) {
     GridLayout.prototype._unregisterLayoutChild = function (child) {
         this.removeFromMap(child);
     };
+    GridLayout.prototype.invalidate = function () {
+        _super.prototype.invalidate.call(this);
+        this.requestLayout();
+    };
     GridLayout.prototype.getColumnIndex = function (view) {
         return Math.max(0, Math.min(GridLayout.getColumn(view), this.columnsInternal.length - 1));
     };
@@ -283,21 +287,17 @@ var MeasureHelper = (function () {
         this.singleColumnGroup = new ItemGroup(this.singleColumn);
     }
     MeasureHelper.prototype.setInfinityWidth = function (value) {
-        if (this.infinityWidth !== value) {
-            this.infinityWidth = value;
-            for (var i = 0, size = this.columns.length; i < size; i++) {
-                var columnGroup = this.columns[i];
-                columnGroup.setIsLengthInfinity(value);
-            }
+        this.infinityWidth = value;
+        for (var i = 0, size = this.columns.length; i < size; i++) {
+            var columnGroup = this.columns[i];
+            columnGroup.setIsLengthInfinity(value);
         }
     };
     MeasureHelper.prototype.setInfinityHeight = function (value) {
-        if (this.infinityHeight !== value) {
-            this.infinityHeight = value;
-            for (var i = 0, size = this.rows.length; i < size; i++) {
-                var rowGroup = this.rows[i];
-                rowGroup.setIsLengthInfinity(value);
-            }
+        this.infinityHeight = value;
+        for (var i = 0, size = this.rows.length; i < size; i++) {
+            var rowGroup = this.rows[i];
+            rowGroup.setIsLengthInfinity(value);
         }
     };
     MeasureHelper.prototype.addMeasureSpec = function (measureSpec) {

@@ -1,11 +1,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var common = require("./image-asset-common");
+var file_system_1 = require("../file-system");
 global.moduleMerge(common, exports);
 var ImageAsset = (function (_super) {
     __extends(ImageAsset, _super);
     function ImageAsset(asset) {
         var _this = _super.call(this) || this;
-        if (asset instanceof UIImage) {
+        if (typeof asset === "string") {
+            if (asset.indexOf("~/") === 0) {
+                asset = file_system_1.path.join(file_system_1.knownFolders.currentApp().path, asset.replace("~/", ""));
+            }
+            _this.nativeImage = UIImage.imageWithContentsOfFile(asset);
+        }
+        else if (asset instanceof UIImage) {
             _this.nativeImage = asset;
         }
         else {
@@ -25,6 +32,9 @@ var ImageAsset = (function (_super) {
     });
     ImageAsset.prototype.getImageAsync = function (callback) {
         var _this = this;
+        if (!this.ios && !this.nativeImage) {
+            callback(null, "Asset cannot be found.");
+        }
         var srcWidth = this.nativeImage ? this.nativeImage.size.width : this.ios.pixelWidth;
         var srcHeight = this.nativeImage ? this.nativeImage.size.height : this.ios.pixelHeight;
         var requestedSize = common.getRequestedImageSize({ width: srcWidth, height: srcHeight }, this.options);
@@ -36,6 +46,7 @@ var ImageAsset = (function (_super) {
         }
         var imageRequestOptions = PHImageRequestOptions.alloc().init();
         imageRequestOptions.deliveryMode = 1;
+        imageRequestOptions.networkAccessAllowed = true;
         PHImageManager.defaultManager().requestImageForAssetTargetSizeContentModeOptionsResultHandler(this.ios, requestedSize, 0, imageRequestOptions, function (image, imageResultInfo) {
             if (image) {
                 var resultImage = _this.scaleImage(image, requestedSize);

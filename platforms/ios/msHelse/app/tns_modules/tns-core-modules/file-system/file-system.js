@@ -112,9 +112,7 @@ var FileSystemEntity = (function () {
         var fileAccess = getFileAccess();
         var path = parentFolder.path;
         var newPath = fileAccess.joinPath(path, newName);
-        var hasError = false;
         var localError = function (error) {
-            hasError = true;
             if (onError) {
                 onError(error);
             }
@@ -183,6 +181,13 @@ var File = (function (_super) {
     Object.defineProperty(File.prototype, "isLocked", {
         get: function () {
             return !!this._locked;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(File.prototype, "size", {
+        get: function () {
+            return getFileAccess().getFileSize(this.path);
         },
         enumerable: true,
         configurable: true

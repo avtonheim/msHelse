@@ -1,0 +1,8 @@
+{
+    "nativescript-local-notifications": true,
+    "nativescript-pro-ui": true,
+    "nativescript-sqlite": true,
+    "nativescript-theme-core": true,
+    "tns-core-modules": true,
+    "tns-core-modules-widgets": true
+}

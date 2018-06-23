@@ -188,7 +188,7 @@ var AttributeSelector = (function (_super) {
             return _this;
         }
     }
-    AttributeSelector.prototype.toString = function () { return "[" + this.attribute + wrap(this.test) + ((this.test && this.value) || '') + "]" + wrap(this.combinator); };
+    AttributeSelector.prototype.toString = function () { return "[" + this.attribute + wrap(this.test) + ((this.test && this.value) || "") + "]" + wrap(this.combinator); };
     AttributeSelector.prototype.match = function (node) { return false; };
     AttributeSelector.prototype.mayMatch = function (node) { return true; };
     AttributeSelector.prototype.trackChanges = function (node, map) { map.addAttribute(node, this.attribute); };
@@ -405,7 +405,7 @@ function createSimpleSelectorFromAst(ast) {
     switch (ast.type) {
         case "*": return new UniversalSelector();
         case "#": return new IdSelector(ast.identifier);
-        case "": return new TypeSelector(ast.identifier.replace(/-/, '').toLowerCase());
+        case "": return new TypeSelector(ast.identifier.replace(/-/, "").toLowerCase());
         case ".": return new ClassSelector(ast.identifier);
         case ":": return new PseudoClassSelector(ast.identifier);
         case "[]": return ast.test ? new AttributeSelector(ast.property, ast.test, ast.value) : new AttributeSelector(ast.property);

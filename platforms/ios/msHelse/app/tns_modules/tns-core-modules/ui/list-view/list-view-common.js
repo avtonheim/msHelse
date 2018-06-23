@@ -121,6 +121,9 @@ var ListViewBase = (function (_super) {
     ListViewBase.prototype._onRowHeightPropertyChanged = function (oldValue, newValue) {
         this.refresh();
     };
+    ListViewBase.prototype.isItemAtIndexVisible = function (index) {
+        return false;
+    };
     ListViewBase.prototype.updateEffectiveRowHeight = function () {
         exports.rowHeightProperty.coerce(this);
     };
@@ -128,6 +131,9 @@ var ListViewBase = (function (_super) {
     ListViewBase.itemTapEvent = "itemTap";
     ListViewBase.loadMoreItemsEvent = "loadMoreItems";
     ListViewBase.knownFunctions = ["itemTemplateSelector", "itemIdGenerator"];
+    ListViewBase = __decorate([
+        view_1.CSSType("ListView")
+    ], ListViewBase);
     return ListViewBase;
 }(view_1.View));
 exports.ListViewBase = ListViewBase;
@@ -171,6 +177,10 @@ exports.rowHeightProperty = new view_1.CoercibleProperty({
     }, valueConverter: view_1.Length.parse
 });
 exports.rowHeightProperty.register(ListViewBase);
+exports.iosEstimatedRowHeightProperty = new view_1.Property({
+    name: "iosEstimatedRowHeight", valueConverter: function (v) { return view_1.Length.parse(v); }
+});
+exports.iosEstimatedRowHeightProperty.register(ListViewBase);
 exports.separatorColorProperty = new view_1.CssProperty({ name: "separatorColor", cssName: "separator-color", equalityComparer: view_1.Color.equals, valueConverter: function (v) { return new view_1.Color(v); } });
 exports.separatorColorProperty.register(view_1.Style);
 //# sourceMappingURL=list-view-common.js.map

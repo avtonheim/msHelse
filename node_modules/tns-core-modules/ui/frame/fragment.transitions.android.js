@@ -10,6 +10,7 @@ var trace_1 = require("../../trace");
 var sdkVersion = lazy_1.default(function () { return parseInt(platform_1.device.sdkVersion); });
 var intEvaluator = lazy_1.default(function () { return new android.animation.IntEvaluator(); });
 var defaultInterpolator = lazy_1.default(function () { return new android.view.animation.AccelerateDecelerateInterpolator(); });
+var isAndroidP = lazy_1.default(function () { return sdkVersion() >= 27; });
 exports.waitingQueue = new Map();
 exports.completedEntries = new Map();
 var TransitionListener;
@@ -23,29 +24,31 @@ function _setAndroidFragmentTransitions(animated, navigationTransition, currentE
     var newFragment = newEntry.fragment;
     var entries = exports.waitingQueue.get(frameId);
     if (entries && entries.size > 0) {
-        throw new Error('Calling navigation before previous navigation finish.');
+        throw new Error("Calling navigation before previous navigation finish.");
     }
-    initDefaultAnimations(manager);
+    if (!isAndroidP()) {
+        initDefaultAnimations(manager);
+    }
     if (sdkVersion() >= 21) {
         allowTransitionOverlap(currentFragment);
         allowTransitionOverlap(newFragment);
     }
-    var name = '';
+    var name = "";
     var transition;
     if (navigationTransition) {
         transition = navigationTransition.instance;
-        name = navigationTransition.name ? navigationTransition.name.toLowerCase() : '';
+        name = navigationTransition.name ? navigationTransition.name.toLowerCase() : "";
     }
-    var useLollipopTransition = name && (name.indexOf('slide') === 0 || name === 'fade' || name === 'explode') && sdkVersion() >= 21;
+    var useLollipopTransition = name && (name.indexOf("slide") === 0 || name === "fade" || name === "explode") && sdkVersion() >= 21;
     if (!animated) {
-        name = 'none';
+        name = "none";
     }
     else if (transition) {
-        name = 'custom';
+        name = "custom";
         useLollipopTransition = false;
     }
-    else if (!useLollipopTransition && name.indexOf('slide') !== 0 && name !== 'fade' && name.indexOf('flip') !== 0) {
-        name = 'default';
+    else if (!useLollipopTransition && name.indexOf("slide") !== 0 && name !== "fade" && name.indexOf("flip") !== 0) {
+        name = "default";
     }
     var currentFragmentNeedsDifferentAnimation = false;
     if (currentEntry) {
@@ -56,45 +59,50 @@ function _setAndroidFragmentTransitions(animated, navigationTransition, currentE
             currentFragmentNeedsDifferentAnimation = true;
         }
     }
-    if (name === 'none') {
+    if (name === "none") {
         transition = new NoTransition(0, null);
     }
-    else if (name === 'default') {
-        transition = new DefaultTransition(0, null);
+    else if (name === "default") {
+        if (isAndroidP()) {
+            transition = new fade_transition_1.FadeTransition(150, null);
+        }
+        else {
+            transition = new DefaultTransition(0, null);
+        }
     }
     else if (useLollipopTransition) {
-        if (name.indexOf('slide') === 0) {
+        if (name.indexOf("slide") === 0) {
             setupNewFragmentSlideTransition(navigationTransition, newEntry, name);
             if (currentFragmentNeedsDifferentAnimation) {
                 setupCurrentFragmentSlideTransition(navigationTransition, currentEntry, name);
             }
         }
-        else if (name === 'fade') {
+        else if (name === "fade") {
             setupNewFragmentFadeTransition(navigationTransition, newEntry);
             if (currentFragmentNeedsDifferentAnimation) {
                 setupCurrentFragmentFadeTransition(navigationTransition, currentEntry);
             }
         }
-        else if (name === 'explode') {
+        else if (name === "explode") {
             setupNewFragmentExplodeTransition(navigationTransition, newEntry);
             if (currentFragmentNeedsDifferentAnimation) {
                 setupCurrentFragmentExplodeTransition(navigationTransition, currentEntry);
             }
         }
     }
-    else if (name.indexOf('slide') === 0) {
-        var direction = name.substr('slide'.length) || 'left';
+    else if (name.indexOf("slide") === 0) {
+        var direction = name.substr("slide".length) || "left";
         transition = new slide_transition_1.SlideTransition(direction, navigationTransition.duration, navigationTransition.curve);
     }
-    else if (name === 'fade') {
+    else if (name === "fade") {
         transition = new fade_transition_1.FadeTransition(navigationTransition.duration, navigationTransition.curve);
     }
-    else if (name.indexOf('flip') === 0) {
-        var direction = name.substr('flip'.length) || 'right';
+    else if (name.indexOf("flip") === 0) {
+        var direction = name.substr("flip".length) || "right";
         transition = new flip_transition_1.FlipTransition(direction, navigationTransition.duration, navigationTransition.curve);
     }
     newEntry.transitionName = name;
-    if (name === 'custom') {
+    if (name === "custom") {
         newEntry.transition = transition;
     }
     if (transition) {
@@ -106,12 +114,16 @@ function _setAndroidFragmentTransitions(animated, navigationTransition, currentE
     }
     if (currentEntry) {
         currentEntry.transitionName = name;
-        if (name === 'custom') {
+        if (name === "custom") {
             currentEntry.transition = transition;
         }
     }
-    initDefaultAnimations(manager);
-    setupDefaultAnimations(newEntry, new DefaultTransition(0, null));
+    if (isAndroidP()) {
+        setupDefaultAnimations(newEntry, new fade_transition_1.FadeTransition(150, null));
+    }
+    else {
+        setupDefaultAnimations(newEntry, new DefaultTransition(0, null));
+    }
     printTransitions(currentEntry);
     printTransitions(newEntry);
 }
@@ -550,6 +562,9 @@ function addNativeTransitionListener(entry, nativeTransition) {
 function transitionOrAnimationCompleted(entry) {
     var frameId = entry.frameId;
     var entries = exports.waitingQueue.get(frameId);
+    if (!entries) {
+        return;
+    }
     entries.delete(entry);
     if (entries.size === 0) {
         var frame_1 = entry.resolvedPage.frame;

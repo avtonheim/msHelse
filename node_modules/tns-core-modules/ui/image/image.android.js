@@ -4,6 +4,7 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var image_common_1 = require("./image-common");
 var file_system_1 = require("../../file-system");
+var platform = require("../../platform");
 __export(require("./image-common"));
 var FILE_PREFIX = "file:///";
 var ASYNC = "async";
@@ -37,8 +38,6 @@ var Image = (function (_super) {
     __extends(Image, _super);
     function Image() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.decodeWidth = 0;
-        _this.decodeHeight = 0;
         _this.useCache = true;
         return _this;
     }
@@ -71,8 +70,20 @@ var Image = (function (_super) {
             return;
         }
         if (!value) {
-            imageView.setUri(null, 0, 0, false, true);
+            imageView.setUri(null, 0, 0, false, false, true);
             return;
+        }
+        var screen = platform.screen.mainScreen;
+        var decodeWidth = Math.min(image_common_1.Length.toDevicePixels(this.decodeWidth, 0), screen.widthPixels);
+        var decodeHeight = Math.min(image_common_1.Length.toDevicePixels(this.decodeHeight, 0), screen.heightPixels);
+        var keepAspectRatio = this._calculateKeepAspectRatio();
+        if (value instanceof image_common_1.ImageAsset) {
+            if (value.options) {
+                decodeWidth = value.options.width || decodeWidth;
+                decodeHeight = value.options.height || decodeHeight;
+                keepAspectRatio = !!value.options.keepAspectRatio;
+            }
+            value = value.android;
         }
         var async = this.loadMode === ASYNC;
         if (typeof value === "string" || value instanceof String) {
@@ -83,23 +94,26 @@ var Image = (function (_super) {
             }
             else if (image_common_1.isFileOrResourcePath(value)) {
                 if (value.indexOf(image_common_1.RESOURCE_PREFIX) === 0) {
-                    imageView.setUri(value, this.decodeWidth, this.decodeHeight, this.useCache, async);
+                    imageView.setUri(value, decodeWidth, decodeHeight, keepAspectRatio, this.useCache, async);
                 }
                 else {
                     var fileName = value;
                     if (fileName.indexOf("~/") === 0) {
                         fileName = file_system_1.knownFolders.currentApp().path + "/" + fileName.replace("~/", "");
                     }
-                    imageView.setUri(FILE_PREFIX + fileName, this.decodeWidth, this.decodeHeight, this.useCache, async);
+                    imageView.setUri(FILE_PREFIX + fileName, decodeWidth, decodeHeight, keepAspectRatio, this.useCache, async);
                 }
             }
             else {
-                imageView.setUri(value, this.decodeWidth, this.decodeHeight, this.useCache, true);
+                imageView.setUri(value, decodeWidth, decodeHeight, keepAspectRatio, this.useCache, true);
             }
         }
         else {
             _super.prototype._createImageSourceFromSrc.call(this, value);
         }
+    };
+    Image.prototype._calculateKeepAspectRatio = function () {
+        return this.stretch === "fill" ? false : true;
     };
     Image.prototype[image_common_1.stretchProperty.getDefault] = function () {
         return "aspectFit";

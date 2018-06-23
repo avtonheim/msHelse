@@ -23,6 +23,9 @@ var ButtonBase = (function (_super) {
         configurable: true
     });
     ButtonBase.tapEvent = "tap";
+    ButtonBase = __decorate([
+        text_base_1.CSSType("Button")
+    ], ButtonBase);
     return ButtonBase;
 }(text_base_1.TextBase));
 exports.ButtonBase = ButtonBase;

@@ -43,6 +43,9 @@ var Label = (function (_super) {
     __decorate([
         profiling_1.profile
     ], Label.prototype, "createNativeView", null);
+    Label = __decorate([
+        text_base_1.CSSType("Label")
+    ], Label);
     return Label;
 }(text_base_1.TextBase));
 exports.Label = Label;

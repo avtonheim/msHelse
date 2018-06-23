@@ -9,6 +9,9 @@ var HtmlViewBase = (function (_super) {
     function HtmlViewBase() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    HtmlViewBase = __decorate([
+        view_1.CSSType("HtmlView")
+    ], HtmlViewBase);
     return HtmlViewBase;
 }(view_1.View));
 exports.HtmlViewBase = HtmlViewBase;

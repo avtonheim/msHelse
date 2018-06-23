@@ -115,6 +115,9 @@ var Animation = (function (_super) {
         return _this;
     }
     Animation.prototype.play = function () {
+        if (this.isPlaying) {
+            return this._rejectAlreadyPlaying();
+        }
         var animationFinishedPromise = _super.prototype.play.call(this);
         this._animators = new Array();
         this._propertyUpdateCallbacks = new Array();
@@ -144,10 +147,11 @@ var Animation = (function (_super) {
         return animationFinishedPromise;
     };
     Animation.prototype.cancel = function () {
-        _super.prototype.cancel.call(this);
-        if (animation_common_1.traceEnabled()) {
-            animation_common_1.traceWrite("Cancelling AnimatorSet.", animation_common_1.traceCategories.Animation);
+        if (!this.isPlaying) {
+            animation_common_1.traceWrite("Animation is not currently playing.", animation_common_1.traceCategories.Animation, animation_common_1.traceType.warn);
+            return;
         }
+        animation_common_1.traceWrite("Cancelling AnimatorSet.", animation_common_1.traceCategories.Animation);
         this._animatorSet.cancel();
     };
     Animation.prototype._resolveAnimationCurve = function (curve) {

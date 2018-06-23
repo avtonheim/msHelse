@@ -46,6 +46,7 @@ var UITextViewDelegateImpl = (function (_super) {
             if (owner.updateTextTrigger === "textChanged") {
                 editable_text_base_1.textProperty.nativeValueChange(owner, textView.text);
             }
+            owner.requestLayout();
         }
     };
     UITextViewDelegateImpl.prototype.textViewShouldChangeTextInRangeReplacementText = function (textView, range, replacementString) {
@@ -75,16 +76,16 @@ var UITextViewDelegateImpl = (function (_super) {
             });
         }
     };
-    UITextViewDelegateImpl.ObjCProtocols = [UITextViewDelegate, UIScrollViewDelegate];
+    UITextViewDelegateImpl.ObjCProtocols = [UITextViewDelegate];
     return UITextViewDelegateImpl;
 }(NSObject));
 var TextView = (function (_super) {
     __extends(TextView, _super);
     function TextView() {
         var _this = _super.call(this) || this;
-        _this.nativeViewProtected = _this._ios = UITextView.new();
-        if (!_this._ios.font) {
-            _this._ios.font = UIFont.systemFontOfSize(12);
+        var textView = _this.nativeViewProtected = _this._ios = UITextView.new();
+        if (!textView.font) {
+            textView.font = UIFont.systemFontOfSize(12);
         }
         _this._delegate = UITextViewDelegateImpl.initWithOwner(new WeakRef(_this));
         return _this;
@@ -108,15 +109,15 @@ var TextView = (function (_super) {
         if (this.formattedText) {
             return;
         }
-        if (text !== null && text !== undefined && text !== '') {
+        if (text !== null && text !== undefined && text !== "") {
             this.showText();
         }
-        else if (!this._isEditing && hint !== null && hint !== undefined && hint !== '') {
+        else if (!this._isEditing && hint !== null && hint !== undefined && hint !== "") {
             this.showHint(hint);
         }
         else {
             this._isShowingHint = false;
-            this.nativeViewProtected.text = '';
+            this.nativeViewProtected.text = "";
         }
     };
     TextView.prototype._refreshColor = function () {
@@ -149,13 +150,14 @@ var TextView = (function (_super) {
         var nativeView = this.nativeViewProtected;
         this._isShowingHint = true;
         this._refreshColor();
-        var hintAsString = (hint === null || hint === undefined) ? '' : hint.toString();
+        var hintAsString = (hint === null || hint === undefined) ? "" : hint.toString();
         nativeView.text = hintAsString;
     };
     TextView.prototype.showText = function () {
         this._isShowingHint = false;
         this._refreshColor();
         this._setNativeText();
+        this.requestLayout();
     };
     TextView.prototype[editable_text_base_1.textProperty.getDefault] = function () {
         return "";
@@ -272,6 +274,9 @@ var TextView = (function (_super) {
     __decorate([
         profiling_1.profile
     ], TextView.prototype, "onLoaded", null);
+    TextView = __decorate([
+        editable_text_base_1.CSSType("TextView")
+    ], TextView);
     return TextView;
 }(editable_text_base_1.EditableTextBase));
 exports.TextView = TextView;

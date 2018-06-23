@@ -46,7 +46,7 @@ var UITextFieldDelegateImpl = (function (_super) {
         this.firstEdit = false;
         var owner = this._owner.get();
         if (owner) {
-            text_field_common_1.textProperty.nativeValueChange(owner, '');
+            text_field_common_1.textProperty.nativeValueChange(owner, "");
         }
         return true;
     };

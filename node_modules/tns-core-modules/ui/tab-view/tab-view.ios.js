@@ -2,10 +2,12 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
+var view_1 = require("../core/view");
 var tab_view_common_1 = require("./tab-view-common");
 var text_base_1 = require("../text-base");
 var image_source_1 = require("../../image-source");
 var profiling_1 = require("../../profiling");
+var frame_1 = require("../frame");
 __export(require("./tab-view-common"));
 var UITabBarControllerImpl = (function (_super) {
     __extends(UITabBarControllerImpl, _super);
@@ -17,16 +19,30 @@ var UITabBarControllerImpl = (function (_super) {
         handler._owner = owner;
         return handler;
     };
-    UITabBarControllerImpl.prototype.viewDidLayoutSubviews = function () {
-        if (tab_view_common_1.traceEnabled()) {
-            tab_view_common_1.traceWrite("TabView.UITabBarControllerClass.viewDidLayoutSubviews();", tab_view_common_1.traceCategories.Debug);
-        }
-        _super.prototype.viewDidLayoutSubviews.call(this);
+    UITabBarControllerImpl.prototype.viewWillAppear = function (animated) {
+        _super.prototype.viewWillAppear.call(this, animated);
         var owner = this._owner.get();
-        if (owner && owner.isLoaded) {
-            owner._updateLayout();
+        if (!owner) {
+            return;
+        }
+        view_1.ios.updateAutoAdjustScrollInsets(this, owner);
+        if (!owner.parent) {
+            owner.callLoaded();
         }
     };
+    UITabBarControllerImpl.prototype.viewDidDisappear = function (animated) {
+        _super.prototype.viewDidDisappear.call(this, animated);
+        var owner = this._owner.get();
+        if (owner && !owner.parent && owner.isLoaded && !this.presentedViewController) {
+            owner.callUnloaded();
+        }
+    };
+    __decorate([
+        profiling_1.profile
+    ], UITabBarControllerImpl.prototype, "viewWillAppear", null);
+    __decorate([
+        profiling_1.profile
+    ], UITabBarControllerImpl.prototype, "viewDidDisappear", null);
     return UITabBarControllerImpl;
 }(UITabBarController));
 var UITabBarControllerDelegateImpl = (function (_super) {
@@ -48,6 +64,7 @@ var UITabBarControllerDelegateImpl = (function (_super) {
             var backToMoreWillBeVisible = false;
             owner._handleTwoNavigationBars(backToMoreWillBeVisible);
         }
+        tabBarController._willSelectViewController = viewController;
         return true;
     };
     UITabBarControllerDelegateImpl.prototype.tabBarControllerDidSelectViewController = function (tabBarController, viewController) {
@@ -58,6 +75,7 @@ var UITabBarControllerDelegateImpl = (function (_super) {
         if (owner) {
             owner._onViewControllerShown(viewController);
         }
+        tabBarController._willSelectViewController = undefined;
     };
     UITabBarControllerDelegateImpl.ObjCProtocols = [UITabBarControllerDelegate];
     return UITabBarControllerDelegateImpl;
@@ -111,22 +129,31 @@ var TabViewItem = (function (_super) {
     function TabViewItem() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    TabViewItem.prototype.setViewController = function (controller) {
-        this._iosViewController = controller;
-        this.setNativeView(this._nativeView = controller.view);
+    TabViewItem.prototype.setViewController = function (controller, nativeView) {
+        this.__controller = controller;
+        this.setNativeView(nativeView);
     };
     TabViewItem.prototype.disposeNativeView = function () {
-        this._iosViewController = undefined;
+        this.__controller = undefined;
         this.setNativeView(undefined);
+    };
+    TabViewItem.prototype.loadView = function (view) {
+        var tabView = this.parent;
+        if (tabView && tabView.items) {
+            var index_1 = tabView.items.indexOf(this);
+            if (index_1 === tabView.selectedIndex) {
+                _super.prototype.loadView.call(this, view);
+            }
+        }
     };
     TabViewItem.prototype._update = function () {
         var parent = this.parent;
-        var controller = this._iosViewController;
+        var controller = this.__controller;
         if (parent && controller) {
             var icon = parent._getIcon(this.iconSource);
-            var index_1 = parent.items.indexOf(this);
+            var index_2 = parent.items.indexOf(this);
             var title = text_base_1.getTransformedText(this.title, this.style.textTransform);
-            var tabBarItem = UITabBarItem.alloc().initWithTitleImageTag(title, icon, index_1);
+            var tabBarItem = UITabBarItem.alloc().initWithTitleImageTag(title, icon, index_2);
             if (!icon) {
                 updateItemTitlePosition(tabBarItem);
             }
@@ -148,10 +175,8 @@ var TabView = (function (_super) {
     __extends(TabView, _super);
     function TabView() {
         var _this = _super.call(this) || this;
-        _this._tabBarHeight = 0;
-        _this._navBarHeight = 0;
         _this._iconsCache = {};
-        _this._ios = UITabBarControllerImpl.initWithOwner(new WeakRef(_this));
+        _this.viewController = _this._ios = UITabBarControllerImpl.initWithOwner(new WeakRef(_this));
         _this.nativeViewProtected = _this._ios.view;
         _this._delegate = UITabBarControllerDelegateImpl.initWithOwner(new WeakRef(_this));
         _this._moreNavigationControllerDelegate = UINavigationControllerDelegateImpl.initWithOwner(new WeakRef(_this));
@@ -173,6 +198,38 @@ var TabView = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    TabView.prototype.layoutNativeView = function (left, top, right, bottom) {
+    };
+    TabView.prototype._setNativeViewFrame = function (nativeView, frame) {
+    };
+    TabView.prototype.onSelectedIndexChanged = function (oldIndex, newIndex) {
+        var items = this.items;
+        if (!items) {
+            return;
+        }
+        var oldItem = items[oldIndex];
+        if (oldItem) {
+            oldItem.unloadView(oldItem.view);
+        }
+        var newItem = items[newIndex];
+        if (newItem && this.isLoaded) {
+            var selectedView = items[newIndex].view;
+            if (selectedView instanceof frame_1.Frame) {
+                selectedView._pushInFrameStack();
+            }
+            newItem.loadView(newItem.view);
+        }
+        _super.prototype.onSelectedIndexChanged.call(this, oldIndex, newIndex);
+    };
+    TabView.prototype.onMeasure = function (widthMeasureSpec, heightMeasureSpec) {
+        var width = tab_view_common_1.layout.getMeasureSpecSize(widthMeasureSpec);
+        var widthMode = tab_view_common_1.layout.getMeasureSpecMode(widthMeasureSpec);
+        var height = tab_view_common_1.layout.getMeasureSpecSize(heightMeasureSpec);
+        var heightMode = tab_view_common_1.layout.getMeasureSpecMode(heightMeasureSpec);
+        var widthAndState = tab_view_common_1.View.resolveSizeAndState(width, width, widthMode, 0);
+        var heightAndState = tab_view_common_1.View.resolveSizeAndState(height, height, heightMode, 0);
+        this.setMeasuredDimension(widthAndState, heightAndState);
+    };
     TabView.prototype._onViewControllerShown = function (viewController) {
         if (tab_view_common_1.traceEnabled()) {
             tab_view_common_1.traceWrite("TabView._onViewControllerShown(" + viewController + ");", tab_view_common_1.traceCategories.Debug);
@@ -190,7 +247,10 @@ var TabView = (function (_super) {
         if (tab_view_common_1.traceEnabled()) {
             tab_view_common_1.traceWrite("TabView._handleTwoNavigationBars(backToMoreWillBeVisible: " + backToMoreWillBeVisible + ")", tab_view_common_1.traceCategories.Debug);
         }
-        var page = this.page;
+        var page = this.page || this._selectedView.page || this._selectedView.currentPage;
+        if (!page || !page.frame) {
+            return;
+        }
         var actionBarVisible = page.frame._getNavBarVisible(page);
         if (backToMoreWillBeVisible && actionBarVisible) {
             page.frame.ios._disableNavBarAnimation = true;
@@ -213,7 +273,30 @@ var TabView = (function (_super) {
             return;
         }
     };
+    TabView.prototype.getViewController = function (item) {
+        var newController = item.view ? item.view.viewController : null;
+        if (newController) {
+            item.setViewController(newController, newController.view);
+            return newController;
+        }
+        if (item.view.ios instanceof UIViewController) {
+            newController = item.view.ios;
+            item.setViewController(newController, newController.view);
+        }
+        else if (item.view.ios && item.view.ios.controller instanceof UIViewController) {
+            newController = item.view.ios.controller;
+            item.setViewController(newController, newController.view);
+        }
+        else {
+            newController = view_1.ios.UILayoutViewController.initWithOwner(new WeakRef(item.view));
+            newController.view.addSubview(item.view.nativeViewProtected);
+            item.view.viewController = newController;
+            item.setViewController(newController, item.view.nativeViewProtected);
+        }
+        return newController;
+    };
     TabView.prototype.setViewControllers = function (items) {
+        var _this = this;
         var length = items ? items.length : 0;
         if (length === 0) {
             this._ios.viewControllers = null;
@@ -221,18 +304,9 @@ var TabView = (function (_super) {
         }
         var controllers = NSMutableArray.alloc().initWithCapacity(length);
         var states = getTitleAttributesForStates(this);
-        for (var i = 0; i < length; i++) {
-            var item = items[i];
-            var newController = void 0;
-            if (item.view.ios instanceof UIViewController) {
-                newController = item.view.ios;
-            }
-            else {
-                newController = UIViewController.new();
-                newController.view.addSubview(item.view.ios);
-            }
-            item.setViewController(newController);
-            var icon = this._getIcon(item.iconSource);
+        items.forEach(function (item, i) {
+            var controller = _this.getViewController(item);
+            var icon = _this._getIcon(item.iconSource);
             var tabBarItem = UITabBarItem.alloc().initWithTitleImageTag((item.title || ""), icon, i);
             if (!icon) {
                 updateItemTitlePosition(tabBarItem);
@@ -241,9 +315,10 @@ var TabView = (function (_super) {
                 updateItemIconPosition(tabBarItem);
             }
             applyStatesToItem(tabBarItem, states);
-            newController.tabBarItem = tabBarItem;
-            controllers.addObject(newController);
-        }
+            controller.tabBarItem = tabBarItem;
+            controllers.addObject(controller);
+            item.canBeLoaded = true;
+        });
         this._ios.viewControllers = controllers;
         this._ios.customizableViewControllers = null;
         this._ios.moreNavigationController.delegate = this._moreNavigationControllerDelegate;
@@ -274,40 +349,6 @@ var TabView = (function (_super) {
         }
         return image;
     };
-    TabView.prototype.onMeasure = function (widthMeasureSpec, heightMeasureSpec) {
-        var nativeView = this.nativeViewProtected;
-        if (nativeView) {
-            var width = tab_view_common_1.layout.getMeasureSpecSize(widthMeasureSpec);
-            var widthMode = tab_view_common_1.layout.getMeasureSpecMode(widthMeasureSpec);
-            var height = tab_view_common_1.layout.getMeasureSpecSize(heightMeasureSpec);
-            var heightMode = tab_view_common_1.layout.getMeasureSpecMode(heightMeasureSpec);
-            this._tabBarHeight = tab_view_common_1.layout.measureNativeView(this._ios.tabBar, width, widthMode, height, heightMode).height;
-            var moreNavBarVisible = !!this._ios.moreNavigationController.navigationBar.window;
-            this._navBarHeight = moreNavBarVisible ? tab_view_common_1.layout.measureNativeView(this._ios.moreNavigationController.navigationBar, width, widthMode, height, heightMode).height : 0;
-            var density = tab_view_common_1.layout.getDisplayDensity();
-            var measureWidth = 0;
-            var measureHeight = 0;
-            var child = this._selectedView;
-            if (child) {
-                var childHeightMeasureSpec = tab_view_common_1.layout.makeMeasureSpec(height - this._navBarHeight - this._tabBarHeight, heightMode);
-                var childSize = tab_view_common_1.View.measureChild(this, child, widthMeasureSpec, childHeightMeasureSpec);
-                measureHeight = childSize.measuredHeight;
-                measureWidth = childSize.measuredWidth;
-            }
-            measureWidth = Math.max(measureWidth, this.effectiveMinWidth * density);
-            measureHeight = Math.max(measureHeight, this.effectiveMinHeight * density);
-            var widthAndState = tab_view_common_1.View.resolveSizeAndState(measureWidth, width, widthMode, 0);
-            var heightAndState = tab_view_common_1.View.resolveSizeAndState(measureHeight, height, heightMode, 0);
-            this.setMeasuredDimension(widthAndState, heightAndState);
-        }
-    };
-    TabView.prototype.onLayout = function (left, top, right, bottom) {
-        _super.prototype.onLayout.call(this, left, top, right, bottom);
-        var child = this._selectedView;
-        if (child) {
-            tab_view_common_1.View.layoutChild(this, child, 0, this._navBarHeight, right, (bottom - this._navBarHeight - this._tabBarHeight));
-        }
-    };
     TabView.prototype._updateIOSTabBarColorsAndFonts = function () {
         if (!this.items) {
             return;
@@ -318,14 +359,12 @@ var TabView = (function (_super) {
             applyStatesToItem(tabBar.items[i], states);
         }
     };
-    TabView.prototype[tab_view_common_1.selectedIndexProperty.getDefault] = function () {
-        return -1;
-    };
     TabView.prototype[tab_view_common_1.selectedIndexProperty.setNative] = function (value) {
         if (tab_view_common_1.traceEnabled()) {
             tab_view_common_1.traceWrite("TabView._onSelectedIndexPropertyChangedSetNativeValue(" + value + ")", tab_view_common_1.traceCategories.Debug);
         }
         if (value > -1) {
+            this._ios._willSelectViewController = this._ios.viewControllers[value];
             this._ios.selectedIndex = value;
         }
     };
@@ -335,6 +374,12 @@ var TabView = (function (_super) {
     TabView.prototype[tab_view_common_1.itemsProperty.setNative] = function (value) {
         this.setViewControllers(value);
         tab_view_common_1.selectedIndexProperty.coerce(this);
+    };
+    TabView.prototype[tab_view_common_1.tabTextFontSizeProperty.getDefault] = function () {
+        return null;
+    };
+    TabView.prototype[tab_view_common_1.tabTextFontSizeProperty.setNative] = function (value) {
+        this._updateIOSTabBarColorsAndFonts();
     };
     TabView.prototype[tab_view_common_1.tabTextColorProperty.getDefault] = function () {
         return null;
@@ -384,7 +429,9 @@ var TabView = (function (_super) {
 exports.TabView = TabView;
 function getTitleAttributesForStates(tabView) {
     var result = {};
-    var font = tabView.style.fontInternal.getUIFont(UIFont.systemFontOfSize(10));
+    var defaultTabItemFontSize = 10;
+    var tabItemFontSize = tabView.style.tabTextFontSize || defaultTabItemFontSize;
+    var font = tabView.style.fontInternal.getUIFont(UIFont.systemFontOfSize(tabItemFontSize));
     var tabItemTextColor = tabView.style.tabTextColor;
     var textColor = tabItemTextColor instanceof tab_view_common_1.Color ? tabItemTextColor.ios : null;
     result.normalState = (_a = {}, _a[NSFontAttributeName] = font, _a);

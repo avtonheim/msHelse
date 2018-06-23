@@ -29,6 +29,9 @@ var SegmentedBarItemBase = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    SegmentedBarItemBase = __decorate([
+        view_1.CSSType("SegmentedBarItem")
+    ], SegmentedBarItemBase);
     return SegmentedBarItemBase;
 }(view_1.ViewBase));
 exports.SegmentedBarItemBase = SegmentedBarItemBase;
@@ -91,6 +94,9 @@ var SegmentedBarBase = (function (_super) {
         }
     };
     SegmentedBarBase.selectedIndexChangedEvent = "selectedIndexChanged";
+    SegmentedBarBase = __decorate([
+        view_1.CSSType("SegmentedBar")
+    ], SegmentedBarBase);
     return SegmentedBarBase;
 }(view_1.View));
 exports.SegmentedBarBase = SegmentedBarBase;
