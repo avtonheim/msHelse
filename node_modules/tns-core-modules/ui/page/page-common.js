@@ -101,6 +101,12 @@ var PageBase = (function (_super) {
     };
     PageBase.prototype.onNavigatingTo = function (context, isBackNavigation, bindingContext) {
         this._navigationContext = context;
+        if (isBackNavigation && this._styleScope) {
+            this._styleScope.ensureSelectors();
+            if (!this._cssState.isSelectorsLatestVersionApplied()) {
+                this._onCssStateChange();
+            }
+        }
         if (!isBackNavigation && bindingContext !== undefined && bindingContext !== null) {
             this.bindingContext = bindingContext;
         }
@@ -129,6 +135,7 @@ var PageBase = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    var PageBase_1;
     PageBase.navigatingToEvent = "navigatingTo";
     PageBase.navigatedToEvent = "navigatedTo";
     PageBase.navigatingFromEvent = "navigatingFrom";
@@ -149,7 +156,6 @@ var PageBase = (function (_super) {
         content_view_1.CSSType("Page")
     ], PageBase);
     return PageBase;
-    var PageBase_1;
 }(content_view_1.ContentView));
 exports.PageBase = PageBase;
 PageBase.prototype.recycleNativeView = "never";

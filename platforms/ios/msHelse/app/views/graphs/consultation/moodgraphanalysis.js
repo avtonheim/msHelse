@@ -16,5 +16,7 @@ function onPageLoaded(args){
        }, error => {
            console.log("OPEN DB ERROR", error);
        });
+    
+      
 
 } exports.onPageLoaded = onPageLoaded;

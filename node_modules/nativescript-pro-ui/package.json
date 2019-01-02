@@ -2,7 +2,7 @@
   "_args": [
     [
       "nativescript-pro-ui@3.4.1",
-      "/Users/aleksandernygardtonheim/msHelse"
+      "/Users/aleksandernygardtonheim/projects/msHelse"
     ]
   ],
   "_from": "nativescript-pro-ui@3.4.1",
@@ -26,7 +26,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/nativescript-pro-ui/-/nativescript-pro-ui-3.4.1.tgz",
   "_spec": "3.4.1",
-  "_where": "/Users/aleksandernygardtonheim/msHelse",
+  "_where": "/Users/aleksandernygardtonheim/projects/msHelse",
   "author": {
     "name": "Progress"
   },
@@ -67,6 +67,7 @@
     "platforms/",
     "!hooks/"
   ],
+  "homepage": "https://github.com/telerik/nativescript-ui-feedback#readme",
   "keywords": [
     "nativescript",
     "ui",
@@ -86,7 +87,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://www.github.com/telerik/nativescript-ui-feedback.git"
+    "url": "git+ssh://git@github.com/telerik/nativescript-ui-feedback.git"
   },
   "version": "3.4.1"
 }

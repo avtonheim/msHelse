@@ -288,6 +288,10 @@ function onItemChanged(item, oldValue, newValue) {
 function onVisibilityChanged(item, oldValue, newValue) {
     item._onVisibilityChanged(newValue);
 }
+function traceMissingIcon(icon) {
+    view_1.traceWrite("Could not load action bar icon: " + icon, view_1.traceCategories.Error, view_1.traceMessageType.error);
+}
+exports.traceMissingIcon = traceMissingIcon;
 exports.textProperty = new view_1.Property({ name: "text", defaultValue: "", valueChanged: onItemChanged });
 exports.textProperty.register(ActionItemBase);
 exports.iconProperty = new view_1.Property({ name: "icon", valueChanged: onItemChanged });

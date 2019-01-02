@@ -43,8 +43,8 @@ var AnimationDelegateImpl = (function (_super) {
                 targetStyle[setLocal ? style_properties_1.rotateProperty.name : style_properties_1.rotateProperty.keyframe] = value;
                 break;
             case animation_common_1.Properties.translate:
-                targetStyle[setLocal ? style_properties_1.translateXProperty.name : style_properties_1.translateXProperty.keyframe] = value;
-                targetStyle[setLocal ? style_properties_1.translateYProperty.name : style_properties_1.translateYProperty.keyframe] = value;
+                targetStyle[setLocal ? style_properties_1.translateXProperty.name : style_properties_1.translateXProperty.keyframe] = value.x;
+                targetStyle[setLocal ? style_properties_1.translateYProperty.name : style_properties_1.translateYProperty.keyframe] = value.y;
                 break;
             case animation_common_1.Properties.scale:
                 targetStyle[setLocal ? style_properties_1.scaleXProperty.name : style_properties_1.scaleXProperty.keyframe] = value.x === 0 ? 0.001 : value.x;

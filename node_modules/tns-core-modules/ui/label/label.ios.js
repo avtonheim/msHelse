@@ -16,14 +16,16 @@ var FixedSize;
 var Label = (function (_super) {
     __extends(Label, _super);
     function Label() {
-        var _this = _super.call(this) || this;
-        _this.nativeViewProtected = TNSLabel.new();
-        _this.nativeViewProtected.userInteractionEnabled = true;
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
+    Label.prototype.createNativeView = function () {
+        var view = TNSLabel.new();
+        view.userInteractionEnabled = true;
+        return view;
+    };
     Object.defineProperty(Label.prototype, "ios", {
         get: function () {
-            return this.nativeViewProtected;
+            return this.nativeTextViewProtected;
         },
         enumerable: true,
         configurable: true
@@ -51,7 +53,7 @@ var Label = (function (_super) {
         _super.prototype._requestLayoutOnTextChanged.call(this);
     };
     Label.prototype.onMeasure = function (widthMeasureSpec, heightMeasureSpec) {
-        var nativeView = this.nativeViewProtected;
+        var nativeView = this.nativeTextViewProtected;
         if (nativeView) {
             var width = text_base_1.layout.getMeasureSpecSize(widthMeasureSpec);
             var widthMode = text_base_1.layout.getMeasureSpecMode(widthMeasureSpec);
@@ -59,7 +61,13 @@ var Label = (function (_super) {
             var heightMode = text_base_1.layout.getMeasureSpecMode(heightMeasureSpec);
             this._fixedSize = (widthMode === text_base_1.layout.EXACTLY ? FixedSize.WIDTH : FixedSize.NONE)
                 | (heightMode === text_base_1.layout.EXACTLY ? FixedSize.HEIGHT : FixedSize.NONE);
-            var nativeSize = this._measureNativeView(width, widthMode, height, heightMode);
+            var nativeSize = void 0;
+            if (this.textWrap) {
+                nativeSize = this._measureNativeView(width, widthMode, height, heightMode);
+            }
+            else {
+                nativeSize = text_base_1.layout.measureNativeView(nativeView, width, widthMode, height, heightMode);
+            }
             var labelWidth = nativeSize.width;
             if (this.textWrap && widthMode === text_base_1.layout.AT_MOST) {
                 labelWidth = Math.min(labelWidth, width);
@@ -72,14 +80,14 @@ var Label = (function (_super) {
         }
     };
     Label.prototype._measureNativeView = function (width, widthMode, height, heightMode) {
-        var view = this.nativeViewProtected;
+        var view = this.nativeTextViewProtected;
         var nativeSize = view.textRectForBoundsLimitedToNumberOfLines(CGRectMake(0, 0, widthMode === 0 ? Number.POSITIVE_INFINITY : text_base_1.layout.toDeviceIndependentPixels(width), heightMode === 0 ? Number.POSITIVE_INFINITY : text_base_1.layout.toDeviceIndependentPixels(height)), 0).size;
         nativeSize.width = text_base_1.layout.round(text_base_1.layout.toDevicePixels(nativeSize.width));
         nativeSize.height = text_base_1.layout.round(text_base_1.layout.toDevicePixels(nativeSize.height));
         return nativeSize;
     };
     Label.prototype[text_base_1.whiteSpaceProperty.setNative] = function (value) {
-        var nativeView = this.nativeViewProtected;
+        var nativeView = this.nativeTextViewProtected;
         switch (value) {
             case "normal":
                 nativeView.lineBreakMode = 0;
@@ -97,13 +105,13 @@ var Label = (function (_super) {
         if (value instanceof background_1.Background) {
             background_2.ios.createBackgroundUIColor(this, function (color) {
                 var cgColor = color ? color.CGColor : null;
-                _this.nativeViewProtected.layer.backgroundColor = cgColor;
+                _this.nativeTextViewProtected.layer.backgroundColor = cgColor;
             }, true);
         }
         this._setNativeClipToBounds();
     };
     Label.prototype[text_base_1.borderTopWidthProperty.setNative] = function (value) {
-        var nativeView = this.nativeViewProtected;
+        var nativeView = this.nativeTextViewProtected;
         var border = nativeView.borderThickness;
         nativeView.borderThickness = {
             top: text_base_1.layout.toDeviceIndependentPixels(this.effectiveBorderTopWidth),
@@ -113,7 +121,7 @@ var Label = (function (_super) {
         };
     };
     Label.prototype[text_base_1.borderRightWidthProperty.setNative] = function (value) {
-        var nativeView = this.nativeViewProtected;
+        var nativeView = this.nativeTextViewProtected;
         var border = nativeView.borderThickness;
         nativeView.borderThickness = {
             top: border.top,
@@ -123,7 +131,7 @@ var Label = (function (_super) {
         };
     };
     Label.prototype[text_base_1.borderBottomWidthProperty.setNative] = function (value) {
-        var nativeView = this.nativeViewProtected;
+        var nativeView = this.nativeTextViewProtected;
         var border = nativeView.borderThickness;
         nativeView.borderThickness = {
             top: border.top,
@@ -133,7 +141,7 @@ var Label = (function (_super) {
         };
     };
     Label.prototype[text_base_1.borderLeftWidthProperty.setNative] = function (value) {
-        var nativeView = this.nativeViewProtected;
+        var nativeView = this.nativeTextViewProtected;
         var border = nativeView.borderThickness;
         nativeView.borderThickness = {
             top: border.top,
@@ -143,7 +151,7 @@ var Label = (function (_super) {
         };
     };
     Label.prototype[text_base_1.paddingTopProperty.setNative] = function (value) {
-        var nativeView = this.nativeViewProtected;
+        var nativeView = this.nativeTextViewProtected;
         var padding = nativeView.padding;
         nativeView.padding = {
             top: text_base_1.layout.toDeviceIndependentPixels(this.effectivePaddingTop),
@@ -153,7 +161,7 @@ var Label = (function (_super) {
         };
     };
     Label.prototype[text_base_1.paddingRightProperty.setNative] = function (value) {
-        var nativeView = this.nativeViewProtected;
+        var nativeView = this.nativeTextViewProtected;
         var padding = nativeView.padding;
         nativeView.padding = {
             top: padding.top,
@@ -163,7 +171,7 @@ var Label = (function (_super) {
         };
     };
     Label.prototype[text_base_1.paddingBottomProperty.setNative] = function (value) {
-        var nativeView = this.nativeViewProtected;
+        var nativeView = this.nativeTextViewProtected;
         var padding = nativeView.padding;
         nativeView.padding = {
             top: padding.top,
@@ -173,7 +181,7 @@ var Label = (function (_super) {
         };
     };
     Label.prototype[text_base_1.paddingLeftProperty.setNative] = function (value) {
-        var nativeView = this.nativeViewProtected;
+        var nativeView = this.nativeTextViewProtected;
         var padding = nativeView.padding;
         nativeView.padding = {
             top: padding.top,

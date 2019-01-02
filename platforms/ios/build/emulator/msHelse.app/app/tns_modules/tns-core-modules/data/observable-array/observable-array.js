@@ -181,10 +181,10 @@ var ObservableArray = (function (_super) {
         return this._array.filter(callbackfn, thisArg);
     };
     ObservableArray.prototype.reduce = function (callbackfn, initialValue) {
-        return this._array.reduce(callbackfn, initialValue);
+        return initialValue !== undefined ? this._array.reduce(callbackfn, initialValue) : this._array.reduce(callbackfn);
     };
     ObservableArray.prototype.reduceRight = function (callbackfn, initialValue) {
-        return this._array.reduceRight(callbackfn, initialValue);
+        return initialValue !== undefined ? this._array.reduceRight(callbackfn, initialValue) : this._array.reduceRight(callbackfn);
     };
     ObservableArray.changeEvent = CHANGE;
     return ObservableArray;

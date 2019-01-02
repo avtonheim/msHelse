@@ -25,15 +25,23 @@ exports.SegmentedBarItem = SegmentedBarItem;
 var SegmentedBar = (function (_super) {
     __extends(SegmentedBar, _super);
     function SegmentedBar() {
-        var _this = _super.call(this) || this;
-        _this.nativeViewProtected = _this._ios = UISegmentedControl.new();
-        _this._selectionHandler = SelectionHandlerImpl.initWithOwner(new WeakRef(_this));
-        _this._ios.addTargetActionForControlEvents(_this._selectionHandler, "selected", 4096);
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
+    SegmentedBar.prototype.createNativeView = function () {
+        return UISegmentedControl.new();
+    };
+    SegmentedBar.prototype.initNativeView = function () {
+        _super.prototype.initNativeView.call(this);
+        this._selectionHandler = SelectionHandlerImpl.initWithOwner(new WeakRef(this));
+        this.nativeViewProtected.addTargetActionForControlEvents(this._selectionHandler, "selected", 4096);
+    };
+    SegmentedBar.prototype.disposeNativeView = function () {
+        this._selectionHandler = null;
+        _super.prototype.disposeNativeView.call(this);
+    };
     Object.defineProperty(SegmentedBar.prototype, "ios", {
         get: function () {
-            return this._ios;
+            return this.nativeViewProtected;
         },
         enumerable: true,
         configurable: true
@@ -42,13 +50,13 @@ var SegmentedBar = (function (_super) {
         return -1;
     };
     SegmentedBar.prototype[segmented_bar_common_1.selectedIndexProperty.setNative] = function (value) {
-        this._ios.selectedSegmentIndex = value;
+        this.ios.selectedSegmentIndex = value;
     };
     SegmentedBar.prototype[segmented_bar_common_1.itemsProperty.getDefault] = function () {
         return null;
     };
     SegmentedBar.prototype[segmented_bar_common_1.itemsProperty.setNative] = function (value) {
-        var segmentedControl = this._ios;
+        var segmentedControl = this.ios;
         segmentedControl.removeAllSegments();
         var newItems = value;
         if (newItems && newItems.length) {
@@ -61,18 +69,18 @@ var SegmentedBar = (function (_super) {
         segmented_bar_common_1.selectedIndexProperty.coerce(this);
     };
     SegmentedBar.prototype[segmented_bar_common_1.selectedBackgroundColorProperty.getDefault] = function () {
-        return this._ios.tintColor;
+        return this.ios.tintColor;
     };
     SegmentedBar.prototype[segmented_bar_common_1.selectedBackgroundColorProperty.setNative] = function (value) {
         var color = value instanceof segmented_bar_common_1.Color ? value.ios : value;
-        this._ios.tintColor = color;
+        this.ios.tintColor = color;
     };
     SegmentedBar.prototype[segmented_bar_common_1.colorProperty.getDefault] = function () {
         return null;
     };
     SegmentedBar.prototype[segmented_bar_common_1.colorProperty.setNative] = function (value) {
         var color = value instanceof segmented_bar_common_1.Color ? value.ios : value;
-        var bar = this._ios;
+        var bar = this.ios;
         var currentAttrs = bar.titleTextAttributesForState(0);
         var attrs = currentAttrs ? currentAttrs.mutableCopy() : NSMutableDictionary.new();
         attrs.setValueForKey(color, NSForegroundColorAttributeName);
@@ -83,7 +91,7 @@ var SegmentedBar = (function (_super) {
     };
     SegmentedBar.prototype[segmented_bar_common_1.fontInternalProperty.setNative] = function (value) {
         var font = value ? value.getUIFont(UIFont.systemFontOfSize(utils_1.ios.getter(UIFont, UIFont.labelFontSize))) : null;
-        var bar = this._ios;
+        var bar = this.ios;
         var currentAttrs = bar.titleTextAttributesForState(0);
         var attrs = currentAttrs ? currentAttrs.mutableCopy() : NSMutableDictionary.new();
         attrs.setValueForKey(font, NSFontAttributeName);

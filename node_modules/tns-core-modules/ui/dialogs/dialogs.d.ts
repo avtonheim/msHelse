@@ -21,6 +21,41 @@ export module inputType {
      * Email input type.
      */
     export var email: string;
+
+    /**
+     * Number input type.
+     */
+    export var number: string;
+
+    /**
+     * Phone input type.
+     */
+    export var phone: string;
+}
+
+/**
+ * Defines the capitalization type for prompt dialog.
+ */
+export module capitalizationType {
+    /**
+     * No automatic capitalization.
+     */
+    export var none: string;
+
+    /**
+     * Capitalizes every character.
+     */
+    export var all: string;
+
+    /**
+     * Capitalize the first word of each sentence.
+     */
+    export var sentences: string;
+
+    /**
+     * Capitalize the first letter of every word.
+     */
+    export var words: string;
 }
 
 /**
@@ -56,21 +91,31 @@ export function prompt(message: string, defaultText?: string): Promise<PromptRes
 
 /**
  * The prompt() method displays a dialog box that prompts the visitor for input.
- * @param options The options for the dialog box. 
+ * @param options The options for the dialog box.
  */
 export function prompt(options: PromptOptions): Promise<PromptResult>;
 
 /**
  * The login() method displays a login dialog box that prompts the visitor for user name and password.
  * @param message The text to display in the dialog box.
+ * @param userNameHint The default text to display as a hint in the username input. Optional.
+ * @param passwordHint The default text to display as a hint in the password input. Optional.
  * @param userName The default text to display in the user name input box. Optional.
  * @param password The default text to display in the password input box. Optional.
  */
-export function login(message: string, userName?: string, password?: string): Promise<LoginResult>;
+export function login(message: string, userNameHint?: string, passwordHint?: string, userName?: string, password?: string): Promise<LoginResult>;
 
 /**
  * The login() method displays a login dialog box that prompts the visitor for user name and password.
- * @param options The options for the dialog box. 
+ * @param message The text to display in the dialog box.
+ * @param userNameHint The default text to display as a hint in the username input. Optional.
+ * @param passwordHint The default text to display as a hint in the password input. Optional.
+ */
+export function login(message: string, userNameHint?: string, passwordHint?: string): Promise<LoginResult>;
+
+/**
+ * The login() method displays a login dialog box that prompts the visitor for user name and password.
+ * @param options The options for the dialog box.
  */
 export function login(options: LoginOptions): Promise<LoginResult>;
 
@@ -84,7 +129,7 @@ export function action(message: string, cancelButtonText: string, actions: Array
 
 /**
  * The action() method displays a action box that prompts the visitor to choose some action.
- * @param options The options for the dialog box. 
+ * @param options The options for the dialog box.
  */
 export function action(options: ActionOptions): Promise<string>;
 
@@ -177,12 +222,27 @@ export interface PromptOptions extends ConfirmOptions {
      * Gets or sets the prompt input type (plain text, password, or email).
      */
     inputType?: string;
+
+    /**
+     * Gets or sets the prompt capitalizationType (none, all, sentences, or words).
+     */
+    capitalizationType?: string;
 }
 
 /**
  * Provides options for the login dialog.
  */
 export interface LoginOptions extends ConfirmOptions {
+    /**
+     * Gets or sets the default text to display as hint in the user name input box.
+     */
+    userNameHint?: string;
+    
+    /**
+     * Gets or sets the default text to display as hint in the password input box.
+     */
+    passwordHint?: string;
+
     /**
      * Gets or sets the default text to display in the user name input box.
      */

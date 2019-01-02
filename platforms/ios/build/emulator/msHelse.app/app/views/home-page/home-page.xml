@@ -25,6 +25,7 @@
           <Label style="font-size: 13px; margin-top: -15px;" text="Dei siste sju dagane"/>
           <StackLayout id="mood">
           </StackLayout>
+          
     </StackLayout>
 
   <GridLayout columns="*,*" row="*">

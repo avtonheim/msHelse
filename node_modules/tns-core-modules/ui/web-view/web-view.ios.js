@@ -81,72 +81,80 @@ var WKNavigationDelegateImpl = (function (_super) {
 var WebView = (function (_super) {
     __extends(WebView, _super);
     function WebView() {
-        var _this = _super.call(this) || this;
-        var configuration = WKWebViewConfiguration.new();
-        _this._delegate = WKNavigationDelegateImpl.initWithOwner(new WeakRef(_this));
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    WebView.prototype.createNativeView = function () {
         var jScript = "var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'initial-scale=1.0'); document.getElementsByTagName('head')[0].appendChild(meta);";
         var wkUScript = WKUserScript.alloc().initWithSourceInjectionTimeForMainFrameOnly(jScript, 1, true);
         var wkUController = WKUserContentController.new();
         wkUController.addUserScript(wkUScript);
+        var configuration = WKWebViewConfiguration.new();
         configuration.userContentController = wkUController;
         configuration.preferences.setValueForKey(true, "allowFileAccessFromFileURLs");
-        _this.nativeViewProtected = _this._ios = new WKWebView({
+        return new WKWebView({
             frame: CGRectZero,
             configuration: configuration
         });
-        return _this;
-    }
+    };
+    WebView.prototype.initNativeView = function () {
+        _super.prototype.initNativeView.call(this);
+        this._delegate = WKNavigationDelegateImpl.initWithOwner(new WeakRef(this));
+    };
+    WebView.prototype.disposeNativeView = function () {
+        this._delegate = null;
+        _super.prototype.disposeNativeView.call(this);
+    };
     WebView.prototype.onLoaded = function () {
         _super.prototype.onLoaded.call(this);
-        this._ios.navigationDelegate = this._delegate;
+        this.ios.navigationDelegate = this._delegate;
     };
     WebView.prototype.onUnloaded = function () {
-        this._ios.navigationDelegate = null;
+        this.ios.navigationDelegate = null;
         _super.prototype.onUnloaded.call(this);
     };
     Object.defineProperty(WebView.prototype, "ios", {
         get: function () {
-            return this._ios;
+            return this.nativeViewProtected;
         },
         enumerable: true,
         configurable: true
     });
     WebView.prototype.stopLoading = function () {
-        this._ios.stopLoading();
+        this.ios.stopLoading();
     };
     WebView.prototype._loadUrl = function (src) {
         if (src.startsWith("file:///")) {
-            this._ios.loadFileURLAllowingReadAccessToURL(NSURL.URLWithString(src), NSURL.URLWithString(src));
+            this.ios.loadFileURLAllowingReadAccessToURL(NSURL.URLWithString(src), NSURL.URLWithString(src));
         }
         else {
-            this._ios.loadRequest(NSURLRequest.requestWithURL(NSURL.URLWithString(src)));
+            this.ios.loadRequest(NSURLRequest.requestWithURL(NSURL.URLWithString(src)));
         }
     };
     WebView.prototype._loadData = function (content) {
-        this._ios.loadHTMLStringBaseURL(content, NSURL.alloc().initWithString("file:///" + web_view_common_1.knownFolders.currentApp().path + "/"));
+        this.ios.loadHTMLStringBaseURL(content, NSURL.alloc().initWithString("file:///" + web_view_common_1.knownFolders.currentApp().path + "/"));
     };
     Object.defineProperty(WebView.prototype, "canGoBack", {
         get: function () {
-            return this._ios.canGoBack;
+            return this.ios.canGoBack;
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(WebView.prototype, "canGoForward", {
         get: function () {
-            return this._ios.canGoForward;
+            return this.ios.canGoForward;
         },
         enumerable: true,
         configurable: true
     });
     WebView.prototype.goBack = function () {
-        this._ios.goBack();
+        this.ios.goBack();
     };
     WebView.prototype.goForward = function () {
-        this._ios.goForward();
+        this.ios.goForward();
     };
     WebView.prototype.reload = function () {
-        this._ios.reload();
+        this.ios.reload();
     };
     __decorate([
         profiling_1.profile

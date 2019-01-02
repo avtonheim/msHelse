@@ -19,19 +19,28 @@ var TimePicker = (function (_super) {
     __extends(TimePicker, _super);
     function TimePicker() {
         var _this = _super.call(this) || this;
-        _this._ios = UIDatePicker.new();
-        _this._ios.datePickerMode = 0;
-        _this._changeHandler = UITimePickerChangeHandlerImpl.initWithOwner(new WeakRef(_this));
-        _this._ios.addTargetActionForControlEvents(_this._changeHandler, "valueChanged", 4096);
         var components = getComponents(NSDate.date());
         _this.hour = components.hour;
         _this.minute = components.minute;
-        _this.nativeViewProtected = _this._ios;
         return _this;
     }
+    TimePicker.prototype.createNativeView = function () {
+        var picker = UIDatePicker.new();
+        picker.datePickerMode = 0;
+        return picker;
+    };
+    TimePicker.prototype.initNativeView = function () {
+        _super.prototype.initNativeView.call(this);
+        this._changeHandler = UITimePickerChangeHandlerImpl.initWithOwner(new WeakRef(this));
+        this.nativeViewProtected.addTargetActionForControlEvents(this._changeHandler, "valueChanged", 4096);
+    };
+    TimePicker.prototype.disposeNativeView = function () {
+        this._changeHandler = null;
+        _super.prototype.initNativeView.call(this);
+    };
     Object.defineProperty(TimePicker.prototype, "ios", {
         get: function () {
-            return this._ios;
+            return this.nativeViewProtected;
         },
         enumerable: true,
         configurable: true
@@ -78,10 +87,10 @@ var TimePicker = (function (_super) {
     TimePicker.prototype[time_picker_common_1.maxMinuteProperty.setNative] = function (value) {
         this.nativeViewProtected.maximumDate = getDate(this.hour, value);
     };
-    TimePicker.prototype[time_picker_common_1.timeProperty.getDefault] = function () {
+    TimePicker.prototype[time_picker_common_1.minuteIntervalProperty.getDefault] = function () {
         return this.nativeViewProtected.minuteInterval;
     };
-    TimePicker.prototype[time_picker_common_1.timeProperty.setNative] = function (value) {
+    TimePicker.prototype[time_picker_common_1.minuteIntervalProperty.setNative] = function (value) {
         this.nativeViewProtected.minuteInterval = value;
     };
     TimePicker.prototype[time_picker_common_1.colorProperty.getDefault] = function () {

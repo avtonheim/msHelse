@@ -53,12 +53,19 @@ var Cache = (function (_super) {
         return _this;
     }
     Cache.prototype._downloadCore = function (request) {
+        var _this = this;
         ensureHttpRequest();
-        var that = this;
         httpRequest.request({ url: request.url, method: "GET" })
             .then(function (response) {
-            var image = UIImage.alloc().initWithData(response.content.raw);
-            that._onDownloadCompleted(request.key, image);
+            try {
+                var image = UIImage.alloc().initWithData(response.content.raw);
+                _this._onDownloadCompleted(request.key, image);
+            }
+            catch (err) {
+                _this._onDownloadError(request.key, err);
+            }
+        }, function (err) {
+            _this._onDownloadError(request.key, err);
         });
     };
     Cache.prototype.get = function (key) {

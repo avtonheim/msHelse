@@ -35,5 +35,5 @@
               <chart:Trackball/>
             </chart:RadCartesianChart.trackball>
           </chart:RadCartesianChart>
-
+          
 </StackLayout>

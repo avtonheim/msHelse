@@ -8,7 +8,11 @@ var text_base_1 = require("../text-base");
 var image_source_1 = require("../../image-source");
 var profiling_1 = require("../../profiling");
 var frame_1 = require("../frame");
+var utils_1 = require("../../utils/utils");
+var platform_1 = require("../../platform");
 __export(require("./tab-view-common"));
+var majorVersion = utils_1.ios.MajorVersion;
+var isPhone = platform_1.device.deviceType === "Phone";
 var UITabBarControllerImpl = (function (_super) {
     __extends(UITabBarControllerImpl, _super);
     function UITabBarControllerImpl() {
@@ -36,6 +40,17 @@ var UITabBarControllerImpl = (function (_super) {
         if (owner && !owner.parent && owner.isLoaded && !this.presentedViewController) {
             owner.callUnloaded();
         }
+    };
+    UITabBarControllerImpl.prototype.viewWillTransitionToSizeWithTransitionCoordinator = function (size, coordinator) {
+        var _this = this;
+        _super.prototype.viewWillTransitionToSizeWithTransitionCoordinator.call(this, size, coordinator);
+        UIViewControllerTransitionCoordinator.prototype.animateAlongsideTransitionCompletion
+            .call(coordinator, null, function () {
+            var owner = _this._owner.get();
+            if (owner && owner.items) {
+                owner.items.forEach(function (tabItem) { return tabItem._updateTitleAndIconPositions(); });
+            }
+        });
     };
     __decorate([
         profiling_1.profile
@@ -113,16 +128,29 @@ var UINavigationControllerDelegateImpl = (function (_super) {
     UINavigationControllerDelegateImpl.ObjCProtocols = [UINavigationControllerDelegate];
     return UINavigationControllerDelegateImpl;
 }(NSObject));
-function updateItemTitlePosition(tabBarItem) {
-    if (typeof tabBarItem.setTitlePositionAdjustment === "function") {
-        tabBarItem.setTitlePositionAdjustment({ horizontal: 0, vertical: -20 });
+function updateTitleAndIconPositions(tabItem, tabBarItem, controller) {
+    if (!tabItem || !tabBarItem) {
+        return;
     }
-    else {
-        tabBarItem.titlePositionAdjustment = { horizontal: 0, vertical: -20 };
+    var orientation = controller.interfaceOrientation;
+    var isPortrait = orientation !== 4 && orientation !== 3;
+    var isIconAboveTitle = (majorVersion < 11) || (isPhone && isPortrait);
+    if (!tabItem.iconSource) {
+        if (isIconAboveTitle) {
+            tabBarItem.titlePositionAdjustment = { horizontal: 0, vertical: -20 };
+        }
+        else {
+            tabBarItem.titlePositionAdjustment = { horizontal: 0, vertical: 0 };
+        }
     }
-}
-function updateItemIconPosition(tabBarItem) {
-    tabBarItem.imageInsets = new UIEdgeInsets({ top: 6, left: 0, bottom: -6, right: 0 });
+    if (!tabItem.title) {
+        if (isIconAboveTitle) {
+            tabBarItem.imageInsets = new UIEdgeInsets({ top: 6, left: 0, bottom: -6, right: 0 });
+        }
+        else {
+            tabBarItem.imageInsets = new UIEdgeInsets({ top: 0, left: 0, bottom: 0, right: 0 });
+        }
+    }
 }
 var TabViewItem = (function (_super) {
     __extends(TabViewItem, _super);
@@ -154,16 +182,17 @@ var TabViewItem = (function (_super) {
             var index_2 = parent.items.indexOf(this);
             var title = text_base_1.getTransformedText(this.title, this.style.textTransform);
             var tabBarItem = UITabBarItem.alloc().initWithTitleImageTag(title, icon, index_2);
-            if (!icon) {
-                updateItemTitlePosition(tabBarItem);
-            }
-            else if (!title) {
-                updateItemIconPosition(tabBarItem);
-            }
+            updateTitleAndIconPositions(this, tabBarItem, controller);
             var states = getTitleAttributesForStates(parent);
             applyStatesToItem(tabBarItem, states);
             controller.tabBarItem = tabBarItem;
         }
+    };
+    TabViewItem.prototype._updateTitleAndIconPositions = function () {
+        if (!this.__controller || !this.__controller.tabBarItem) {
+            return;
+        }
+        updateTitleAndIconPositions(this, this.__controller.tabBarItem, this.__controller);
     };
     TabViewItem.prototype[text_base_1.textTransformProperty.setNative] = function (value) {
         this._update();
@@ -178,12 +207,25 @@ var TabView = (function (_super) {
         _this._iconsCache = {};
         _this.viewController = _this._ios = UITabBarControllerImpl.initWithOwner(new WeakRef(_this));
         _this.nativeViewProtected = _this._ios.view;
-        _this._delegate = UITabBarControllerDelegateImpl.initWithOwner(new WeakRef(_this));
-        _this._moreNavigationControllerDelegate = UINavigationControllerDelegateImpl.initWithOwner(new WeakRef(_this));
         return _this;
     }
+    TabView.prototype.initNativeView = function () {
+        _super.prototype.initNativeView.call(this);
+        this._delegate = UITabBarControllerDelegateImpl.initWithOwner(new WeakRef(this));
+        this._moreNavigationControllerDelegate = UINavigationControllerDelegateImpl.initWithOwner(new WeakRef(this));
+    };
+    TabView.prototype.disposeNativeView = function () {
+        this._delegate = null;
+        this._moreNavigationControllerDelegate = null;
+        _super.prototype.disposeNativeView.call(this);
+    };
     TabView.prototype.onLoaded = function () {
         _super.prototype.onLoaded.call(this);
+        var selectedIndex = this.selectedIndex;
+        var selectedView = this.items && this.items[selectedIndex] && this.items[selectedIndex].view;
+        if (selectedView instanceof frame_1.Frame) {
+            selectedView._pushInFrameStackRecursive();
+        }
         this._ios.delegate = this._delegate;
     };
     TabView.prototype.onUnloaded = function () {
@@ -215,7 +257,7 @@ var TabView = (function (_super) {
         if (newItem && this.isLoaded) {
             var selectedView = items[newIndex].view;
             if (selectedView instanceof frame_1.Frame) {
-                selectedView._pushInFrameStack();
+                selectedView._pushInFrameStackRecursive();
             }
             newItem.loadView(newItem.view);
         }
@@ -308,12 +350,7 @@ var TabView = (function (_super) {
             var controller = _this.getViewController(item);
             var icon = _this._getIcon(item.iconSource);
             var tabBarItem = UITabBarItem.alloc().initWithTitleImageTag((item.title || ""), icon, i);
-            if (!icon) {
-                updateItemTitlePosition(tabBarItem);
-            }
-            else if (!item.title) {
-                updateItemIconPosition(tabBarItem);
-            }
+            updateTitleAndIconPositions(item, tabBarItem, controller);
             applyStatesToItem(tabBarItem, states);
             controller.tabBarItem = tabBarItem;
             controllers.addObject(controller);
@@ -345,6 +382,9 @@ var TabView = (function (_super) {
                 var originalRenderedImage = is.ios.imageWithRenderingMode(this._getIconRenderingMode());
                 this._iconsCache[iconSource] = originalRenderedImage;
                 image = originalRenderedImage;
+            }
+            else {
+                tab_view_common_1.traceMissingIcon(iconSource);
             }
         }
         return image;
@@ -428,6 +468,7 @@ var TabView = (function (_super) {
 }(tab_view_common_1.TabViewBase));
 exports.TabView = TabView;
 function getTitleAttributesForStates(tabView) {
+    var _a, _b;
     var result = {};
     var defaultTabItemFontSize = 10;
     var tabItemFontSize = tabView.style.tabTextFontSize || defaultTabItemFontSize;
@@ -445,7 +486,6 @@ function getTitleAttributesForStates(tabView) {
         result.selectedState[UITextAttributeTextColor] = selectedTextColor;
     }
     return result;
-    var _a, _b;
 }
 function applyStatesToItem(item, states) {
     item.setTitleTextAttributesForState(states.normalState, 0);

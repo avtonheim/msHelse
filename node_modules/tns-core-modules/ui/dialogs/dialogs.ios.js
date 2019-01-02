@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var view_1 = require("../core/view");
 var dialogs_common_1 = require("./dialogs-common");
 var types_1 = require("../../utils/types");
+var application_1 = require("../../application");
 __export(require("./dialogs-common"));
 function addButtonsToAlertController(alertController, options, callback) {
     if (!options) {
@@ -93,12 +94,37 @@ function prompt(arg) {
                 if (options && options.inputType === dialogs_common_1.inputType.email) {
                     arg.keyboardType = 7;
                 }
+                else if (options && options.inputType === dialogs_common_1.inputType.number) {
+                    arg.keyboardType = 4;
+                }
+                else if (options && options.inputType === dialogs_common_1.inputType.phone) {
+                    arg.keyboardType = 5;
+                }
                 var color = dialogs_common_1.getTextFieldColor();
                 if (color) {
                     arg.textColor = arg.tintColor = color.ios;
                 }
             });
             textField_1 = alertController.textFields.firstObject;
+            if (options) {
+                switch (options.capitalizationType) {
+                    case dialogs_common_1.capitalizationType.all: {
+                        textField_1.autocapitalizationType = 3;
+                        break;
+                    }
+                    case dialogs_common_1.capitalizationType.sentences: {
+                        textField_1.autocapitalizationType = 2;
+                        break;
+                    }
+                    case dialogs_common_1.capitalizationType.words: {
+                        textField_1.autocapitalizationType = 1;
+                        break;
+                    }
+                    default: {
+                        textField_1.autocapitalizationType = 0;
+                    }
+                }
+            }
             addButtonsToAlertController(alertController, options, function (r) { resolve({ result: r, text: textField_1.text }); });
             showUIAlertController(alertController);
         }
@@ -109,32 +135,11 @@ function prompt(arg) {
 }
 exports.prompt = prompt;
 function login() {
-    var options;
-    var defaultOptions = { title: dialogs_common_1.LOGIN, okButtonText: dialogs_common_1.OK, cancelButtonText: dialogs_common_1.CANCEL };
-    if (arguments.length === 1) {
-        if (types_1.isString(arguments[0])) {
-            options = defaultOptions;
-            options.message = arguments[0];
-        }
-        else {
-            options = arguments[0];
-        }
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
     }
-    else if (arguments.length === 2) {
-        if (types_1.isString(arguments[0]) && types_1.isString(arguments[1])) {
-            options = defaultOptions;
-            options.message = arguments[0];
-            options.userName = arguments[1];
-        }
-    }
-    else if (arguments.length === 3) {
-        if (types_1.isString(arguments[0]) && types_1.isString(arguments[1]) && types_1.isString(arguments[2])) {
-            options = defaultOptions;
-            options.message = arguments[0];
-            options.userName = arguments[1];
-            options.password = arguments[2];
-        }
-    }
+    var options = dialogs_common_1.parseLoginOptions(args);
     return new Promise(function (resolve, reject) {
         try {
             var userNameTextField_1;
@@ -143,6 +148,7 @@ function login() {
             var textFieldColor_1 = dialogs_common_1.getTextFieldColor();
             alertController.addTextFieldWithConfigurationHandler(function (arg) {
                 arg.placeholder = "Login";
+                arg.placeholder = options.userNameHint ? options.userNameHint : "";
                 arg.text = types_1.isString(options.userName) ? options.userName : "";
                 if (textFieldColor_1) {
                     arg.textColor = arg.tintColor = textFieldColor_1.ios;
@@ -151,6 +157,7 @@ function login() {
             alertController.addTextFieldWithConfigurationHandler(function (arg) {
                 arg.placeholder = "Password";
                 arg.secureTextEntry = true;
+                arg.placeholder = options.passwordHint ? options.passwordHint : "";
                 arg.text = types_1.isString(options.password) ? options.password : "";
                 if (textFieldColor_1) {
                     arg.textColor = arg.tintColor = textFieldColor_1.ios;
@@ -174,18 +181,14 @@ function login() {
 }
 exports.login = login;
 function showUIAlertController(alertController) {
-    var currentPage = dialogs_common_1.getCurrentPage();
-    if (currentPage) {
-        var view = currentPage;
-        var viewController = currentPage.ios;
-        if (currentPage.modal) {
-            view = currentPage.modal;
-            if (view.ios instanceof UIViewController) {
-                viewController = view.ios;
-            }
-            else {
-                viewController = view_1.ios.getParentWithViewController(view).viewController;
-            }
+    var _a, _b;
+    var currentView = dialogs_common_1.getCurrentPage() || application_1.getRootView();
+    if (currentView) {
+        currentView = currentView.modal || currentView;
+        var viewController = currentView.ios;
+        if (!(currentView.ios instanceof UIViewController)) {
+            var parentWithController = view_1.ios.getParentWithViewController(currentView);
+            viewController = parentWithController ? parentWithController.viewController : undefined;
         }
         if (viewController) {
             if (alertController.popoverPresentationController) {
@@ -211,7 +214,6 @@ function showUIAlertController(alertController) {
             viewController.presentModalViewControllerAnimated(alertController, true);
         }
     }
-    var _a, _b;
 }
 function action() {
     var options;

@@ -118,7 +118,7 @@ var ImageSource = (function () {
             return false;
         }
         if (quality) {
-            quality = quality - 0 / (100 - 0);
+            quality = (quality - 0) / (100 - 0);
         }
         var data = getImageData(this.ios, format, quality);
         if (data) {
@@ -132,7 +132,7 @@ var ImageSource = (function () {
             return res;
         }
         if (quality) {
-            quality = quality - 0 / (100 - 0);
+            quality = (quality - 0) / (100 - 0);
         }
         var data = getImageData(this.ios, format, quality);
         if (data) {
@@ -178,7 +178,7 @@ function getFileName(path) {
     return fileName;
 }
 function getImageData(instance, format, quality) {
-    if (quality === void 0) { quality = 1.0; }
+    if (quality === void 0) { quality = 0.9; }
     var data = null;
     switch (format) {
         case "png":

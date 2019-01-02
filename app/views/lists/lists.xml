@@ -11,8 +11,9 @@
     </Page.actionBar>
         <ListView items="{{ lists }}" class="listLayout">
             <ListView.itemTemplate>
-                <StackLayout>
-                    <Label text="{{ list_name }}" class="list-view-item" tap="markDone"/>
+                <StackLayout orientation="horizontal" class="list-view-item">
+                    <Label text="[ ]" tap="markDone"/>
+                    <Label text="{{ list_name }}" class="listItems"/>
                 </StackLayout>
             </ListView.itemTemplate>
         </ListView>

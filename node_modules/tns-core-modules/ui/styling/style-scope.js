@@ -52,13 +52,7 @@ var CSSSource = (function () {
         this.parse();
     }
     CSSSource.fromURI = function (uri, keyframes) {
-        var appRelativeUri = uri;
-        if (appRelativeUri.startsWith("/")) {
-            var app = file_system_1.knownFolders.currentApp().path + "/";
-            if (appRelativeUri.startsWith(app)) {
-                appRelativeUri = "./" + appRelativeUri.substr(app.length);
-            }
-        }
+        var appRelativeUri = CSSSource.pathRelativeToApp(uri);
         try {
             var cssOrAst = global.loadModule(appRelativeUri);
             if (cssOrAst) {
@@ -77,6 +71,18 @@ var CSSSource = (function () {
         }
         return CSSSource.fromFile(appRelativeUri, keyframes);
     };
+    CSSSource.pathRelativeToApp = function (uri) {
+        if (!uri.startsWith("/")) {
+            return uri;
+        }
+        var appPath = file_system_1.knownFolders.currentApp().path;
+        if (!uri.startsWith(appPath)) {
+            trace_1.write(uri + " does not start with " + appPath, trace_1.categories.Error, trace_1.messageType.error);
+            return uri;
+        }
+        var relativeUri = "." + uri.substr(appPath.length);
+        return relativeUri;
+    };
     CSSSource.fromFile = function (url, keyframes) {
         var cssFileUrl = url.replace(/\..\w+$/, ".css");
         if (cssFileUrl !== url) {
@@ -88,9 +94,13 @@ var CSSSource = (function () {
         var file = CSSSource.resolveCSSPathFromURL(url);
         return new CSSSource(undefined, url, file, keyframes, undefined);
     };
-    CSSSource.resolveCSSPathFromURL = function (url) {
+    CSSSource.fromFileImport = function (url, keyframes, importSource) {
+        var file = CSSSource.resolveCSSPathFromURL(url, importSource);
+        return new CSSSource(undefined, url, file, keyframes, undefined);
+    };
+    CSSSource.resolveCSSPathFromURL = function (url, importSource) {
         var app = file_system_1.knownFolders.currentApp().path;
-        var file = resolveFileNameFromUrl(url, app, file_system_1.File.exists);
+        var file = resolveFileNameFromUrl(url, app, file_system_1.File.exists, importSource);
         return file;
     };
     CSSSource.fromSource = function (source, keyframes, url) {
@@ -156,18 +166,35 @@ var CSSSource = (function () {
         }
     };
     CSSSource.prototype.createSelectorsFromImports = function () {
-        var selectors = [];
+        var _this = this;
         var imports = this._ast["stylesheet"]["rules"].filter(function (r) { return r.type === "import"; });
-        for (var i = 0; i < imports.length; i++) {
-            var importItem = imports[i]["import"];
-            var match = importItem && importItem.match(pattern);
-            var url = match && match[2];
-            if (url !== null && url !== undefined) {
-                var cssFile = CSSSource.fromURI(url, this._keyframes);
-                selectors = selectors.concat(cssFile.selectors);
-            }
-        }
-        return selectors;
+        var urlFromImportObject = function (importObject) {
+            var importItem = importObject["import"];
+            var urlMatch = importItem && importItem.match(pattern);
+            return urlMatch && urlMatch[2];
+        };
+        var sourceFromImportObject = function (importObject) {
+            return importObject["position"] && importObject["position"]["source"];
+        };
+        var toUrlSourcePair = function (importObject) { return ({
+            url: urlFromImportObject(importObject),
+            source: sourceFromImportObject(importObject),
+        }); };
+        var getCssFile = function (_a) {
+            var url = _a.url, source = _a.source;
+            return source ?
+                CSSSource.fromFileImport(url, _this._keyframes, source) :
+                CSSSource.fromURI(url, _this._keyframes);
+        };
+        var cssFiles = imports
+            .map(toUrlSourcePair)
+            .filter(function (_a) {
+            var url = _a.url;
+            return !!url;
+        })
+            .map(getCssFile);
+        var selectors = cssFiles.map(function (file) { return (file && file.selectors) || []; });
+        return selectors.reduce(function (acc, val) { return acc.concat(val); }, []);
     };
     CSSSource.prototype.createSelectorsFromSyntaxTree = function () {
         var _this = this;
@@ -203,6 +230,37 @@ var CSSSource = (function () {
     ], CSSSource, "resolveCSSPathFromURL", null);
     return CSSSource;
 }());
+function removeTaggedAdditionalCSS(tag) {
+    var changed = false;
+    for (var i = 0; i < applicationAdditionalSelectors.length; i++) {
+        if (applicationAdditionalSelectors[i].tag === tag) {
+            applicationAdditionalSelectors.splice(i, 1);
+            i--;
+            changed = true;
+        }
+    }
+    if (changed) {
+        mergeCssSelectors();
+    }
+    return changed;
+}
+exports.removeTaggedAdditionalCSS = removeTaggedAdditionalCSS;
+function addTaggedAdditionalCSS(cssText, tag) {
+    var parsed = CSSSource.fromSource(cssText, applicationKeyframes, undefined).selectors;
+    var changed = false;
+    if (parsed && parsed.length) {
+        changed = true;
+        if (tag != null) {
+            for (var i = 0; i < parsed.length; i++) {
+                parsed[i].tag = tag;
+            }
+        }
+        applicationAdditionalSelectors.push.apply(applicationAdditionalSelectors, parsed);
+        mergeCssSelectors();
+    }
+    return changed;
+}
+exports.addTaggedAdditionalCSS = addTaggedAdditionalCSS;
 var onCssChanged = profiling_1.profile("\"style-scope\".onCssChanged", function (args) {
     if (args.cssText) {
         var parsed = CSSSource.fromSource(args.cssText, applicationKeyframes, args.cssFile).selectors;
@@ -247,7 +305,7 @@ var CssState = (function () {
         this._onDynamicStateChangeHandler = function () { return _this.updateDynamicState(); };
     }
     CssState.prototype.onChange = function () {
-        if (this.view.isLoaded) {
+        if (this.view && this.view.isLoaded) {
             this.unsubscribeFromDynamicUpdates();
             this.updateMatch();
             this.subscribeForDynamicUpdates();
@@ -256,6 +314,9 @@ var CssState = (function () {
         else {
             this._matchInvalid = true;
         }
+    };
+    CssState.prototype.isSelectorsLatestVersionApplied = function () {
+        return this.view._styleScope._getSelectorsVersion() === this._appliedSelectorsVersion;
     };
     CssState.prototype.onLoaded = function () {
         if (this._matchInvalid) {
@@ -268,7 +329,13 @@ var CssState = (function () {
         this.unsubscribeFromDynamicUpdates();
     };
     CssState.prototype.updateMatch = function () {
-        this._match = this.view._styleScope ? this.view._styleScope.matchSelectors(this.view) : CssState.emptyMatch;
+        if (this.view._styleScope) {
+            this._appliedSelectorsVersion = this.view._styleScope._getSelectorsVersion();
+            this._match = this.view._styleScope.matchSelectors(this.view);
+        }
+        else {
+            this._match = CssState.emptyMatch;
+        }
         this._matchInvalid = false;
     };
     CssState.prototype.updateDynamicState = function () {
@@ -382,7 +449,7 @@ var CssState = (function () {
         this._appliedChangeMap.forEach(function (changes, view) {
             if (changes.attributes) {
                 changes.attributes.forEach(function (attribute) {
-                    view.removeEventListener("onPropertyChanged:" + attribute, _this._onDynamicStateChangeHandler);
+                    view.removeEventListener(attribute + "Change", _this._onDynamicStateChangeHandler);
                 });
             }
             if (changes.pseudoClasses) {
@@ -472,12 +539,18 @@ var StyleScope = (function () {
         return animation;
     };
     StyleScope.prototype.ensureSelectors = function () {
-        if (this._applicationCssSelectorsAppliedVersion !== applicationCssSelectorVersion ||
-            this._localCssSelectorVersion !== this._localCssSelectorsAppliedVersion ||
+        if (!this.isApplicationCssSelectorsLatestVersionApplied() ||
+            !this.isLocalCssSelectorsLatestVersionApplied() ||
             !this._mergedCssSelectors) {
             this._createSelectors();
         }
         return this._getSelectorsVersion();
+    };
+    StyleScope.prototype.isApplicationCssSelectorsLatestVersionApplied = function () {
+        return this._applicationCssSelectorsAppliedVersion === applicationCssSelectorVersion;
+    };
+    StyleScope.prototype.isLocalCssSelectorsLatestVersionApplied = function () {
+        return this._localCssSelectorsAppliedVersion === this._localCssSelectorVersion;
     };
     StyleScope.prototype._createSelectors = function () {
         var toMerge = [];
@@ -540,7 +613,7 @@ var StyleScope = (function () {
     return StyleScope;
 }());
 exports.StyleScope = StyleScope;
-function resolveFileNameFromUrl(url, appDirectory, fileExists) {
+function resolveFileNameFromUrl(url, appDirectory, fileExists, importSource) {
     var fileName = typeof url === "string" ? url.trim() : "";
     if (fileName.indexOf("~/") === 0) {
         fileName = fileName.replace("~/", "");
@@ -554,6 +627,12 @@ function resolveFileNameFromUrl(url, appDirectory, fileExists) {
         if (fileName[0] === "~" && fileName[1] !== "/" && fileName[1] !== "\"") {
             fileName = fileName.substr(1);
         }
+        if (importSource) {
+            var importFile = resolveFilePathFromImport(importSource, fileName);
+            if (fileExists(importFile)) {
+                return importFile;
+            }
+        }
         var external_1 = file_system_1.path.join(appDirectory, "tns_modules", fileName);
         if (fileExists(external_1)) {
             return external_1;
@@ -562,6 +641,14 @@ function resolveFileNameFromUrl(url, appDirectory, fileExists) {
     return null;
 }
 exports.resolveFileNameFromUrl = resolveFileNameFromUrl;
+function resolveFilePathFromImport(importSource, fileName) {
+    var importSourceParts = importSource.split(file_system_1.path.separator);
+    var fileNameParts = fileName.split(file_system_1.path.separator)
+        .filter(function (p) { return !isCurrentDirectory(p); });
+    importSourceParts.pop();
+    fileNameParts.forEach(function (p) { return isParentDirectory(p) ? importSourceParts.pop() : importSourceParts.push(p); });
+    return importSourceParts.join(file_system_1.path.separator);
+}
 exports.applyInlineStyle = profiling_1.profile(function applyInlineStyle(view, styleStr) {
     var localStyle = "local { " + styleStr + " }";
     var inlineRuleSet = CSSSource.fromSource(localStyle, new Map()).selectors;
@@ -581,6 +668,12 @@ exports.applyInlineStyle = profiling_1.profile(function applyInlineStyle(view, s
         }
     });
 });
+function isCurrentDirectory(uriPart) {
+    return uriPart === ".";
+}
+function isParentDirectory(uriPart) {
+    return uriPart === "..";
+}
 function isKeyframe(node) {
     return node.type === "keyframes";
 }

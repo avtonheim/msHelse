@@ -312,15 +312,19 @@ var TouchGestureRecognizer = (function (_super) {
     }
     TouchGestureRecognizer.prototype.touchesBeganWithEvent = function (touches, event) {
         this.executeCallback(gestures_common_1.TouchAction.down, touches, event);
+        this.view.touchesBeganWithEvent(touches, event);
     };
     TouchGestureRecognizer.prototype.touchesMovedWithEvent = function (touches, event) {
         this.executeCallback(gestures_common_1.TouchAction.move, touches, event);
+        this.view.touchesMovedWithEvent(touches, event);
     };
     TouchGestureRecognizer.prototype.touchesEndedWithEvent = function (touches, event) {
         this.executeCallback(gestures_common_1.TouchAction.up, touches, event);
+        this.view.touchesEndedWithEvent(touches, event);
     };
     TouchGestureRecognizer.prototype.touchesCancelledWithEvent = function (touches, event) {
         this.executeCallback(gestures_common_1.TouchAction.cancel, touches, event);
+        this.view.touchesCancelledWithEvent(touches, event);
     };
     TouchGestureRecognizer.prototype.executeCallback = function (action, touches, event) {
         if (!this._eventData) {

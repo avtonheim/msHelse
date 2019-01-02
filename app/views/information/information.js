@@ -3,6 +3,7 @@ var frameModule = require("ui/frame");
 
 function onLoaded(args) {
     var page = args.object;
+    
     page.enableSwipeBackNavigation = false;
     var controller = frameModule.topmost().ios.controller;
     var navigationItem = controller.visibleViewController.navigationItem;

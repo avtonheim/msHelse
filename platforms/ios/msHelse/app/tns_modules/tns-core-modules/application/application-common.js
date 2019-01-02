@@ -22,6 +22,7 @@ function hasLaunched() {
     return launched;
 }
 exports.hasLaunched = hasLaunched;
+var application_1 = require("./application");
 exports.launchEvent = "launch";
 exports.suspendEvent = "suspend";
 exports.displayedEvent = "displayed";
@@ -51,10 +52,21 @@ function setApplication(instance) {
     app = instance;
 }
 exports.setApplication = setApplication;
-function livesync() {
+function livesync(context) {
     events.notify({ eventName: "livesync", object: app });
     var liveSyncCore = global.__onLiveSyncCore;
-    if (liveSyncCore) {
+    var reapplyAppCss = false;
+    if (context) {
+        var fullFileName = getCssFileName();
+        var fileName_1 = fullFileName.substring(0, fullFileName.lastIndexOf(".") + 1);
+        var extensions = ["css", "scss"];
+        reapplyAppCss = extensions.some(function (ext) { return context.module === fileName_1.concat(ext); });
+    }
+    var rootView = application_1.getRootView();
+    if (reapplyAppCss && rootView) {
+        rootView._onCssStateChange();
+    }
+    else if (liveSyncCore) {
         liveSyncCore();
     }
 }

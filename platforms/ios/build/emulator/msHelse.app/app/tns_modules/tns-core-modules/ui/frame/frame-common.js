@@ -2,6 +2,7 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
+var view_common_1 = require("../core/view/view-common");
 var view_1 = require("../core/view");
 var builder_1 = require("../builder");
 var profiling_1 = require("../../profiling");
@@ -140,6 +141,9 @@ var FrameBase = (function (_super) {
             newPage._frame = this;
         }
         this._currentEntry = entry;
+        if (isBack) {
+            this._pushInFrameStack();
+        }
         newPage.onNavigatedTo(isBack);
         this._executingEntry = null;
     };
@@ -164,6 +168,16 @@ var FrameBase = (function (_super) {
         if (current && this._backStack.indexOf(current) < 0) {
             this._removeEntry(current);
         }
+    };
+    FrameBase.prototype.isNestedWithin = function (parentFrameCandidate) {
+        var frameAncestor = this;
+        while (frameAncestor) {
+            frameAncestor = view_common_1.getAncestor(frameAncestor, FrameBase_1);
+            if (frameAncestor === parentFrameCandidate) {
+                return true;
+            }
+        }
+        return false;
     };
     FrameBase.prototype.raiseCurrentPageNavigatedEvents = function (isBack) {
         var page = this.currentPage;
@@ -308,6 +322,20 @@ var FrameBase = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    FrameBase.prototype._pushInFrameStackRecursive = function () {
+        this._pushInFrameStack();
+        var framesToPush = [];
+        for (var _i = 0, frameStack_1 = frame_stack_1.frameStack; _i < frameStack_1.length; _i++) {
+            var frame = frameStack_1[_i];
+            if (frame.isNestedWithin(this)) {
+                framesToPush.push(frame);
+            }
+        }
+        for (var _a = 0, framesToPush_1 = framesToPush; _a < framesToPush_1.length; _a++) {
+            var frame = framesToPush_1[_a];
+            frame._pushInFrameStack();
+        }
+    };
     FrameBase.prototype._pushInFrameStack = function () {
         frame_stack_1._pushInFrameStack(this);
     };
@@ -321,8 +349,8 @@ var FrameBase = (function (_super) {
         this._removeFromFrameStack();
     };
     FrameBase.prototype._onRootViewReset = function () {
-        this._removeFromFrameStack();
         _super.prototype._onRootViewReset.call(this);
+        this._removeFromFrameStack();
     };
     Object.defineProperty(FrameBase.prototype, "_childrenCount", {
         get: function () {
@@ -412,6 +440,9 @@ var FrameBase = (function (_super) {
     };
     FrameBase.prototype._onLivesync = function () {
         _super.prototype._onLivesync.call(this);
+        if (!this._currentEntry || !this._currentEntry.entry) {
+            return false;
+        }
         var currentEntry = this._currentEntry.entry;
         var newEntry = {
             animated: false,
@@ -430,6 +461,7 @@ var FrameBase = (function (_super) {
         this.navigate(newEntry);
         return true;
     };
+    var FrameBase_1;
     FrameBase.androidOptionSelectedEvent = "optionSelected";
     FrameBase.defaultAnimatedNavigation = true;
     __decorate([
@@ -445,7 +477,6 @@ var FrameBase = (function (_super) {
         view_1.CSSType("Frame")
     ], FrameBase);
     return FrameBase;
-    var FrameBase_1;
 }(view_1.CustomLayoutView));
 exports.FrameBase = FrameBase;
 function getFrameById(id) {
@@ -461,6 +492,22 @@ function goBack() {
     if (top && top.canGoBack()) {
         top.goBack();
         return true;
+    }
+    else if (top) {
+        var parentFrameCanGoBack = false;
+        var parentFrame = view_common_1.getAncestor(top, "Frame");
+        while (parentFrame && !parentFrameCanGoBack) {
+            if (parentFrame && parentFrame.canGoBack()) {
+                parentFrameCanGoBack = true;
+            }
+            else {
+                parentFrame = view_common_1.getAncestor(parentFrame, "Frame");
+            }
+        }
+        if (parentFrame && parentFrameCanGoBack) {
+            parentFrame.goBack();
+            return true;
+        }
     }
     if (frame_stack_1.frameStack.length > 1) {
         top._popFromFrameStack();
@@ -478,4 +525,6 @@ exports.defaultPage = new view_1.Property({
     }
 });
 exports.defaultPage.register(FrameBase);
+exports.actionBarVisibilityProperty = new view_1.Property({ name: "actionBarVisibility", defaultValue: "auto", affectsLayout: view_1.isIOS });
+exports.actionBarVisibilityProperty.register(FrameBase);
 //# sourceMappingURL=frame-common.js.map

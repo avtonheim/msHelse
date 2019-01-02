@@ -430,7 +430,7 @@ function transformConverter(text) {
     }
     var usedTransforms = transformations.map(function (t) { return t.property; });
     if (!utils_1.hasDuplicates(usedTransforms)) {
-        var fullTransformations_1 = Object.assign({}, IDENTITY_TRANSFORMATION);
+        var fullTransformations_1 = __assign({}, IDENTITY_TRANSFORMATION);
         transformations.forEach(function (transform) {
             fullTransformations_1[transform.property] = transform.value;
         });

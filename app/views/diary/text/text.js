@@ -6,8 +6,6 @@ var Dialogs = require("ui/dialogs");
 
 function onNavigatingTo(args){
 var page = args.object;
-var keyboard = page.getViewById("subject");
-keyboard._ios.returnKeyType = UIReturnKeyDone;
 
 //Controlling the native back-button
 var controller = frameModule.topmost().ios.controller;

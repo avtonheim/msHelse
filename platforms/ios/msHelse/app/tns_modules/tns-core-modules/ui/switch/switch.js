@@ -30,14 +30,23 @@ var Switch = (function (_super) {
     __extends(Switch, _super);
     function Switch() {
         var _this = _super.call(this) || this;
-        var nativeView = UISwitch.new();
-        _this._handler = SwitchChangeHandlerImpl.initWithOwner(new WeakRef(_this));
-        nativeView.addTargetActionForControlEvents(_this._handler, "valueChanged", 4096);
-        _this.nativeViewProtected = nativeView;
         _this.width = 51;
         _this.height = 31;
         return _this;
     }
+    Switch.prototype.createNativeView = function () {
+        return UISwitch.new();
+    };
+    Switch.prototype.initNativeView = function () {
+        _super.prototype.initNativeView.call(this);
+        var nativeView = this.nativeViewProtected;
+        this._handler = SwitchChangeHandlerImpl.initWithOwner(new WeakRef(this));
+        nativeView.addTargetActionForControlEvents(this._handler, "valueChanged", 4096);
+    };
+    Switch.prototype.disposeNativeView = function () {
+        this._handler = null;
+        _super.prototype.disposeNativeView.call(this);
+    };
     Object.defineProperty(Switch.prototype, "ios", {
         get: function () {
             return this.nativeViewProtected;

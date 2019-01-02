@@ -5,9 +5,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var view_1 = require("../core/view");
 var page_common_1 = require("./page-common");
 var profiling_1 = require("../../profiling");
+var utils_1 = require("../../utils/utils");
 __export(require("./page-common"));
 var ENTRY = "_entry";
 var DELEGATE = "_delegate";
+var majorVersion = utils_1.ios.MajorVersion;
 function isBackNavigationTo(page, entry) {
     var frame = page.frame;
     if (!frame) {
@@ -151,6 +153,25 @@ var UIViewControllerImpl = (function (_super) {
         _super.prototype.viewDidLayoutSubviews.call(this);
         var owner = this._owner.get();
         if (owner) {
+            if (majorVersion >= 11) {
+                var frame = owner.parent;
+                var frameParent = frame && frame.parent;
+                while (frameParent && !frameParent.nativeViewProtected) {
+                    frameParent = frameParent.parent;
+                }
+                if (frameParent) {
+                    var parentPageInsetsTop = frameParent.nativeViewProtected.safeAreaInsets.top;
+                    var currentInsetsTop = this.view.safeAreaInsets.top;
+                    var additionalInsetsTop = Math.max(parentPageInsetsTop - currentInsetsTop, 0);
+                    var parentPageInsetsBottom = frameParent.nativeViewProtected.safeAreaInsets.bottom;
+                    var currentInsetsBottom = this.view.safeAreaInsets.bottom;
+                    var additionalInsetsBottom = Math.max(parentPageInsetsBottom - currentInsetsBottom, 0);
+                    if (additionalInsetsTop > 0 || additionalInsetsBottom > 0) {
+                        var additionalInsets = new UIEdgeInsets({ top: additionalInsetsTop, left: 0, bottom: additionalInsetsBottom, right: 0 });
+                        this.additionalSafeAreaInsets = additionalInsets;
+                    }
+                }
+            }
             view_1.ios.layoutView(this, owner);
         }
     };
@@ -172,10 +193,12 @@ var Page = (function (_super) {
         var _this = _super.call(this) || this;
         var controller = UIViewControllerImpl.initWithOwner(new WeakRef(_this));
         _this.viewController = _this._ios = controller;
-        _this.nativeViewProtected = controller.view;
-        _this.nativeViewProtected.backgroundColor = whiteColor;
+        controller.view.backgroundColor = whiteColor;
         return _this;
     }
+    Page.prototype.createNativeView = function () {
+        return this.viewController.view;
+    };
     Object.defineProperty(Page.prototype, "ios", {
         get: function () {
             return this._ios;
@@ -239,7 +262,18 @@ var Page = (function (_super) {
     Page.prototype.onLayout = function (left, top, right, bottom) {
         var _a = this.actionBar._getActualSize, actionBarWidth = _a.width, actionBarHeight = _a.height;
         page_common_1.View.layoutChild(this, this.actionBar, 0, 0, actionBarWidth, actionBarHeight);
-        page_common_1.View.layoutChild(this, this.layoutView, left, top, right, bottom);
+        var insets = this.getSafeAreaInsets();
+        if (majorVersion <= 10) {
+            insets.top = page_common_1.layout.round(page_common_1.layout.toDevicePixels(this.viewController.view.safeAreaLayoutGuide.layoutFrame.origin.y));
+        }
+        var childLeft = 0 + insets.left;
+        var childTop = 0 + insets.top;
+        var childRight = right - insets.right;
+        var childBottom = bottom - insets.bottom;
+        if (majorVersion >= 11 && this.actionBar.flat) {
+            childBottom -= top;
+        }
+        page_common_1.View.layoutChild(this, this.layoutView, childLeft, childTop, childRight, childBottom);
     };
     Page.prototype._addViewToNativeVisualTree = function (child, atIndex) {
         if (child === this.actionBar) {

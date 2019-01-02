@@ -98,6 +98,7 @@ function getSystemFont(size, nativeWeight, italic, symbolicTraits) {
     return result;
 }
 function createUIFont(font, defaultFont) {
+    var _a, _b;
     var result;
     var size = font.fontSize || defaultFont.pointSize;
     var nativeWeight = getNativeFontWeight(font.fontWeight);
@@ -145,7 +146,6 @@ function createUIFont(font, defaultFont) {
         result = getSystemFont(size, nativeWeight, font.isItalic, symbolicTraits);
     }
     return result;
-    var _a, _b;
 }
 var ios;
 (function (ios) {

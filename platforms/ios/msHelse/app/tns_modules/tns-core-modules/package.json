@@ -1,31 +1,32 @@
 {
-  "_from": "tns-core-modules",
-  "_id": "tns-core-modules@4.1.0",
+  "_from": "tns-core-modules@next",
+  "_id": "tns-core-modules@5.2.0-next-2019-01-02-113109-01",
   "_inBundle": false,
-  "_integrity": "sha512-ZTpH7/zHfARrJ+1bPwbBYyqFVQO+2unnygfLW8Bu3clzpTkdwwW++1DS+Qbzw7r84+dzdVPZ7zwEVkjpfAFogw==",
+  "_integrity": "sha512-6ZafHhCs5ysZpHE64pqOvJ7uDkf94IvYY9yQsv1FAsDAYbXV7BuuPe53o3EN6Wf9VUrw7pKyU2LvUiJLI0Tt5w==",
   "_location": "/tns-core-modules",
   "_phantomChildren": {},
   "_requested": {
     "type": "tag",
     "registry": true,
-    "raw": "tns-core-modules",
+    "raw": "tns-core-modules@next",
     "name": "tns-core-modules",
     "escapedName": "tns-core-modules",
-    "rawSpec": "",
+    "rawSpec": "next",
     "saveSpec": null,
-    "fetchSpec": "latest"
+    "fetchSpec": "next"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/tns-core-modules/-/tns-core-modules-4.1.0.tgz",
-  "_shasum": "f838f0e040b9cdef8d361ba7392dfece51762fc2",
-  "_spec": "tns-core-modules",
-  "_where": "/Users/aleksandernygardtonheim/msHelse",
+  "_resolved": "https://registry.npmjs.org/tns-core-modules/-/tns-core-modules-5.2.0-next-2019-01-02-113109-01.tgz",
+  "_shasum": "311d761d5bff4e7d65e9a0c17fa5db01a1763ac1",
+  "_spec": "tns-core-modules@next",
+  "_where": "/Users/aleksandernygardtonheim/projects/msHelse",
   "bundleDependencies": false,
   "dependencies": {
-    "tns-core-modules-widgets": "4.1.0"
+    "tns-core-modules-widgets": "next",
+    "tslib": "^1.9.3"
   },
   "deprecated": false,
   "description": "Telerik NativeScript Core Modules",
@@ -36,6 +37,7 @@
   "files": [
     "**/*.d.ts",
     "**/*.js",
+    "**/platforms/ios/**",
     "**/package.json",
     "!android17.d.ts",
     "!ios.d.ts",
@@ -59,7 +61,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/NativeScript/NativeScript/commit/86f9d3870688f1e7a759fa72061ea07d5d488e09"
+    "url": "https://github.com/NativeScript/NativeScript/commit/1ae0cfd4b3d72ced8516216566551cf3b1b726b6"
+  },
+  "scripts": {
+    "version": "conventional-changelog -p angular -i ../CHANGELOG.md -s && git add ../CHANGELOG.md"
   },
   "snapshot": {
     "android": {
@@ -72,5 +77,5 @@
     }
   },
   "typings": "tns-core-modules.d.ts",
-  "version": "4.1.0"
+  "version": "5.2.0-next-2019-01-02-113109-01"
 }

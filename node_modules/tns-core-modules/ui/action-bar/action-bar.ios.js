@@ -8,6 +8,16 @@ var utils_1 = require("../../utils/utils");
 __export(require("./action-bar-common"));
 var majorVersion = utils_1.ios.MajorVersion;
 var UNSPECIFIED = action_bar_common_1.layout.makeMeasureSpec(0, action_bar_common_1.layout.UNSPECIFIED);
+function loadActionIconFromFileOrResource(icon) {
+    var img = image_source_1.fromFileOrResource(icon);
+    if (img && img.ios) {
+        return img.ios;
+    }
+    else {
+        action_bar_common_1.traceMissingIcon(icon);
+        return null;
+    }
+}
 var TapBarItemHandlerImpl = (function (_super) {
     __extends(TapBarItemHandlerImpl, _super);
     function TapBarItemHandlerImpl() {
@@ -130,7 +140,10 @@ var ActionBar = (function (_super) {
         var viewController = page.ios;
         var navigationItem = viewController.navigationItem;
         var navController = viewController.navigationController;
-        var navigationBar = navController ? navController.navigationBar : null;
+        if (!navController) {
+            return;
+        }
+        var navigationBar = navController.navigationBar;
         var previousController;
         navigationItem.title = this.title;
         var titleView = this.titleView;
@@ -156,10 +169,10 @@ var ActionBar = (function (_super) {
         }
         var img;
         if (this.navigationButton && action_bar_common_1.isVisible(this.navigationButton) && this.navigationButton.icon) {
-            img = image_source_1.fromFileOrResource(this.navigationButton.icon);
+            img = loadActionIconFromFileOrResource(this.navigationButton.icon);
         }
-        if (img && img.ios) {
-            var image = img.ios.imageWithRenderingMode(1);
+        if (img) {
+            var image = img.imageWithRenderingMode(1);
             navigationBar.backIndicatorImage = image;
             navigationBar.backIndicatorTransitionMaskImage = image;
         }
@@ -214,13 +227,8 @@ var ActionBar = (function (_super) {
             barButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(id, tapHandler, "tap");
         }
         else if (item.icon) {
-            var img = image_source_1.fromFileOrResource(item.icon);
-            if (img && img.ios) {
-                barButtonItem = UIBarButtonItem.alloc().initWithImageStyleTargetAction(img.ios, 0, tapHandler, "tap");
-            }
-            else {
-                throw new Error("Error loading icon from " + item.icon);
-            }
+            var img = loadActionIconFromFileOrResource(item.icon);
+            barButtonItem = UIBarButtonItem.alloc().initWithImageStyleTargetAction(img, 0, tapHandler, "tap");
         }
         else {
             barButtonItem = UIBarButtonItem.alloc().initWithTitleStyleTargetAction(item.text + "", 0, tapHandler, "tap");
@@ -234,17 +242,22 @@ var ActionBar = (function (_super) {
     };
     ActionBar.prototype.updateColors = function (navBar) {
         var color = this.color;
+        this.setColor(navBar, color);
+        var bgColor = this.backgroundColor;
+        navBar.barTintColor = bgColor ? bgColor.ios : null;
+    };
+    ActionBar.prototype.setColor = function (navBar, color) {
+        var _a, _b;
         if (color) {
             navBar.titleTextAttributes = (_a = {}, _a[NSForegroundColorAttributeName] = color.ios, _a);
+            navBar.largeTitleTextAttributes = (_b = {}, _b[NSForegroundColorAttributeName] = color.ios, _b);
             navBar.tintColor = color.ios;
         }
         else {
             navBar.titleTextAttributes = null;
+            navBar.largeTitleTextAttributes = null;
             navBar.tintColor = null;
         }
-        var bgColor = this.backgroundColor;
-        navBar.barTintColor = bgColor ? bgColor.ios : null;
-        var _a;
     };
     ActionBar.prototype._onTitlePropertyChanged = function () {
         var page = this.page;
@@ -324,15 +337,7 @@ var ActionBar = (function (_super) {
     };
     ActionBar.prototype[action_bar_common_1.colorProperty.setNative] = function (color) {
         var navBar = this.navBar;
-        if (color) {
-            navBar.tintColor = color.ios;
-            navBar.titleTextAttributes = (_a = {}, _a[NSForegroundColorAttributeName] = color.ios, _a);
-        }
-        else {
-            navBar.tintColor = null;
-            navBar.titleTextAttributes = null;
-        }
-        var _a;
+        this.setColor(navBar, color);
     };
     ActionBar.prototype[action_bar_common_1.backgroundColorProperty.getDefault] = function () {
         return null;

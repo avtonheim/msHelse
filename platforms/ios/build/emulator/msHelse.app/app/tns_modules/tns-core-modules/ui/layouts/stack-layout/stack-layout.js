@@ -73,19 +73,20 @@ var StackLayout = (function (_super) {
     };
     StackLayout.prototype.onLayout = function (left, top, right, bottom) {
         _super.prototype.onLayout.call(this, left, top, right, bottom);
+        var insets = this.getSafeAreaInsets();
         if (this.orientation === "vertical") {
-            this.layoutVertical(left, top, right, bottom);
+            this.layoutVertical(left, top, right, bottom, insets);
         }
         else {
-            this.layoutHorizontal(left, top, right, bottom);
+            this.layoutHorizontal(left, top, right, bottom, insets);
         }
     };
-    StackLayout.prototype.layoutVertical = function (left, top, right, bottom) {
+    StackLayout.prototype.layoutVertical = function (left, top, right, bottom, insets) {
         var _this = this;
-        var paddingLeft = this.effectiveBorderLeftWidth + this.effectivePaddingLeft;
-        var paddingTop = this.effectiveBorderTopWidth + this.effectivePaddingTop;
-        var paddingRight = this.effectiveBorderRightWidth + this.effectivePaddingRight;
-        var paddingBottom = this.effectiveBorderBottomWidth + this.effectivePaddingBottom;
+        var paddingLeft = this.effectiveBorderLeftWidth + this.effectivePaddingLeft + insets.left;
+        var paddingTop = this.effectiveBorderTopWidth + this.effectivePaddingTop + insets.top;
+        var paddingRight = this.effectiveBorderRightWidth + this.effectivePaddingRight + insets.right;
+        var paddingBottom = this.effectiveBorderBottomWidth + this.effectivePaddingBottom + insets.bottom;
         var childTop;
         var childLeft = paddingLeft;
         var childRight = right - left - paddingRight;
@@ -108,12 +109,12 @@ var StackLayout = (function (_super) {
             childTop += childHeight;
         });
     };
-    StackLayout.prototype.layoutHorizontal = function (left, top, right, bottom) {
+    StackLayout.prototype.layoutHorizontal = function (left, top, right, bottom, insets) {
         var _this = this;
-        var paddingLeft = this.effectiveBorderLeftWidth + this.effectivePaddingLeft;
-        var paddingTop = this.effectiveBorderTopWidth + this.effectivePaddingTop;
-        var paddingRight = this.effectiveBorderRightWidth + this.effectivePaddingRight;
-        var paddingBottom = this.effectiveBorderBottomWidth + this.effectivePaddingBottom;
+        var paddingLeft = this.effectiveBorderLeftWidth + this.effectivePaddingLeft + insets.left;
+        var paddingTop = this.effectiveBorderTopWidth + this.effectivePaddingTop + insets.top;
+        var paddingRight = this.effectiveBorderRightWidth + this.effectivePaddingRight + insets.right;
+        var paddingBottom = this.effectiveBorderBottomWidth + this.effectivePaddingBottom + insets.bottom;
         var childTop = paddingTop;
         var childLeft;
         var childBottom = bottom - top - paddingBottom;

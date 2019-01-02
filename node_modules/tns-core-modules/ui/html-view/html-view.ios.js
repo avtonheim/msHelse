@@ -7,16 +7,17 @@ __export(require("./html-view-common"));
 var HtmlView = (function (_super) {
     __extends(HtmlView, _super);
     function HtmlView() {
-        var _this = _super.call(this) || this;
-        var nativeView = UITextView.new();
-        nativeView.scrollEnabled = false;
-        nativeView.editable = false;
-        nativeView.selectable = true;
-        nativeView.userInteractionEnabled = true;
-        nativeView.dataDetectorTypes = 4294967295;
-        _this.nativeViewProtected = nativeView;
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
+    HtmlView.prototype.createNativeView = function () {
+        var view = UITextView.new();
+        view.scrollEnabled = false;
+        view.editable = false;
+        view.selectable = true;
+        view.userInteractionEnabled = true;
+        view.dataDetectorTypes = 18446744073709552000;
+        return view;
+    };
     Object.defineProperty(HtmlView.prototype, "ios", {
         get: function () {
             return this.nativeViewProtected;
@@ -44,10 +45,10 @@ var HtmlView = (function (_super) {
         return "";
     };
     HtmlView.prototype[html_view_common_1.htmlProperty.setNative] = function (value) {
+        var _a;
         var htmlString = NSString.stringWithString(value + "");
         var nsData = htmlString.dataUsingEncoding(NSUnicodeStringEncoding);
         this.nativeViewProtected.attributedText = NSAttributedString.alloc().initWithDataOptionsDocumentAttributesError(nsData, (_a = {}, _a[NSDocumentTypeDocumentAttribute] = NSHTMLTextDocumentType, _a), null);
-        var _a;
     };
     return HtmlView;
 }(html_view_common_1.HtmlViewBase));

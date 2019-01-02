@@ -179,22 +179,34 @@ var ViewCommon = (function (_super) {
     ViewCommon.prototype._getFragmentManager = function () {
         return undefined;
     };
-    ViewCommon.prototype.showModal = function () {
-        if (arguments.length === 0) {
+    ViewCommon.prototype.getModalOptions = function (args) {
+        if (args.length === 0) {
             throw new Error("showModal without parameters is deprecated. Please call showModal on a view instance instead.");
         }
         else {
-            var firstAgrument = arguments[0];
-            var context_1 = arguments[1];
-            var closeCallback = arguments[2];
-            var fullscreen = arguments[3];
-            var animated = arguments[4];
-            var stretched = arguments[5];
-            var view = firstAgrument instanceof ViewCommon
-                ? firstAgrument : builder_1.createViewFromEntry({ moduleName: firstAgrument });
-            view._showNativeModalView(this, context_1, closeCallback, fullscreen, animated, stretched);
-            return view;
+            var options = null;
+            if (args.length === 2) {
+                options = args[1];
+            }
+            else {
+                options = {
+                    context: args[1],
+                    closeCallback: args[2],
+                    fullscreen: args[3],
+                    animated: args[4],
+                    stretched: args[5]
+                };
+            }
+            var firstArgument = args[0];
+            var view = firstArgument instanceof ViewCommon
+                ? firstArgument : builder_1.createViewFromEntry({ moduleName: firstArgument });
+            return { view: view, options: options };
         }
+    };
+    ViewCommon.prototype.showModal = function () {
+        var _a = this.getModalOptions(arguments), view = _a.view, options = _a.options;
+        view._showNativeModalView(this, options);
+        return view;
     };
     ViewCommon.prototype.closeModal = function () {
         var args = [];
@@ -219,29 +231,33 @@ var ViewCommon = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    ViewCommon.prototype._showNativeModalView = function (parent, context, closeCallback, fullscreen, animated, stretched) {
+    ViewCommon.prototype._showNativeModalView = function (parent, options) {
         exports._rootModalViews.push(this);
         parent._modal = this;
         this._modalParent = parent;
-        this._modalContext = context;
+        this._modalContext = options.context;
         var that = this;
         this._closeModalCallback = function () {
+            var originalArgs = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                originalArgs[_i] = arguments[_i];
+            }
             if (that._closeModalCallback) {
                 var modalIndex = exports._rootModalViews.indexOf(that);
                 exports._rootModalViews.splice(modalIndex);
-                that._hideNativeModalView(parent);
                 that._modalParent = null;
                 that._modalContext = null;
                 that._closeModalCallback = null;
                 that._dialogClosed();
                 parent._modal = null;
-                if (typeof closeCallback === "function") {
-                    closeCallback.apply(undefined, arguments);
-                }
+                var whenClosedCallback = function () {
+                    if (typeof options.closeCallback === "function") {
+                        options.closeCallback.apply(undefined, originalArgs);
+                    }
+                };
+                that._hideNativeModalView(parent, whenClosedCallback);
             }
         };
-    };
-    ViewCommon.prototype._hideNativeModalView = function (parent) {
     };
     ViewCommon.prototype._raiseLayoutChangedEvent = function () {
         var args = {
@@ -852,7 +868,7 @@ var ViewCommon = (function (_super) {
         return changed;
     };
     ViewCommon.prototype._getCurrentLayoutBounds = function () {
-        return { left: this._oldLeft, top: this._oldTop, right: this._oldRight, bottom: this._oldBottom };
+        return { left: 0, top: 0, right: 0, bottom: 0 };
     };
     ViewCommon.prototype._setCurrentLayoutBounds = function (left, top, right, bottom) {
         this._isLayoutValid = true;
@@ -877,6 +893,9 @@ var ViewCommon = (function (_super) {
     };
     ViewCommon.prototype.focus = function () {
         return undefined;
+    };
+    ViewCommon.prototype.getSafeAreaInsets = function () {
+        return { left: 0, top: 0, right: 0, bottom: 0 };
     };
     ViewCommon.prototype.getLocationInWindow = function () {
         return undefined;
@@ -987,4 +1006,8 @@ exports.isEnabledProperty = new view_base_1.Property({
 exports.isEnabledProperty.register(ViewCommon);
 exports.isUserInteractionEnabledProperty = new view_base_1.Property({ name: "isUserInteractionEnabled", defaultValue: true, valueConverter: view_base_1.booleanConverter });
 exports.isUserInteractionEnabledProperty.register(ViewCommon);
+exports.iosOverflowSafeAreaProperty = new view_base_1.Property({ name: "iosOverflowSafeArea", defaultValue: false, valueConverter: view_base_1.booleanConverter });
+exports.iosOverflowSafeAreaProperty.register(ViewCommon);
+exports.iosOverflowSafeAreaEnabledProperty = new view_base_1.InheritedProperty({ name: "iosOverflowSafeAreaEnabled", defaultValue: true, valueConverter: view_base_1.booleanConverter });
+exports.iosOverflowSafeAreaEnabledProperty.register(ViewCommon);
 //# sourceMappingURL=view-common.js.map

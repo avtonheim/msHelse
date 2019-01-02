@@ -82,14 +82,14 @@ var WebViewBase = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    var WebViewBase_1;
     WebViewBase.loadStartedEvent = "loadStarted";
     WebViewBase.loadFinishedEvent = "loadFinished";
     WebViewBase = WebViewBase_1 = __decorate([
         view_1.CSSType("WebView")
     ], WebViewBase);
     return WebViewBase;
-    var WebViewBase_1;
-}(view_1.View));
+}(view_1.ContainerView));
 exports.WebViewBase = WebViewBase;
 exports.srcProperty.register(WebViewBase);
 //# sourceMappingURL=web-view-common.js.map

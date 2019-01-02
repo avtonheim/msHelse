@@ -5,7 +5,7 @@ var ImageAsset = (function (_super) {
     __extends(ImageAsset, _super);
     function ImageAsset() {
         var _this = _super.call(this) || this;
-        _this._options = { keepAspectRatio: true };
+        _this._options = { keepAspectRatio: true, autoScaleFactor: true };
         return _this;
     }
     Object.defineProperty(ImageAsset.prototype, "options", {

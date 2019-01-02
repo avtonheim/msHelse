@@ -56,6 +56,10 @@ function ensureImageSource() {
 }
 function request(options) {
     return new Promise(function (resolve, reject) {
+        if (!options.url) {
+            reject(new Error("Request url was empty."));
+            return;
+        }
         try {
             var network = domainDebugger.getNetwork();
             var debugRequest = network && network.create();

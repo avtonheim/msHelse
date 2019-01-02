@@ -714,7 +714,7 @@ function parseSelector(text, start) {
     var value = [];
     var combinator;
     var expectSimpleSelector = true;
-    var pair = [];
+    var pair;
     do {
         var simpleSelectorSequence = parseSimpleSelectorSequence(text, end);
         if (!simpleSelectorSequence) {

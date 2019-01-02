@@ -5,14 +5,10 @@ var fs = require('file-system');
 function onLoaded(args){
   var page = args.object;
   var stackLayout = page.getViewById('mood');
-
-  // Load our JS for the component
+  
   var path = fs.knownFolders.currentApp().path;
   var componentJS = require(path + '/views/graphs/patientOverview/moodgraph.js');
-  // Actually have the builder build the Component using the XML & JS.
   var component = builder.load(path + '/views/graphs/patientOverview/moodgraph.xml', componentJS);
-
-  // And add our component to the visual tree
   stackLayout.addChild(component);
 
   //Controlling the native back-button

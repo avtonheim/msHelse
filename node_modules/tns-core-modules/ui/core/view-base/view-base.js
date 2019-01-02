@@ -435,12 +435,12 @@ var ViewBase = (function (_super) {
         }
     };
     ViewBase.prototype.loadView = function (view) {
-        if (!view.isLoaded) {
+        if (view && !view.isLoaded) {
             view.callLoaded();
         }
     };
     ViewBase.prototype.unloadView = function (view) {
-        if (view.isLoaded) {
+        if (view && view.isLoaded) {
             view.callUnloaded();
         }
     };
@@ -486,11 +486,11 @@ var ViewBase = (function (_super) {
             this._tearDownUI(true);
         }
         this._context = context;
-        var nativeView;
+        var nativeView = this.nativeViewProtected;
+        if (!nativeView) {
+            nativeView = this.createNativeView();
+        }
         if (platform_1.isAndroid) {
-            if (!nativeView) {
-                nativeView = this.createNativeView();
-            }
             this._androidView = nativeView;
             if (nativeView) {
                 if (this._isPaddingRelative === undefined) {
@@ -521,10 +521,9 @@ var ViewBase = (function (_super) {
             }
         }
         else {
-            nativeView = this.createNativeView();
-            this._iosView = nativeView || this.nativeViewProtected;
+            this._iosView = nativeView;
         }
-        this.setNativeView(nativeView || this.nativeViewProtected);
+        this.setNativeView(nativeView);
         if (this.parent) {
             var nativeIndex = this.parent._childIndexToNativeChildIndex(atIndex);
             this._isAddedToNativeVisualTree = this.parent._addViewToNativeVisualTree(this, nativeIndex);

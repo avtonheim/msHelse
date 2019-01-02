@@ -8,12 +8,21 @@ __export(require("./button-common"));
 var Button = (function (_super) {
     __extends(Button, _super);
     function Button() {
-        var _this = _super.call(this) || this;
-        _this.nativeViewProtected = UIButton.buttonWithType(1);
-        _this._tapHandler = TapHandlerImpl.initWithOwner(new WeakRef(_this));
-        _this.nativeViewProtected.addTargetActionForControlEvents(_this._tapHandler, "tap", 64);
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
+    Button.prototype.createNativeView = function () {
+        return UIButton.buttonWithType(1);
+    };
+    Button.prototype.initNativeView = function () {
+        _super.prototype.initNativeView.call(this);
+        var nativeView = this.nativeViewProtected;
+        this._tapHandler = TapHandlerImpl.initWithOwner(new WeakRef(this));
+        nativeView.addTargetActionForControlEvents(this._tapHandler, "tap", 64);
+    };
+    Button.prototype.disposeNativeView = function () {
+        this._tapHandler = null;
+        _super.prototype.disposeNativeView.call(this);
+    };
     Object.defineProperty(Button.prototype, "ios", {
         get: function () {
             return this.nativeViewProtected;

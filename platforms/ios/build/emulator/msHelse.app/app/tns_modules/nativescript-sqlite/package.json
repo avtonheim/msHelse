@@ -2,7 +2,7 @@
   "_args": [
     [
       "nativescript-sqlite@1.2.0",
-      "/Users/aleksandernygardtonheim/msHelse"
+      "/Users/aleksandernygardtonheim/projects/msHelse"
     ]
   ],
   "_from": "nativescript-sqlite@1.2.0",
@@ -26,7 +26,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/nativescript-sqlite/-/nativescript-sqlite-1.2.0.tgz",
   "_spec": "1.2.0",
-  "_where": "/Users/aleksandernygardtonheim/msHelse",
+  "_where": "/Users/aleksandernygardtonheim/projects/msHelse",
   "author": {
     "name": "Nathanael Anderson",
     "email": "nathan@master-technology.com"

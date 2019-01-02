@@ -113,6 +113,19 @@ var ios;
         return NSString.stringWithString(NSString.pathWithComponents(paths)).stringByStandardizingPath;
     }
     ios.joinPaths = joinPaths;
+    function getVisibleViewController(rootViewController) {
+        if (rootViewController.presentedViewController) {
+            return getVisibleViewController(rootViewController.presentedViewController);
+        }
+        if (rootViewController.isKindOfClass(UINavigationController.class())) {
+            return getVisibleViewController(rootViewController.visibleViewController);
+        }
+        if (rootViewController.isKindOfClass(UITabBarController.class())) {
+            return getVisibleViewController(rootViewController);
+        }
+        return rootViewController;
+    }
+    ios.getVisibleViewController = getVisibleViewController;
 })(ios = exports.ios || (exports.ios = {}));
 function GC() {
     __collect();

@@ -193,12 +193,12 @@ var NetworkDomainDebugger = (function () {
         resources_datas[id] = resourceData;
         return resourceData;
     };
+    var NetworkDomainDebugger_1;
     NetworkDomainDebugger.idSequence = 0;
     NetworkDomainDebugger = NetworkDomainDebugger_1 = __decorate([
         inspectorCommands.DomainDispatcher("Network")
     ], NetworkDomainDebugger);
     return NetworkDomainDebugger;
-    var NetworkDomainDebugger_1;
 }());
 exports.NetworkDomainDebugger = NetworkDomainDebugger;
 var RuntimeDomainDebugger = (function () {

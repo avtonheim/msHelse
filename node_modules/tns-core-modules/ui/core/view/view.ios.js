@@ -11,6 +11,7 @@ __export(require("./view-common"));
 var PFLAG_FORCE_LAYOUT = 1;
 var PFLAG_MEASURED_DIMENSION_SET = 1 << 1;
 var PFLAG_LAYOUT_REQUIRED = 1 << 2;
+var majorVersion = utils_1.ios.MajorVersion;
 var View = (function (_super) {
     __extends(View, _super);
     function View() {
@@ -65,7 +66,12 @@ var View = (function (_super) {
             this.layoutNativeView(left, top, right, bottom);
         }
         if (boundsChanged || (this._privateFlags & PFLAG_LAYOUT_REQUIRED) === PFLAG_LAYOUT_REQUIRED) {
-            this.onLayout(left, top, right, bottom);
+            var position = { left: left, top: top, right: right, bottom: bottom };
+            if (this.nativeViewProtected && majorVersion > 10) {
+                var frame = this.nativeViewProtected.frame;
+                position = ios.getPositionFromFrame(frame);
+            }
+            this.onLayout(position.left, position.top, position.right, position.bottom);
             this._privateFlags &= ~PFLAG_LAYOUT_REQUIRED;
         }
         this.updateBackground(sizeChanged);
@@ -106,35 +112,56 @@ var View = (function (_super) {
     View.prototype.onLayout = function (left, top, right, bottom) {
     };
     View.prototype._setNativeViewFrame = function (nativeView, frame) {
-        if (!CGRectEqualToRect(nativeView.frame, frame)) {
+        var oldFrame = this._cachedFrame || nativeView.frame;
+        if (!CGRectEqualToRect(oldFrame, frame)) {
             if (view_common_1.traceEnabled()) {
-                view_common_1.traceWrite(this + ", Native setFrame: = " + NSStringFromCGRect(frame), view_common_1.traceCategories.Layout);
+                view_common_1.traceWrite(this + " :_setNativeViewFrame: " + JSON.stringify(ios.getPositionFromFrame(frame)), view_common_1.traceCategories.Layout);
             }
             this._cachedFrame = frame;
+            var adjustedFrame = null;
+            var transform = null;
             if (this._hasTransfrom) {
-                var transform = nativeView.transform;
+                transform = nativeView.transform;
                 nativeView.transform = CGAffineTransformIdentity;
                 nativeView.frame = frame;
-                nativeView.transform = transform;
             }
             else {
                 nativeView.frame = frame;
             }
+            adjustedFrame = this.applySafeAreaInsets(frame);
+            if (adjustedFrame) {
+                nativeView.frame = adjustedFrame;
+            }
+            if (this._hasTransfrom) {
+                nativeView.transform = transform;
+            }
             var boundsOrigin = nativeView.bounds.origin;
-            nativeView.bounds = CGRectMake(boundsOrigin.x, boundsOrigin.y, frame.size.width, frame.size.height);
+            var boundsFrame = adjustedFrame || frame;
+            nativeView.bounds = CGRectMake(boundsOrigin.x, boundsOrigin.y, boundsFrame.size.width, boundsFrame.size.height);
             this._raiseLayoutChangedEvent();
             this._isLaidOut = true;
         }
         else if (!this._isLaidOut) {
             this._raiseLayoutChangedEvent();
+            this._isLaidOut = true;
         }
     };
+    Object.defineProperty(View.prototype, "isLayoutValid", {
+        get: function () {
+            if (this.nativeViewProtected) {
+                return this._isLayoutValid;
+            }
+            return false;
+        },
+        enumerable: true,
+        configurable: true
+    });
     View.prototype.layoutNativeView = function (left, top, right, bottom) {
         if (!this.nativeViewProtected) {
             return;
         }
         var nativeView = this.nativeViewProtected;
-        var frame = CGRectMake(view_common_1.layout.toDeviceIndependentPixels(left), view_common_1.layout.toDeviceIndependentPixels(top), view_common_1.layout.toDeviceIndependentPixels(right - left), view_common_1.layout.toDeviceIndependentPixels(bottom - top));
+        var frame = ios.getFrameFromPosition({ left: left, top: top, right: right, bottom: bottom });
         this._setNativeViewFrame(nativeView, frame);
     };
     View.prototype._setLayoutFlags = function (left, top, right, bottom) {
@@ -155,6 +182,29 @@ var View = (function (_super) {
             return this.ios.becomeFirstResponder();
         }
         return false;
+    };
+    View.prototype.applySafeAreaInsets = function (frame) {
+        if (majorVersion <= 10) {
+            return null;
+        }
+        if (!this.iosOverflowSafeArea || !this.iosOverflowSafeAreaEnabled) {
+            return ios.shrinkToSafeArea(this, frame);
+        }
+        else if (this.nativeViewProtected && this.nativeViewProtected.window) {
+            return ios.expandBeyondSafeArea(this, frame);
+        }
+        return null;
+    };
+    View.prototype.getSafeAreaInsets = function () {
+        var safeAreaInsets = this.nativeViewProtected && this.nativeViewProtected.safeAreaInsets;
+        var insets = { left: 0, top: 0, right: 0, bottom: 0 };
+        if (safeAreaInsets) {
+            insets.left = view_common_1.layout.round(view_common_1.layout.toDevicePixels(safeAreaInsets.left));
+            insets.top = view_common_1.layout.round(view_common_1.layout.toDevicePixels(safeAreaInsets.top));
+            insets.right = view_common_1.layout.round(view_common_1.layout.toDevicePixels(safeAreaInsets.right));
+            insets.bottom = view_common_1.layout.round(view_common_1.layout.toDevicePixels(safeAreaInsets.bottom));
+        }
+        return insets;
     };
     View.prototype.getLocationInWindow = function () {
         if (!this.nativeViewProtected || !this.nativeViewProtected.window) {
@@ -243,10 +293,24 @@ var View = (function (_super) {
     View.prototype._isPresentationLayerUpdateSuspeneded = function () {
         return this._suspendCATransaction || this._suspendNativeUpdatesCount;
     };
-    View.prototype._showNativeModalView = function (parent, context, closeCallback, fullscreen, animated, stretched) {
+    View.prototype._showNativeModalView = function (parent, options) {
         var _this = this;
         var parentWithController = ios.getParentWithViewController(parent);
-        _super.prototype._showNativeModalView.call(this, parentWithController, context, closeCallback, fullscreen, stretched);
+        if (!parentWithController) {
+            view_common_1.traceWrite("Could not find parent with viewController for " + parent + " while showing modal view.", view_common_1.traceCategories.ViewHierarchy, view_common_1.traceMessageType.error);
+            return;
+        }
+        var parentController = parentWithController.viewController;
+        if (parentController.presentedViewController) {
+            view_common_1.traceWrite("Parent is already presenting view controller. Close the current modal page before showing another one!", view_common_1.traceCategories.ViewHierarchy, view_common_1.traceMessageType.error);
+            return;
+        }
+        if (!parentController.view || !parentController.view.window) {
+            view_common_1.traceWrite("Parent page is not part of the window hierarchy.", view_common_1.traceCategories.ViewHierarchy, view_common_1.traceMessageType.error);
+            return;
+        }
+        this._setupAsRootView({});
+        _super.prototype._showNativeModalView.call(this, parentWithController, options);
         var controller = this.viewController;
         if (!controller) {
             var nativeView = this.ios || this.nativeViewProtected;
@@ -256,36 +320,45 @@ var View = (function (_super) {
             }
             this.viewController = controller;
         }
-        this._setupAsRootView({});
-        var parentController = parentWithController.viewController;
-        if (!parentController.view.window) {
-            throw new Error("Parent page is not part of the window hierarchy. Close the current modal page before showing another one!");
-        }
-        if (fullscreen) {
+        if (options.fullscreen) {
             controller.modalPresentationStyle = 0;
         }
         else {
             controller.modalPresentationStyle = 2;
         }
+        if (options.ios && options.ios.presentationStyle) {
+            var presentationStyle = options.ios.presentationStyle;
+            controller.modalPresentationStyle = presentationStyle;
+            if (presentationStyle === 7) {
+                var popoverPresentationController = controller.popoverPresentationController;
+                var view = parent.nativeViewProtected;
+                popoverPresentationController.sourceView = view;
+                popoverPresentationController.sourceRect = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height);
+            }
+        }
         this.horizontalAlignment = "stretch";
         this.verticalAlignment = "stretch";
         this._raiseShowingModallyEvent();
-        animated = animated === undefined ? true : !!animated;
+        var animated = options.animated === undefined ? true : !!options.animated;
         controller.animated = animated;
         parentController.presentViewControllerAnimatedCompletion(controller, animated, null);
         var transitionCoordinator = utils_1.ios.getter(parentController, parentController.transitionCoordinator);
         if (transitionCoordinator) {
-            UIViewControllerTransitionCoordinator.prototype.animateAlongsideTransitionCompletion.call(transitionCoordinator, null, function () { return _this._raiseShownModallyEvent(); });
+            UIViewControllerTransitionCoordinator.prototype.animateAlongsideTransitionCompletion
+                .call(transitionCoordinator, null, function () { return _this._raiseShownModallyEvent(); });
         }
         else {
             this._raiseShownModallyEvent();
         }
     };
-    View.prototype._hideNativeModalView = function (parent) {
+    View.prototype._hideNativeModalView = function (parent, whenClosedCallback) {
+        if (!parent || !parent.viewController) {
+            view_common_1.traceError("Trying to hide modal view but no parent with viewController specified.");
+            return;
+        }
         var parentController = parent.viewController;
         var animated = this.viewController.animated;
-        _super.prototype._hideNativeModalView.call(this, parent);
-        parentController.dismissModalViewControllerAnimated(animated);
+        parentController.dismissViewControllerAnimatedCompletion(animated, whenClosedCallback);
     };
     View.prototype[view_common_1.isEnabledProperty.getDefault] = function () {
         var nativeView = this.nativeViewProtected;
@@ -397,6 +470,23 @@ var View = (function (_super) {
             this._redrawNativeBackground(value);
         }
     };
+    View.prototype._getCurrentLayoutBounds = function () {
+        var nativeView = this.nativeViewProtected;
+        if (nativeView && !this.isCollapsed) {
+            var frame = nativeView.frame;
+            var origin_1 = frame.origin;
+            var size = frame.size;
+            return {
+                left: Math.round(view_common_1.layout.toDevicePixels(origin_1.x)),
+                top: Math.round(view_common_1.layout.toDevicePixels(origin_1.y)),
+                right: Math.round(view_common_1.layout.toDevicePixels(origin_1.x + size.width)),
+                bottom: Math.round(view_common_1.layout.toDevicePixels(origin_1.y + size.height))
+            };
+        }
+        else {
+            return { left: 0, top: 0, right: 0, bottom: 0 };
+        }
+    };
     View.prototype._redrawNativeBackground = function (value) {
         var _this = this;
         var updateSuspended = this._isPresentationLayerUpdateSuspeneded();
@@ -434,13 +524,24 @@ var View = (function (_super) {
 }(view_common_1.ViewCommon));
 exports.View = View;
 View.prototype._nativeBackgroundState = "unset";
+var ContainerView = (function (_super) {
+    __extends(ContainerView, _super);
+    function ContainerView() {
+        var _this = _super.call(this) || this;
+        _this.iosOverflowSafeArea = true;
+        return _this;
+    }
+    return ContainerView;
+}(View));
+exports.ContainerView = ContainerView;
 var CustomLayoutView = (function (_super) {
     __extends(CustomLayoutView, _super);
     function CustomLayoutView() {
-        var _this = _super.call(this) || this;
-        _this.nativeViewProtected = UIView.alloc().initWithFrame(utils_1.ios.getter(UIScreen, UIScreen.mainScreen).bounds);
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
+    CustomLayoutView.prototype.createNativeView = function () {
+        return UIView.alloc().initWithFrame(utils_1.ios.getter(UIScreen, UIScreen.mainScreen).bounds);
+    };
     Object.defineProperty(CustomLayoutView.prototype, "ios", {
         get: function () {
             return this.nativeViewProtected;
@@ -471,142 +572,174 @@ var CustomLayoutView = (function (_super) {
             child.nativeViewProtected.removeFromSuperview();
         }
     };
-    CustomLayoutView.prototype._getCurrentLayoutBounds = function () {
-        var nativeView = this.nativeViewProtected;
-        if (nativeView && !this.isCollapsed) {
-            var frame = nativeView.frame;
-            var origin = frame.origin;
-            var size = frame.size;
-            return {
-                left: view_common_1.layout.toDevicePixels(origin.x),
-                top: view_common_1.layout.toDevicePixels(origin.y),
-                right: view_common_1.layout.toDevicePixels(origin.x + size.width),
-                bottom: view_common_1.layout.toDevicePixels(origin.y + size.height)
-            };
-        }
-        else {
-            return { left: 0, top: 0, right: 0, bottom: 0 };
-        }
-    };
     return CustomLayoutView;
-}(View));
+}(ContainerView));
 exports.CustomLayoutView = CustomLayoutView;
 var ios;
 (function (ios) {
-    function getParentWithViewController(parent) {
-        var view = parent;
-        var controller = view.viewController;
-        while (!controller) {
+    function getParentWithViewController(view) {
+        while (view && !view.viewController) {
             view = view.parent;
-            controller = view.viewController;
         }
         return view;
     }
     ios.getParentWithViewController = getParentWithViewController;
-    function isContentScrollable(controller, owner) {
-        var scrollableContent = owner.scrollableContent;
-        if (scrollableContent === undefined) {
-            var view = controller.view.subviews.count > 0 ? controller.view.subviews[0] : null;
-            if (view instanceof UIScrollView) {
-                scrollableContent = true;
-            }
-        }
-        return scrollableContent === true || scrollableContent === "true";
-    }
-    ios.isContentScrollable = isContentScrollable;
     function updateAutoAdjustScrollInsets(controller, owner) {
-        var scrollable = isContentScrollable(controller, owner);
-        owner._automaticallyAdjustsScrollViewInsets = scrollable;
-        controller.automaticallyAdjustsScrollViewInsets = scrollable;
+        if (majorVersion <= 10) {
+            owner._automaticallyAdjustsScrollViewInsets = false;
+            controller.automaticallyAdjustsScrollViewInsets = false;
+        }
     }
     ios.updateAutoAdjustScrollInsets = updateAutoAdjustScrollInsets;
     function updateConstraints(controller, owner) {
-        var root = controller.view;
-        if (!root.safeAreaLayoutGuide) {
-            var layoutGuide = root.safeAreaLayoutGuide = UILayoutGuide.alloc().init();
-            root.addLayoutGuide(layoutGuide);
-            NSLayoutConstraint.activateConstraints([
-                layoutGuide.topAnchor.constraintEqualToAnchor(controller.topLayoutGuide.bottomAnchor),
-                layoutGuide.bottomAnchor.constraintEqualToAnchor(controller.bottomLayoutGuide.topAnchor),
-                layoutGuide.leadingAnchor.constraintEqualToAnchor(root.leadingAnchor),
-                layoutGuide.trailingAnchor.constraintEqualToAnchor(root.trailingAnchor)
-            ]);
+        if (majorVersion <= 10) {
+            var layoutGuide = initLayoutGuide(controller);
+            controller.view.safeAreaLayoutGuide = layoutGuide;
         }
     }
     ios.updateConstraints = updateConstraints;
-    function getStatusBarHeight(viewController) {
-        var app = utils_1.ios.getter(UIApplication, UIApplication.sharedApplication);
-        if (!app || app.statusBarHidden) {
-            return 0;
-        }
-        if (viewController && viewController.prefersStatusBarHidden) {
-            return 0;
-        }
-        var statusFrame = app.statusBarFrame;
-        return Math.min(statusFrame.size.width, statusFrame.size.height);
+    function initLayoutGuide(controller) {
+        var rootView = controller.view;
+        var layoutGuide = UILayoutGuide.alloc().init();
+        rootView.addLayoutGuide(layoutGuide);
+        NSLayoutConstraint.activateConstraints([
+            layoutGuide.topAnchor.constraintEqualToAnchor(controller.topLayoutGuide.bottomAnchor),
+            layoutGuide.bottomAnchor.constraintEqualToAnchor(controller.bottomLayoutGuide.topAnchor),
+            layoutGuide.leadingAnchor.constraintEqualToAnchor(rootView.leadingAnchor),
+            layoutGuide.trailingAnchor.constraintEqualToAnchor(rootView.trailingAnchor)
+        ]);
+        return layoutGuide;
     }
     function layoutView(controller, owner) {
-        var left, top, width, height;
-        var frame = controller.view.frame;
-        var fullscreenOrigin = frame.origin;
-        var fullscreenSize = frame.size;
-        var safeArea = controller.view.safeAreaLayoutGuide.layoutFrame;
-        var safeOrigin = safeArea.origin;
+        var layoutGuide = controller.view.safeAreaLayoutGuide;
+        if (!layoutGuide) {
+            view_common_1.traceWrite("safeAreaLayoutGuide during layout of " + owner + ". Creating fallback constraints, but layout might be wrong.", view_common_1.traceCategories.Layout, view_common_1.traceMessageType.error);
+            layoutGuide = initLayoutGuide(controller);
+        }
+        var safeArea = layoutGuide.layoutFrame;
+        var position = ios.getPositionFromFrame(safeArea);
         var safeAreaSize = safeArea.size;
-        var navController = controller.navigationController;
-        var navBarHidden = navController ? navController.navigationBarHidden : true;
-        var scrollable = isContentScrollable(controller, owner);
-        var hasChildControllers = controller.childViewControllers.count > 0;
-        if (!(controller.edgesForExtendedLayout & 1)) {
-            var statusBarHeight = getStatusBarHeight(controller);
-            var navBarHeight = controller.navigationController ? controller.navigationController.navigationBar.frame.size.height : 0;
-            fullscreenOrigin.y = safeOrigin.y;
-            fullscreenSize.height -= (statusBarHeight + navBarHeight);
+        var hasChildViewControllers = controller.childViewControllers.count > 0;
+        if (hasChildViewControllers) {
+            var fullscreen = controller.view.frame;
+            position = ios.getPositionFromFrame(fullscreen);
         }
-        left = safeOrigin.x;
-        width = safeAreaSize.width;
-        if (hasChildControllers) {
-            top = fullscreenOrigin.y;
-            height = fullscreenSize.height;
-        }
-        else if (!scrollable) {
-            top = safeOrigin.y;
-            height = safeAreaSize.height;
-        }
-        else if (navBarHidden) {
-            top = safeOrigin.y;
-            height = navController ? (fullscreenSize.height - top) : safeAreaSize.height;
-        }
-        else {
-            top = fullscreenOrigin.y;
-            height = fullscreenSize.height;
-        }
-        left = view_common_1.layout.toDevicePixels(left);
-        top = view_common_1.layout.toDevicePixels(top);
-        width = view_common_1.layout.toDevicePixels(width);
-        height = view_common_1.layout.toDevicePixels(height);
-        var widthSpec = view_common_1.layout.makeMeasureSpec(width, view_common_1.layout.EXACTLY);
-        var heightSpec = view_common_1.layout.makeMeasureSpec(height, view_common_1.layout.EXACTLY);
+        var safeAreaWidth = view_common_1.layout.round(view_common_1.layout.toDevicePixels(safeAreaSize.width));
+        var safeAreaHeight = view_common_1.layout.round(view_common_1.layout.toDevicePixels(safeAreaSize.height));
+        var widthSpec = view_common_1.layout.makeMeasureSpec(safeAreaWidth, view_common_1.layout.EXACTLY);
+        var heightSpec = view_common_1.layout.makeMeasureSpec(safeAreaHeight, view_common_1.layout.EXACTLY);
         View.measureChild(null, owner, widthSpec, heightSpec);
-        View.layoutChild(null, owner, left, top, width + left, height + top);
+        View.layoutChild(null, owner, position.left, position.top, position.right, position.bottom);
         layoutParent(owner.parent);
     }
     ios.layoutView = layoutView;
+    function getPositionFromFrame(frame) {
+        var left = view_common_1.layout.round(view_common_1.layout.toDevicePixels(frame.origin.x));
+        var top = view_common_1.layout.round(view_common_1.layout.toDevicePixels(frame.origin.y));
+        var right = view_common_1.layout.round(view_common_1.layout.toDevicePixels(frame.origin.x + frame.size.width));
+        var bottom = view_common_1.layout.round(view_common_1.layout.toDevicePixels(frame.origin.y + frame.size.height));
+        return { left: left, right: right, top: top, bottom: bottom };
+    }
+    ios.getPositionFromFrame = getPositionFromFrame;
+    function getFrameFromPosition(position, insets) {
+        insets = insets || { left: 0, top: 0, right: 0, bottom: 0 };
+        var left = view_common_1.layout.toDeviceIndependentPixels(position.left + insets.left);
+        var top = view_common_1.layout.toDeviceIndependentPixels(position.top + insets.top);
+        var width = view_common_1.layout.toDeviceIndependentPixels(position.right - position.left - insets.left - insets.right);
+        var height = view_common_1.layout.toDeviceIndependentPixels(position.bottom - position.top - insets.top - insets.bottom);
+        return CGRectMake(left, top, width, height);
+    }
+    ios.getFrameFromPosition = getFrameFromPosition;
+    function shrinkToSafeArea(view, frame) {
+        var insets = view.getSafeAreaInsets();
+        if (insets.left || insets.top) {
+            var position = ios.getPositionFromFrame(frame);
+            var adjustedFrame = ios.getFrameFromPosition(position, insets);
+            if (view_common_1.traceEnabled()) {
+                view_common_1.traceWrite(this + " :shrinkToSafeArea: " + JSON.stringify(ios.getPositionFromFrame(adjustedFrame)), view_common_1.traceCategories.Layout);
+            }
+            return adjustedFrame;
+        }
+        return null;
+    }
+    ios.shrinkToSafeArea = shrinkToSafeArea;
+    function expandBeyondSafeArea(view, frame) {
+        var locationInWindow = view.getLocationInWindow();
+        var inWindowLeft = view_common_1.layout.round(view_common_1.layout.toDevicePixels(locationInWindow.x));
+        var inWindowTop = view_common_1.layout.round(view_common_1.layout.toDevicePixels(locationInWindow.y));
+        var inWindowRight = inWindowLeft + view_common_1.layout.round(view_common_1.layout.toDevicePixels(frame.size.width));
+        var inWindowBottom = inWindowTop + view_common_1.layout.round(view_common_1.layout.toDevicePixels(frame.size.height));
+        var availableSpace = getAvailableSpaceFromParent(view);
+        var safeArea = availableSpace.safeArea;
+        var fullscreen = availableSpace.fullscreen;
+        var position = ios.getPositionFromFrame(frame);
+        var safeAreaPosition = ios.getPositionFromFrame(safeArea);
+        var fullscreenPosition = ios.getPositionFromFrame(fullscreen);
+        var adjustedPosition = position;
+        if (position.left && inWindowLeft <= safeAreaPosition.left) {
+            adjustedPosition.left = fullscreenPosition.left;
+        }
+        if (position.top && inWindowTop <= safeAreaPosition.top) {
+            adjustedPosition.top = fullscreenPosition.top;
+        }
+        if (inWindowRight < fullscreenPosition.right && inWindowRight >= safeAreaPosition.right + fullscreenPosition.left) {
+            adjustedPosition.right += fullscreenPosition.right - inWindowRight;
+        }
+        if (inWindowBottom < fullscreenPosition.bottom && inWindowBottom >= safeAreaPosition.bottom + fullscreenPosition.top) {
+            adjustedPosition.bottom += fullscreenPosition.bottom - inWindowBottom;
+        }
+        var adjustedFrame = CGRectMake(view_common_1.layout.toDeviceIndependentPixels(adjustedPosition.left), view_common_1.layout.toDeviceIndependentPixels(adjustedPosition.top), view_common_1.layout.toDeviceIndependentPixels(adjustedPosition.right - adjustedPosition.left), view_common_1.layout.toDeviceIndependentPixels(adjustedPosition.bottom - adjustedPosition.top));
+        if (view_common_1.traceEnabled()) {
+            view_common_1.traceWrite(view + " :expandBeyondSafeArea: " + JSON.stringify(ios.getPositionFromFrame(adjustedFrame)), view_common_1.traceCategories.Layout);
+        }
+        return adjustedFrame;
+    }
+    ios.expandBeyondSafeArea = expandBeyondSafeArea;
     function layoutParent(view) {
         if (!view) {
             return;
         }
         if (view instanceof View && view.nativeViewProtected) {
             var frame = view.nativeViewProtected.frame;
-            var origin = frame.origin;
+            var origin_2 = frame.origin;
             var size = frame.size;
-            var left = view_common_1.layout.toDevicePixels(origin.x);
-            var top_1 = view_common_1.layout.toDevicePixels(origin.y);
+            var left = view_common_1.layout.toDevicePixels(origin_2.x);
+            var top_1 = view_common_1.layout.toDevicePixels(origin_2.y);
             var width = view_common_1.layout.toDevicePixels(size.width);
             var height = view_common_1.layout.toDevicePixels(size.height);
             view._setLayoutFlags(left, top_1, width + left, height + top_1);
         }
         layoutParent(view.parent);
+    }
+    function getAvailableSpaceFromParent(view) {
+        if (!view) {
+            return;
+        }
+        var fullscreen = null;
+        var safeArea = null;
+        if (view.viewController) {
+            var nativeView = view.viewController.view;
+            safeArea = nativeView.safeAreaLayoutGuide.layoutFrame;
+            fullscreen = nativeView.frame;
+        }
+        else {
+            var parent_1 = view.parent;
+            while (parent_1 && !parent_1.viewController && !(parent_1.nativeViewProtected instanceof UIScrollView)) {
+                parent_1 = parent_1.parent;
+            }
+            if (parent_1.nativeViewProtected instanceof UIScrollView) {
+                var nativeView = parent_1.nativeViewProtected;
+                var insets = nativeView.safeAreaInsets;
+                safeArea = CGRectMake(insets.left, insets.top, nativeView.contentSize.width - insets.left - insets.right, nativeView.contentSize.height - insets.top - insets.bottom);
+                fullscreen = CGRectMake(0, 0, nativeView.contentSize.width, nativeView.contentSize.height);
+            }
+            else if (parent_1.viewController) {
+                var nativeView = parent_1.viewController.view;
+                safeArea = nativeView.safeAreaLayoutGuide.layoutFrame;
+                fullscreen = nativeView.frame;
+            }
+        }
+        return { safeArea: safeArea, fullscreen: fullscreen };
     }
     var UILayoutViewController = (function (_super) {
         __extends(UILayoutViewController, _super);
@@ -629,6 +762,26 @@ var ios;
             _super.prototype.viewDidLayoutSubviews.call(this);
             var owner = this.owner.get();
             if (owner) {
+                if (majorVersion >= 11) {
+                    var tabViewItem = owner.parent;
+                    var tabView = tabViewItem && tabViewItem.parent;
+                    var parent_2 = tabView && tabView.parent;
+                    while (parent_2 && !parent_2.nativeViewProtected) {
+                        parent_2 = parent_2.parent;
+                    }
+                    if (parent_2) {
+                        var parentPageInsetsTop = parent_2.nativeViewProtected.safeAreaInsets.top;
+                        var currentInsetsTop = this.view.safeAreaInsets.top;
+                        var additionalInsetsTop = Math.max(parentPageInsetsTop - currentInsetsTop, 0);
+                        var parentPageInsetsBottom = parent_2.nativeViewProtected.safeAreaInsets.bottom;
+                        var currentInsetsBottom = this.view.safeAreaInsets.bottom;
+                        var additionalInsetsBottom = Math.max(parentPageInsetsBottom - currentInsetsBottom, 0);
+                        if (additionalInsetsTop > 0 || additionalInsetsBottom > 0) {
+                            var additionalInsets = new UIEdgeInsets({ top: additionalInsetsTop, left: 0, bottom: additionalInsetsBottom, right: 0 });
+                            this.additionalSafeAreaInsets = additionalInsets;
+                        }
+                    }
+                }
                 layoutView(this, owner);
             }
         };

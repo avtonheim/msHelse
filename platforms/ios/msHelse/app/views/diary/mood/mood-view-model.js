@@ -9,6 +9,7 @@ function createViewModel(database) {
     viewModel.MoodAnalysis = new ObservableArray([]);
     viewModel.SelectMoodWeekly = new ObservableArray([]);
     viewModel.SelectMoodMonth = new ObservableArray([]);
+    viewModel.emptyData = new ObservableArray([]);
 
     // insert a new record
     viewModel.insert = function(args) {
@@ -30,8 +31,10 @@ function createViewModel(database) {
             database.all("SELECT avg(moodState) FROM mood WHERE id < 8").then(rows => {
                 for(var row in rows) {
                 this.SelectMoodWeekly.push({average: rows[row][0]});
-
                }
+               if (isEmpty(this.SelectMoodWeekly)){
+                this.emptyData.push('Du må fullføre en registrering i dagboken din for å vise denne grafen.');
+            }
             }, error => {
                 console.log("SELECT ERROR", error);
             });
@@ -43,8 +46,10 @@ function createViewModel(database) {
               database.all("SELECT round(avg(moodState)) FROM mood").then(rows => {
                   for(var row in rows) {
                   this.SelectMoodMonth.push({average: rows[row][0]});
-
                  }
+                 if (isEmpty(this.SelectMoodMonth)){
+                    this.emptyData.push('Du må fullføre en registrering i dagboken din for å vise denne grafen.');
+                }
               }, error => {
                   console.log("SELECT ERROR", error);
               });
@@ -56,8 +61,10 @@ function createViewModel(database) {
             database.all("SELECT * FROM mood WHERE id < 8").then(rows => {
                 for(var row in rows) {
                  this.Mood.push({id: rows[row][0], dagsform: rows[row][1], dato: rows[row][2]});
-
                }
+               if (isEmpty(this.Mood)){
+                this.emptyData.push('Du må fullføre en registrering i dagboken din for å vise denne grafen.');
+            }
             }, error => {
                 console.log("SELECT ERROR", error);
             });
@@ -69,8 +76,10 @@ function createViewModel(database) {
               database.all("SELECT round(avg(moodState)), strftime('%m-%Y', timestamp) as 'month-year' FROM mood group by strftime('%m-%Y', timestamp)").then(rows => {
                   for(var row in rows) {
                    this.MoodAnalysis.push({gjennomsnitt: rows[row][0], dato: rows[row][1]});
-
                  }
+                 if (isEmpty(this.MoodAnalysis)){
+                    this.emptyData.push('Du må fullføre en registrering i dagboken din for å vise denne grafen.');
+                }
               }, error => {
                   console.log("SELECT ERROR", error);
               });

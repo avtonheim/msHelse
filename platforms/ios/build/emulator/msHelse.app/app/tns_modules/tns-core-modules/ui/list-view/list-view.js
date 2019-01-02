@@ -6,6 +6,7 @@ var list_view_common_1 = require("./list-view-common");
 var stack_layout_1 = require("../layouts/stack-layout");
 var proxy_view_container_1 = require("../proxy-view-container");
 var profiling_1 = require("../../profiling");
+var trace = require("../../trace");
 __export(require("./list-view-common"));
 var ITEMLOADING = list_view_common_1.ListViewBase.itemLoadingEvent;
 var LOADMOREITEMS = list_view_common_1.ListViewBase.loadMoreItemsEvent;
@@ -73,6 +74,7 @@ var DataSource = (function (_super) {
                 var width = list_view_common_1.layout.getMeasureSpecSize(owner.widthMeasureSpec);
                 var rowHeight = owner._effectiveRowHeight;
                 var cellHeight = rowHeight > 0 ? rowHeight : owner.getHeight(indexPath.row);
+                cellView.iosOverflowSafeAreaEnabled = false;
                 list_view_common_1.View.layoutChild(owner, cellView, 0, 0, width, cellHeight);
             }
         }
@@ -176,34 +178,45 @@ var ListView = (function (_super) {
     function ListView() {
         var _this = _super.call(this) || this;
         _this.widthMeasureSpec = 0;
-        _this.nativeViewProtected = _this._ios = UITableView.new();
-        _this._ios.registerClassForCellReuseIdentifier(ListViewCell.class(), _this._defaultTemplate.key);
-        _this._ios.estimatedRowHeight = DEFAULT_HEIGHT;
-        _this._ios.rowHeight = UITableViewAutomaticDimension;
-        _this._ios.dataSource = _this._dataSource = DataSource.initWithOwner(new WeakRef(_this));
-        _this._delegate = UITableViewDelegateImpl.initWithOwner(new WeakRef(_this));
-        _this._heights = new Array();
         _this._map = new Map();
-        _this._setNativeClipToBounds();
+        _this._heights = new Array();
         return _this;
     }
+    ListView.prototype.createNativeView = function () {
+        return UITableView.new();
+    };
+    ListView.prototype.initNativeView = function () {
+        _super.prototype.initNativeView.call(this);
+        var nativeView = this.nativeViewProtected;
+        nativeView.registerClassForCellReuseIdentifier(ListViewCell.class(), this._defaultTemplate.key);
+        nativeView.estimatedRowHeight = DEFAULT_HEIGHT;
+        nativeView.rowHeight = UITableViewAutomaticDimension;
+        nativeView.dataSource = this._dataSource = DataSource.initWithOwner(new WeakRef(this));
+        this._delegate = UITableViewDelegateImpl.initWithOwner(new WeakRef(this));
+        this._setNativeClipToBounds();
+    };
+    ListView.prototype.disposeNativeView = function () {
+        this._delegate = null;
+        this._dataSource = null;
+        _super.prototype.disposeNativeView.call(this);
+    };
     ListView.prototype._setNativeClipToBounds = function () {
-        this._ios.clipsToBounds = true;
+        this.ios.clipsToBounds = true;
     };
     ListView.prototype.onLoaded = function () {
         _super.prototype.onLoaded.call(this);
         if (this._isDataDirty) {
             this.refresh();
         }
-        this._ios.delegate = this._delegate;
+        this.ios.delegate = this._delegate;
     };
     ListView.prototype.onUnloaded = function () {
-        this._ios.delegate = null;
+        this.ios.delegate = null;
         _super.prototype.onUnloaded.call(this);
     };
     Object.defineProperty(ListView.prototype, "ios", {
         get: function () {
-            return this._ios;
+            return this.nativeViewProtected;
         },
         enumerable: true,
         configurable: true
@@ -221,8 +234,28 @@ var ListView = (function (_super) {
         });
     };
     ListView.prototype.scrollToIndex = function (index) {
-        if (this._ios) {
-            this._ios.scrollToRowAtIndexPathAtScrollPositionAnimated(NSIndexPath.indexPathForItemInSection(index, 0), 1, false);
+        this._scrollToIndex(index, false);
+    };
+    ListView.prototype.scrollToIndexAnimated = function (index) {
+        this._scrollToIndex(index);
+    };
+    ListView.prototype._scrollToIndex = function (index, animated) {
+        if (animated === void 0) { animated = true; }
+        if (!this.ios) {
+            return;
+        }
+        var itemsLength = this.items ? this.items.length : 0;
+        if (itemsLength > 0) {
+            if (index < 0) {
+                index = 0;
+            }
+            else if (index >= itemsLength) {
+                index = itemsLength - 1;
+            }
+            this.ios.scrollToRowAtIndexPathAtScrollPositionAnimated(NSIndexPath.indexPathForItemInSection(index, 0), 1, animated);
+        }
+        else if (trace.isEnabled()) {
+            trace.write("Cannot scroll listview to index " + index + " when listview items not set", trace.categories.Binding);
         }
     };
     ListView.prototype.refresh = function () {
@@ -232,7 +265,7 @@ var ListView = (function (_super) {
             }
         });
         if (this.isLoaded) {
-            this._ios.reloadData();
+            this.ios.reloadData();
             this.requestLayout();
             this._isDataDirty = false;
         }
@@ -241,7 +274,7 @@ var ListView = (function (_super) {
         }
     };
     ListView.prototype.isItemAtIndexVisible = function (itemIndex) {
-        var indexes = Array.from(this._ios.indexPathsForVisibleRows);
+        var indexes = Array.from(this.ios.indexPathsForVisibleRows);
         return indexes.some(function (visIndex) { return visIndex.row === itemIndex; });
     };
     ListView.prototype.getHeight = function (index) {
@@ -252,7 +285,7 @@ var ListView = (function (_super) {
     };
     ListView.prototype._onRowHeightPropertyChanged = function (oldValue, newValue) {
         var value = list_view_common_1.layout.toDeviceIndependentPixels(this._effectiveRowHeight);
-        var nativeView = this._ios;
+        var nativeView = this.ios;
         if (value < 0) {
             nativeView.rowHeight = UITableViewAutomaticDimension;
             nativeView.estimatedRowHeight = DEFAULT_HEIGHT;
@@ -278,8 +311,28 @@ var ListView = (function (_super) {
         var changed = this._setCurrentMeasureSpecs(widthMeasureSpec, heightMeasureSpec);
         _super.prototype.measure.call(this, widthMeasureSpec, heightMeasureSpec);
         if (changed) {
-            this._ios.reloadData();
+            this.ios.reloadData();
         }
+    };
+    ListView.prototype.onMeasure = function (widthMeasureSpec, heightMeasureSpec) {
+        var _this = this;
+        _super.prototype.onMeasure.call(this, widthMeasureSpec, heightMeasureSpec);
+        this._map.forEach(function (childView, listViewCell) {
+            list_view_common_1.View.measureChild(_this, childView, childView._currentWidthMeasureSpec, childView._currentHeightMeasureSpec);
+        });
+    };
+    ListView.prototype.onLayout = function (left, top, right, bottom) {
+        var _this = this;
+        _super.prototype.onLayout.call(this, left, top, right, bottom);
+        this._map.forEach(function (childView, listViewCell) {
+            var rowHeight = _this._effectiveRowHeight;
+            var cellHeight = rowHeight > 0 ? rowHeight : _this.getHeight(childView._listViewItemIndex);
+            if (cellHeight) {
+                var width = list_view_common_1.layout.getMeasureSpecSize(_this.widthMeasureSpec);
+                childView.iosOverflowSafeAreaEnabled = false;
+                list_view_common_1.View.layoutChild(_this, childView, 0, 0, width, cellHeight);
+            }
+        });
     };
     ListView.prototype._layoutCell = function (cellView, indexPath) {
         if (cellView) {
@@ -290,7 +343,7 @@ var ListView = (function (_super) {
             this.setHeight(indexPath.row, height);
             return height;
         }
-        return this._ios.estimatedRowHeight;
+        return this.ios.estimatedRowHeight;
     };
     ListView.prototype._prepareCell = function (cell, indexPath) {
         var cellHeight;
@@ -316,10 +369,11 @@ var ListView = (function (_super) {
                 cell.owner = new WeakRef(view);
             }
             this._prepareItem(view, indexPath.row);
+            view._listViewItemIndex = indexPath.row;
             this._map.set(cell, view);
-            if (view && !view.parent && view.nativeViewProtected) {
-                cell.contentView.addSubview(view.nativeViewProtected);
+            if (view && !view.parent) {
                 this._addView(view);
+                cell.contentView.addSubview(view.nativeViewProtected);
             }
             cellHeight = this._layoutCell(view, indexPath);
         }
@@ -336,14 +390,15 @@ var ListView = (function (_super) {
         var preparing = this._preparingCell;
         this._preparingCell = true;
         view.parent._removeView(view);
+        view._listViewItemIndex = undefined;
         this._preparingCell = preparing;
         this._map.delete(cell);
     };
     ListView.prototype[list_view_common_1.separatorColorProperty.getDefault] = function () {
-        return this._ios.separatorColor;
+        return this.ios.separatorColor;
     };
     ListView.prototype[list_view_common_1.separatorColorProperty.setNative] = function (value) {
-        this._ios.separatorColor = value instanceof list_view_common_1.Color ? value.ios : value;
+        this.ios.separatorColor = value instanceof list_view_common_1.Color ? value.ios : value;
     };
     ListView.prototype[list_view_common_1.itemTemplatesProperty.getDefault] = function () {
         return null;
@@ -352,7 +407,7 @@ var ListView = (function (_super) {
         this._itemTemplatesInternal = new Array(this._defaultTemplate);
         if (value) {
             for (var i = 0, length_1 = value.length; i < length_1; i++) {
-                this._ios.registerClassForCellReuseIdentifier(ListViewCell.class(), value[i].key);
+                this.ios.registerClassForCellReuseIdentifier(ListViewCell.class(), value[i].key);
             }
             this._itemTemplatesInternal = this._itemTemplatesInternal.concat(value);
         }
@@ -362,7 +417,7 @@ var ListView = (function (_super) {
         return DEFAULT_HEIGHT;
     };
     ListView.prototype[list_view_common_1.iosEstimatedRowHeightProperty.setNative] = function (value) {
-        var nativeView = this._ios;
+        var nativeView = this.ios;
         var estimatedHeight = list_view_common_1.Length.toDevicePixels(value, 0);
         nativeView.estimatedRowHeight = estimatedHeight < 0 ? DEFAULT_HEIGHT : estimatedHeight;
     };

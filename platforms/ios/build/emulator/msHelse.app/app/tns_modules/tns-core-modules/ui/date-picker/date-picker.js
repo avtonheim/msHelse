@@ -8,13 +8,23 @@ __export(require("./date-picker-common"));
 var DatePicker = (function (_super) {
     __extends(DatePicker, _super);
     function DatePicker() {
-        var _this = _super.call(this) || this;
-        _this.nativeViewProtected = UIDatePicker.new();
-        _this.nativeViewProtected.datePickerMode = 1;
-        _this._changeHandler = UIDatePickerChangeHandlerImpl.initWithOwner(new WeakRef(_this));
-        _this.nativeViewProtected.addTargetActionForControlEvents(_this._changeHandler, "valueChanged", 4096);
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
+    DatePicker.prototype.createNativeView = function () {
+        var picker = UIDatePicker.new();
+        picker.datePickerMode = 1;
+        return picker;
+    };
+    DatePicker.prototype.initNativeView = function () {
+        _super.prototype.initNativeView.call(this);
+        var nativeView = this.nativeViewProtected;
+        this._changeHandler = UIDatePickerChangeHandlerImpl.initWithOwner(new WeakRef(this));
+        nativeView.addTargetActionForControlEvents(this._changeHandler, "valueChanged", 4096);
+    };
+    DatePicker.prototype.disposeNativeView = function () {
+        this._changeHandler = null;
+        _super.prototype.disposeNativeView.call(this);
+    };
     Object.defineProperty(DatePicker.prototype, "ios", {
         get: function () {
             return this.nativeViewProtected;

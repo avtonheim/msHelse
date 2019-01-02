@@ -48,9 +48,24 @@ components that have the btn class name.
 .listLayout{
   margin: 20px;
 }
+/*Todo-list*/
+.list-view-item {
+  height: 100px;
+  width: 100%;
+  font-size: 20pt;
+  color: rgb(0, 0, 0);
+  background-color: rgb(236, 234, 234);
+  padding: 16px;
+}
 .listItems{
-  font-size: 25pt;
+  font-size: 19pt;
   text-align: center;
+  width: 80%;
+}
+/*Remove item from list*/
+#remove{
+  text-align: right;
+  font-size: 16pt;
 }
 /*Start and end button in diary component*/
 .startEndBtn{
@@ -67,17 +82,7 @@ components that have the btn class name.
   text-align: center;
   width: 200px;
 }
-/*Todo-list*/
-.list-view-item {
-  height: 48;
-  font-size: 20;
-  color: #212121;
-  background-color: #FFFFFF;
-  padding-top: 16;
-  padding-bottom: 16;
-  padding-left: 16;
-  padding-right: 16;
-}
+
 .graph{
   background-color: blue;
   text-align: center;

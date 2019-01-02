@@ -129,7 +129,7 @@ var XMLHttpRequest = (function () {
         }
     };
     XMLHttpRequest.prototype.addEventListener = function (eventName, handler) {
-        if (eventName !== "load" && eventName !== "error") {
+        if (eventName !== "load" && eventName !== "error" && eventName !== "progress") {
             throw new Error("Event not supported: " + eventName);
         }
         var handlers = this._listeners.get(eventName) || [];

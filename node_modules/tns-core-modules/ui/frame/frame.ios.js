@@ -20,9 +20,15 @@ var Frame = (function (_super) {
         _this._animatedDelegate = UINavigationControllerAnimatedDelegate.new();
         _this._ios = new iOSFrame(_this);
         _this.viewController = _this._ios.controller;
-        _this.nativeViewProtected = _this._ios.controller.view;
         return _this;
     }
+    Frame.prototype.createNativeView = function () {
+        return this.viewController.view;
+    };
+    Frame.prototype.disposeNativeView = function () {
+        this._removeFromFrameStack();
+        _super.prototype.disposeNativeView.call(this);
+    };
     Object.defineProperty(Frame.prototype, "ios", {
         get: function () {
             return this._ios;
@@ -150,21 +156,28 @@ var Frame = (function (_super) {
         }
     };
     Frame.prototype._getNavBarVisible = function (page) {
-        switch (this._ios.navBarVisibility) {
+        switch (this.actionBarVisibility) {
             case "always":
                 return true;
             case "never":
                 return false;
             case "auto":
-                var newValue = void 0;
-                if (page && page.actionBarHidden !== undefined) {
-                    newValue = !page.actionBarHidden;
+                switch (this._ios.navBarVisibility) {
+                    case "always":
+                        return true;
+                    case "never":
+                        return false;
+                    case "auto":
+                        var newValue = void 0;
+                        if (page && page.actionBarHidden !== undefined) {
+                            newValue = !page.actionBarHidden;
+                        }
+                        else {
+                            newValue = this.ios.controller.viewControllers.count > 1 || (page && page.actionBar && !page.actionBar._isEmpty());
+                        }
+                        newValue = !!newValue;
+                        return newValue;
                 }
-                else {
-                    newValue = this.ios.controller.viewControllers.count > 1 || (page && page.actionBar && !page.actionBar._isEmpty());
-                }
-                newValue = !!newValue;
-                return newValue;
         }
     };
     Object.defineProperty(Frame, "defaultAnimatedNavigation", {
@@ -504,7 +517,7 @@ var iOSFrame = (function () {
         },
         set: function (value) {
             this._showNavigationBar = value;
-            this._controller.setNavigationBarHiddenAnimated(!value, true);
+            this._controller.setNavigationBarHiddenAnimated(!value, !this._disableNavBarAnimation);
         },
         enumerable: true,
         configurable: true

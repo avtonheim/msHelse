@@ -85,6 +85,8 @@ var ListViewBase = (function (_super) {
     };
     ListViewBase.prototype.scrollToIndex = function (index) {
     };
+    ListViewBase.prototype.scrollToIndexAnimated = function (index) {
+    };
     ListViewBase.prototype._getItemTemplate = function (index) {
         var templateKey = "default";
         if (this.itemTemplateSelector) {
@@ -135,7 +137,7 @@ var ListViewBase = (function (_super) {
         view_1.CSSType("ListView")
     ], ListViewBase);
     return ListViewBase;
-}(view_1.View));
+}(view_1.ContainerView));
 exports.ListViewBase = ListViewBase;
 ListViewBase.prototype.recycleNativeView = "auto";
 exports.itemsProperty = new view_1.Property({

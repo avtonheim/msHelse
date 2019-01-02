@@ -58,7 +58,8 @@ var ImageAsset = (function (_super) {
         });
     };
     ImageAsset.prototype.scaleImage = function (image, requestedSize) {
-        UIGraphicsBeginImageContextWithOptions(requestedSize, false, 0.0);
+        var scaleFactor = this.options && this.options.autoScaleFactor === false ? 1.0 : 0.0;
+        UIGraphicsBeginImageContextWithOptions(requestedSize, false, scaleFactor);
         image.drawInRect(CGRectMake(0, 0, requestedSize.width, requestedSize.height));
         var resultImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();

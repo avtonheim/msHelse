@@ -120,8 +120,9 @@ var GridLayout = (function (_super) {
     };
     GridLayout.prototype.onLayout = function (left, top, right, bottom) {
         _super.prototype.onLayout.call(this, left, top, right, bottom);
-        var paddingLeft = this.effectiveBorderLeftWidth + this.effectivePaddingLeft;
-        var paddingTop = this.effectiveBorderTopWidth + this.effectivePaddingTop;
+        var insets = this.getSafeAreaInsets();
+        var paddingLeft = this.effectiveBorderLeftWidth + this.effectivePaddingLeft + insets.left;
+        var paddingTop = this.effectiveBorderTopWidth + this.effectivePaddingTop + insets.top;
         this.columnOffsets.length = 0;
         this.rowOffsets.length = 0;
         this.columnOffsets.push(paddingLeft);

@@ -1,16 +1,5 @@
 Object.defineProperty(exports, "__esModule", { value: true });
-require("./decorators");
-if (!global.__extends) {
-    global.__extends = function (d, b) {
-        for (var p in b) {
-            if (b.hasOwnProperty(p)) {
-                d[p] = b[p];
-            }
-        }
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-}
+require("./ts-helpers");
 global.moduleMerge = function (sourceExports, destExports) {
     for (var key in sourceExports) {
         destExports[key] = sourceExports[key];
@@ -166,7 +155,7 @@ function Deprecated(target, key, descriptor) {
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
-            console.log(key + " is deprecated");
+            console.log(key.toString() + " is deprecated");
             return originalMethod.apply(this, args);
         };
         return descriptor;
@@ -186,7 +175,7 @@ function Experimental(target, key, descriptor) {
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
-            console.log(key + " is experimental");
+            console.log(key.toString() + " is experimental");
             return originalMethod.apply(this, args);
         };
         return descriptor;

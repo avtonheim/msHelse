@@ -16,7 +16,6 @@ function createViewModel(database) {
 
     viewModel.insert = function(args) {
           var symptomType = args.object.context; // Problem with adding the same context twice in one session. Should be able to register both morning and evening to register only one context
-          var eventVal = args.object.value; //day or night
           var eventTime = args.object.text; //testing purposes
           var morgonVal = null;
           var kveldVal = null;

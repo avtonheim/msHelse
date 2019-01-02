@@ -62,17 +62,25 @@ var UISearchBarImpl = (function (_super) {
 var SearchBar = (function (_super) {
     __extends(SearchBar, _super);
     function SearchBar() {
-        var _this = _super.call(this) || this;
-        _this.nativeViewProtected = _this._ios = UISearchBarImpl.new();
-        _this._delegate = UISearchBarDelegateImpl.initWithOwner(new WeakRef(_this));
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
+    SearchBar.prototype.createNativeView = function () {
+        return UISearchBarImpl.new();
+    };
+    SearchBar.prototype.initNativeView = function () {
+        _super.prototype.initNativeView.call(this);
+        this._delegate = UISearchBarDelegateImpl.initWithOwner(new WeakRef(this));
+    };
+    SearchBar.prototype.disposeNativeView = function () {
+        this._delegate = null;
+        _super.prototype.disposeNativeView.call(this);
+    };
     SearchBar.prototype.onLoaded = function () {
         _super.prototype.onLoaded.call(this);
-        this._ios.delegate = this._delegate;
+        this.ios.delegate = this._delegate;
     };
     SearchBar.prototype.onUnloaded = function () {
-        this._ios.delegate = null;
+        this.ios.delegate = null;
         _super.prototype.onUnloaded.call(this);
     };
     SearchBar.prototype.dismissSoftInput = function () {
@@ -80,7 +88,7 @@ var SearchBar = (function (_super) {
     };
     Object.defineProperty(SearchBar.prototype, "ios", {
         get: function () {
-            return this._ios;
+            return this.nativeViewProtected;
         },
         enumerable: true,
         configurable: true
@@ -107,12 +115,22 @@ var SearchBar = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    SearchBar.prototype[search_bar_common_1.isEnabledProperty.setNative] = function (value) {
+        var nativeView = this.nativeViewProtected;
+        if (nativeView instanceof UIControl) {
+            nativeView.enabled = value;
+        }
+        var textField = this._textField;
+        if (textField) {
+            textField.enabled = value;
+        }
+    };
     SearchBar.prototype[search_bar_common_1.backgroundColorProperty.getDefault] = function () {
-        return this._ios.barTintColor;
+        return this.ios.barTintColor;
     };
     SearchBar.prototype[search_bar_common_1.backgroundColorProperty.setNative] = function (value) {
         var color = value instanceof search_bar_common_1.Color ? value.ios : value;
-        this._ios.barTintColor = color;
+        this.ios.barTintColor = color;
     };
     SearchBar.prototype[search_bar_common_1.colorProperty.getDefault] = function () {
         var sf = this._textField;
@@ -149,14 +167,14 @@ var SearchBar = (function (_super) {
     };
     SearchBar.prototype[search_bar_common_1.textProperty.setNative] = function (value) {
         var text = (value === null || value === undefined) ? "" : value.toString();
-        this._ios.text = text;
+        this.ios.text = text;
     };
     SearchBar.prototype[search_bar_common_1.hintProperty.getDefault] = function () {
         return "";
     };
     SearchBar.prototype[search_bar_common_1.hintProperty.setNative] = function (value) {
         var text = (value === null || value === undefined) ? "" : value.toString();
-        this._ios.placeholder = text;
+        this.ios.placeholder = text;
     };
     SearchBar.prototype[search_bar_common_1.textFieldBackgroundColorProperty.getDefault] = function () {
         var textField = this._textField;
