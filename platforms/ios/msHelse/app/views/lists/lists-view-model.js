@@ -33,7 +33,7 @@ function createViewModel(database) {
         });
     }
 
-    viewModel.remove = function() {
+    viewModel.delete = function() {
         this.lists = new ObservableArray([]);
         database.all("DELETE FROM lists WHERE list_name= (?)", [args.object.text]).then(rows => {
             for(var row in rows) {

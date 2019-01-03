@@ -11,8 +11,10 @@
     </Page.actionBar>
         <ListView items="{{ lists }}" class="listLayout">
             <ListView.itemTemplate>
-                <StackLayout>
-                    <Label text="{{ list_name }}" class="list-view-item" tap="markDone"/>
+                <StackLayout orientation="horizontal" class="list-view-item">
+                    <CheckBox text="CheckBox Label" checked="false"></CheckBox>
+                    <Label text="{{ finsihed ? '&#xf192;' : '&#xf10c;' }}" tap="tapDone"/>
+                    <Label text="{{ list_name }}" class="listItems"/>
                 </StackLayout>
             </ListView.itemTemplate>
         </ListView>

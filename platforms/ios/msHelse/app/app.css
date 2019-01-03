@@ -52,16 +52,21 @@ components that have the btn class name.
 .list-view-item {
   height: 100px;
   width: 100%;
-  font-size: 20pt;
+  font-size: 15pt;
+  text-align: center;
   color: rgb(0, 0, 0);
   background-color: rgb(236, 234, 234);
   padding: 16px;
 }
 .listItems{
-  font-size: 19pt;
-  text-align: center;
-  width: 80%;
+  width: 100%;
 }
+
+.listItemsDone{
+  width: 100%;
+  text-decoration: line-through;
+}
+
 /*Remove item from list*/
 #remove{
   text-align: right;

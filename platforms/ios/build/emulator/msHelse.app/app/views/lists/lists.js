@@ -15,8 +15,12 @@ function onNavigatingTo(args) {
         console.log("OPEN DB ERROR", error);
     });
 } exports.onNavigatingTo = onNavigatingTo;
-
+ 
 /*Next buttin to text-general*/
 function navText(){
   FrameModule.topmost().navigate('views/diary/text/text');
 } exports.navText = navText;
+
+function tapDone(args){
+    console.log(this.args.object.text)
+} exports.tapDone = tapDone;

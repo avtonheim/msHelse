@@ -15,7 +15,7 @@
       <Label class="body" text="Trykk på eit kort for å utvide" textWrap="true"/>
 
       <StackLayout class="symptomCont" id="firstElement">
-        <Label class="symptomHead" text="Legg til eit nytt symptom"/>
+        <Label class="symptomHead" text="Legg til eit nytt symptom" tap="toggle0"/>
         <Label class="body" text="{{ showDetails0 ? 'Klikk for å utvide' : 'Lukk' }}" tap="toggle0"/>
         <StackLayout visibility="{{ showDetails0 ? 'collapsed' : 'visible' }}">
           <TextField id="inputSelf" hint="Klikk for å legge til eit anna symptom" autocorrect="true"/>
@@ -28,7 +28,7 @@
       </StackLayout>
 
       <StackLayout class="symptomCont">
-        <Label class="symptomHead" text="Vannlatning"/>
+        <Label class="symptomHead" text="Vannlatning" tap="toggle1"/>
         <Label class="body" text="{{ showDetails1 ? 'Klikk for å utvide' : 'Lukk' }}" tap="toggle1"/>
         <StackLayout class="symtomDetails" visibility="{{ showDetails1 ? 'collapsed' : 'visible' }}">
           <Label class="specQuestion" text="Hadde du problem med å tisse når du var på do?" textWrap="true"/>
@@ -51,7 +51,7 @@
       </StackLayout>
 
       <StackLayout class="symptomCont" >
-        <Label class="symptomHead" text="Søvnproblem"/>
+        <Label class="symptomHead" text="Søvnproblem" tap="toggle2"/>
         <Label class="body" text="{{ showDetails2 ? 'Klikk for å utvide' : 'Lukk' }}" tap="toggle2"/>
         <StackLayout class="symtomDetails" visibility="{{ showDetails2 ? 'collapsed' : 'visible' }}">
           <Label class="specQuestion" text="Hadde du problem med å sove?" textWrap="true"/>
@@ -74,7 +74,7 @@
       </StackLayout>
 
       <StackLayout class="symptomCont">
-        <Label class="symptomHead" text="Ereksjonsproblem"/>
+        <Label class="symptomHead" text="Ereksjonsproblem" tap="toggle3"/>
         <Label class="body" text="{{ showDetails3 ? 'Klikk for å utvide' : 'Lukk' }}" tap="toggle3"/>
         <StackLayout class="symtomDetails" visibility="{{ showDetails3 ? 'collapsed' : 'visible' }}">
           <Label class="specQuestion" text="Hadde du problem med å få ereksjon?" textWrap="true"/>
@@ -92,7 +92,7 @@
       </StackLayout>
 
       <StackLayout class="symptomCont">
-        <Label class="symptomHead" text="Fatigue"/>
+        <Label class="symptomHead" text="Fatigue" tap="toggle4"/>
         <Label class="body" text="{{ showDetails4 ? 'Klikk for å utvide' : 'Lukk' }}" tap="toggle4"/>
           <StackLayout class="symtomDetails" visibility="{{ showDetails4 ? 'collapsed' : 'visible' }}">
             <Label class="specQuestion" text="Fekk du Fatigue etter å ha utført ein krevjande aktivitet?" textWrap="true"/>
