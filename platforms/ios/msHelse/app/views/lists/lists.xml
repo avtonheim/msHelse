@@ -1,7 +1,7 @@
-<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="onNavigatingTo">
+<Page navigatingTo="onNavigatingTo">
     <Page.actionBar>
         <ActionBar class="action-bar">
-          <StackLayout loaded="loaded">
+          <StackLayout>
              <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
           </StackLayout>
             <ActionBar.actionItems>
@@ -9,11 +9,11 @@
             </ActionBar.actionItems>
         </ActionBar>
     </Page.actionBar>
-        <ListView items="{{ lists }}" class="listLayout">
+        <ListView id="listView" items="{{ lists }}" class="listLayout">
             <ListView.itemTemplate>
                 <StackLayout orientation="horizontal" class="list-view-item">
-                    <Label class="{{ done ? 'listItemsDone' : 'listItems' }}" text="{{ list_name }}" tap="tapDone"/>
+                    <Label class="listItems" text="{{ list_name }}"/>
                 </StackLayout>
-            </ListView.itemTemplate>
+            </ListView.itemTemplate> 
         </ListView>
 </Page>

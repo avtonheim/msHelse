@@ -2,20 +2,11 @@
 In NativeScript, the app.css file is where you place CSS rules that
 you would like to apply to your entire application. Check out
 http://docs.nativescript.org/ui/styling for a full list of the CSS
-selectors and properties you can use to style UI components.
+selectors and properties you can use to style UI components. */
 
-/*
-In many cases you may want to use the NativeScript core theme instead
-of writing your own CSS rules. For a full list of class names in the theme
-refer to http://docs.nativescript.org/ui/theme.
-The imported CSS rules must precede all other types of rules.
-*/
 @import '~/nativescript-theme-core/css/sky.css';
 
-/*
-The following CSS rule changes the font size of all UI
-components that have the btn class name.
-*/
+
 .btn {
     font-size: 18;
 }
@@ -36,15 +27,16 @@ components that have the btn class name.
 }
 /*Title in each component*/
 .titleMain{
-  font-size: 50pt;
+  font-size: 40pt;
   margin-top: 20px;
 }
 /*Image in each component*/
 .mainComp{
   width: 300px;
   height: 300px;
-  margin-top: 30px;
+  margin-top: 40px;
 }
+
 .listLayout{
   margin: 20px;
 }
@@ -59,7 +51,7 @@ components that have the btn class name.
   padding: 16px;
 }
 .listItems{
-  width: 100%;
+  width: 90%;
 }
 
 .listItemsDone{
@@ -72,10 +64,20 @@ components that have the btn class name.
   text-align: right;
   font-size: 16pt;
 }
+
+.textBox{
+  width: 90%;
+  padding: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+
 /*Start and end button in diary component*/
 .startEndBtn{
   margin-top: 20px;
-  width: 500px;
+  width: 50%;
   height: 100px;
   border-radius: 15px;
   background-color: green;
@@ -94,7 +96,7 @@ components that have the btn class name.
   color: white;
   margin-bottom: 10px;
 }
-.navButton{
+.navButton, .navButtonGraphs{
   height: 140px;
   width: 90%;
   text-align: center;
@@ -104,8 +106,12 @@ components that have the btn class name.
   background-color:#78DD8C;
   border-radius: 15px;
 }
-.navButton Label{
+.navButton Label, .navButtonGraphs Label{
   margin-top: 40%;
+}
+
+.navButtonGraphs{
+  background-color:#82DBDE;
 }
 .diaryComp{
   text-align: center;

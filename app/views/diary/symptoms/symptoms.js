@@ -1,30 +1,66 @@
 var createViewModel = require("./symptoms-view-model").createViewModel;
+const ListPicker = require("tns-core-modules/ui/list-picker").ListPicker;
 var Sqlite = require("nativescript-sqlite");
 var frameModule = require('ui/frame');
 var observable = require("data/observable");
-var pageData = new observable.Observable();
+var ObservableArray = require("data/observable-array").ObservableArray;
 var Dialogs = require("ui/dialogs");
+var fs = require('file-system');
+
+var pageData = new observable.Observable();
+selectedSymptoms = new ObservableArray([]);
+symptomList = new ObservableArray([]);
+
 
 function onNavigatingTo(args){
-  var page = args.object;
-  //Controlling the native back-button
   var controller = frameModule.topmost().ios.controller;
   var navigationItem = controller.visibleViewController.navigationItem;
   navigationItem.setHidesBackButtonAnimated(true, false);
 
-  if (!Sqlite.exists("populated.db")) {
-          Sqlite.copyDatabase("populated.db");
-      }
-      (new Sqlite("populated.db")).then(db => {
-          db.execSQL("CREATE TABLE IF NOT EXISTS symptoms (id INTEGER PRIMARY KEY AUTOINCREMENT, symptom TEXT, morning INT, evening INT, timestamp INT)").then(id => {
-              page.bindingContext = createViewModel(db);
-          }, error => {
-              console.log("CREATE TABLE ERROR", error);
-          });
-      }, error => {
-          console.log("OPEN DB ERROR", error);
-      });
+  
+
+  loadDatabase(args);
+  loadJSON(args);   
 }
+
+function loadDatabase(args){
+      var page = args.object;
+      if (!Sqlite.exists("populated.db")) {
+        Sqlite.copyDatabase("populated.db");
+    }
+    (new Sqlite("populated.db")).then(db => {
+        db.execSQL("CREATE TABLE IF NOT EXISTS symptoms (id INTEGER PRIMARY KEY AUTOINCREMENT, symptom TEXT, morning INT, evening INT, timestamp INT)").then(id => {
+            page.bindingContext = createViewModel(db);
+        }, error => {
+            console.log("CREATE TABLE ERROR", error);
+        });
+    }, error => {
+        console.log("OPEN DB ERROR", error);
+    });
+} exports.loadDatabase = loadDatabase;
+
+
+function loadJSON(args){
+  const path = fs.knownFolders.currentApp().path;
+  const symptomsJSON = require(path + '/views/diary/symptoms/symptoms.json');
+
+  this.symptomList = new ObservableArray([]); 
+  console.log(symptomsJSON.symptomList); // "debug"
+  this.selectedSymptoms.push(symptomsJSON.symptomList);
+
+  createListPicker(args);
+} exports.loadJSON = loadJSON;
+
+function createListPicker(args){
+    const page = args.object;
+    const container = page.getViewById("container");
+    const listPicker = new ListPicker();
+    listPicker.items = this.selectedSymptoms;
+    listPicker.selectedIndex = 0;
+    container.addChild(listPicker);
+} exports.createListPicker = createListPicker;
+
+
 function loaded(args){
   pageData.set("showDetails0", true);
   pageData.set("showDetails1", true);

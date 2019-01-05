@@ -4,7 +4,6 @@
            <StackLayout>
               <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
            </StackLayout>
-            <ActionItem text="Tilbake" tap="tapHome" ios.position="left"/>
          </ActionBar>
 
      </Page.actionBar>
@@ -14,13 +13,13 @@
     <Image class="mainComp" src="~/images/analyse_ny.png" height="400px" width="400px"/>
     <Label class="titleMain" text="Analyse"/>
     </StackLayout>
-    <StackLayout class="navButton" style="background-color:#82DBDE;">
-      <Label text="Generer rapport til konsultasjon" tap="tapReport"/>
+    <StackLayout class="navButtonGraphs" tap="tapReport">
+      <Label text="Generer rapport til konsultasjon"/>
     </StackLayout>
-    <StackLayout class="navButton" style="background-color:#82DBDE;" tap="tapGraph">
+    <StackLayout class="navButtonGraphs" tap="tapGraph">
       <Label text="Sjå graf over dagbok"/>
     </StackLayout>
-    <StackLayout class="navButton" style="background-color:#82DBDE;" tap="tapText">
+    <StackLayout class="navButtonGraphs" tap="tapText">
       <Label text="Oversikt over tekst"/>
     </StackLayout>
   </StackLayout>

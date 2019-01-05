@@ -1,4 +1,4 @@
-<Page navigatingTo="onNavigatingTo">
+<Page loaded="onNavigatingTo">
   <Page.actionBar>
          <ActionBar title="mHelse" class="action-bar">
            <StackLayout>
@@ -8,22 +8,21 @@
            <ActionItem text="Avbryt" tap="tapHome" ios.position="left"/>
          </ActionBar>
      </Page.actionBar>
-  <ScrollView>
+     
+   <ScrollView>
     <StackLayout class="diaryComp" id="uiFix" loaded="loaded">
-       <Progress value="66"/>
-      <Label class="titleMain" text="Kva har prega deg sidan sist registrering?" textWrap="true"/>
-      <Label class="body" text="Trykk på eit kort for å utvide" textWrap="true"/>
+        <Progress value="66"/>
+      <Label class="titleMain" text="Hva har preget deg siden sist registrering?" textWrap="true"/>
+      <Label class="body" text="Trykk på et kort for å utvide" textWrap="true"/>
+
+      
 
       <StackLayout class="symptomCont" id="firstElement">
         <Label class="symptomHead" text="Legg til eit nytt symptom" tap="toggle0"/>
         <Label class="body" text="{{ showDetails0 ? 'Klikk for å utvide' : 'Lukk' }}" tap="toggle0"/>
         <StackLayout visibility="{{ showDetails0 ? 'collapsed' : 'visible' }}">
-          <TextField id="inputSelf" hint="Klikk for å legge til eit anna symptom" autocorrect="true"/>
-          <GridLayout columns="*,*,*" rows="*">
-            <Button class="eventBtn" col="0" row="0" value="1" text="Morgon"></Button>
-            <Button class="eventBtn" col="1" row="0" value="1" text="Dag"></Button>
-            <Button class="eventBtn" col="2" row="0" value="1" text="Kveld"></Button>
-          </GridLayout>
+          <StackLayout id="container" class="listPicker"/>
+          
         </StackLayout>
       </StackLayout>
 
@@ -112,8 +111,9 @@
               <Button class="eventBtn" col="2" row="0" context="Fatigue" value="1" text="Kveld"></Button>
             </GridLayout>
         </StackLayout>
+       
       </StackLayout>
-
+       
     </StackLayout>
-</ScrollView>
+    </ScrollView>
 </Page>

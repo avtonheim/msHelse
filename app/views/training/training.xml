@@ -4,7 +4,6 @@
            <StackLayout>
               <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
            </StackLayout>
-           <ActionItem text="Tilbake" tap="tapHome" ios.position="left"/>
          </ActionBar>
      </Page.actionBar>
   <StackLayout>
@@ -15,9 +14,6 @@
     </StackLayout>
     <StackLayout class="navButton">
       <Label text="Pusteøving" tap="MindfullnessTap"/>
-    </StackLayout>
-    <StackLayout class="navButton">
-      <Label text="Gå tur"/>
     </StackLayout>
   </StackLayout>
 </Page>

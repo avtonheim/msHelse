@@ -11,7 +11,7 @@
     <StackLayout class="diaryComp">
       <Progress value="33" />
           <StackLayout class="marginMood">
-            <Label class="titleMain" text="Korleis har du hatt det sidan sist registrering?" textWrap="true"/>
+            <Label class="titleMain" text="Hvordan har du hatt det siden sist registrering?" textWrap="true"/>
             <Label class="body" text="Klikk på valgt knapp for å registrere."/>
           </StackLayout>
         <StackLayout>
@@ -25,7 +25,7 @@
           </StackLayout>
           <StackLayout class="btnRegister" value="0" tap="{{ insert }}">
             <Image src="~/images/sad.png" height="200px" width="200px"/>
-            <Label text="Dårleg"/>
+            <Label text="Dårlig"/>
           </StackLayout>
         </StackLayout>
     </StackLayout>

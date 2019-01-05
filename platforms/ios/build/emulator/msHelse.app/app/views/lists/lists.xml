@@ -1,4 +1,4 @@
-<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="onNavigatingTo">
+<Page  xmlns:lv="nativescript-ui-listview" navigatingTo="onNavigatingTo">
     <Page.actionBar>
         <ActionBar class="action-bar">
           <StackLayout>
@@ -9,13 +9,15 @@
             </ActionBar.actionItems>
         </ActionBar>
     </Page.actionBar>
-        <ListView items="{{ lists }}" class="listLayout">
-            <ListView.itemTemplate>
-                <StackLayout orientation="horizontal" class="list-view-item">
-                    <CheckBox text="CheckBox Label" checked="false"></CheckBox>
-                    <Label text="{{ finsihed ? '&#xf192;' : '&#xf10c;' }}" tap="tapDone"/>
-                    <Label text="{{ list_name }}" class="listItems"/>
-                </StackLayout>
-            </ListView.itemTemplate>
-        </ListView>
+     <lv:RadListView class="listLayout">
+        <lv:RadListView.listViewLayout>
+            <lv:ListViewLinearLayout scrollDirection="Vertical"/>
+        </lv:RadListView.listViewLayout>
+        <lv:RadListView.itemTemplate>
+            <StackLayout class="list-group-item">
+                <Label text="{{ id }}" class="list-group-item-heading" />
+                <Label text="{{ list_name }}" textWrap="true" class="list-group-item-text" />
+            </StackLayout>
+        </lv:RadListView.itemTemplate>
+    </lv:RadListView>
 </Page>

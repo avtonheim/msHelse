@@ -6,7 +6,6 @@ var pageData = new observable.Observable();
 
 function onNavigatingTo(args) {
     var page = args.object;
-    const finsihed = false;
     (new Sqlite("my.db")).then(db => {
         db.execSQL("CREATE TABLE IF NOT EXISTS lists (id INTEGER PRIMARY KEY AUTOINCREMENT, list_name TEXT)").then(id => {
             page.bindingContext = createViewModel(db);
@@ -23,11 +22,21 @@ function navText(){
   FrameModule.topmost().navigate('views/diary/text/text');
 } exports.navText = navText;
 
-function loaded(args){
-    pageData.set("done", false);
+function loaded(args){    
+    pageData.set("done", true);
     args.object.bindingContext = pageData;
   } exports.loaded = loaded;
 
-  function tapDone(){
-	pageData.set("done", !pageData.get("done"));
+  function tapDone(args){
+    const id = args.object.index;
+    console.log("slett denne" + id);
+
 } exports.tapDone = tapDone;
+
+/*
+const index = args.index;
+    const page = args.object.page;
+    const listView = page.getViewById("listView");
+    page.bindingContext.lists.push({ id: index});
+    listView.refresh();
+*/

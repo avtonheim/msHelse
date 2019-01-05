@@ -1,5 +1,4 @@
 var Observable = require("data/observable").Observable;
-var Sqlite = require("nativescript-sqlite");
 var ObservableArray = require("data/observable-array").ObservableArray;
 
 //Read more of SQLITE in nativescript

@@ -33,9 +33,9 @@ function createViewModel(database) {
         });
     }
 
-    viewModel.delete = function() {
+    viewModel.delete = function(id) {
         this.lists = new ObservableArray([]);
-        database.all("DELETE FROM lists WHERE list_name= (?)", [args.object.text]).then(rows => {
+        database.all("DELETE FROM lists WHERE id = (?)", [id]).then(rows => {
             for(var row in rows) {
                 this.lists.push({id: rows[row][0], list_name: rows[row][1]});
             }
