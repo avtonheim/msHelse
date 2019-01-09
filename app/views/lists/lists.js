@@ -16,6 +16,16 @@ function onNavigatingTo(args) {
         console.log("OPEN DB ERROR", error);
     });
 } exports.onNavigatingTo = onNavigatingTo;
+
+function buttonClick(args){
+    const page = args.object;
+    const element = page.getViewById("setActiveButton");
+    element.classList.toggle("activeButton");
+    console.log(element);
+  } exports.buttonClick = buttonClick;
+
+//https://stackoverflow.com/questions/37652578/click-event-on-an-item-template sjå denne for databinding i item.itemtemplate
+//https://github.com/NativeScript/NativeScript/issues/4469#issuecomment-334079192
  
 /*Next buttin to text-general*/
 function navText(){

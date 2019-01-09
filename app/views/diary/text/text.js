@@ -40,7 +40,7 @@ function tapHome(){
 
 function selected(args){
   var selected = args.object;
-  selected.backgroundColor = "gray";
+  selected.backgroundColor = "blue";
 }
 
 exports.onNavigatingTo = onNavigatingTo;

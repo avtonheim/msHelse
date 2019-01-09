@@ -1,4 +1,4 @@
-<Page  xmlns:lv="nativescript-ui-listview" navigatingTo="onNavigatingTo">
+<Page navigatingTo="onNavigatingTo">
     <Page.actionBar>
         <ActionBar class="action-bar">
           <StackLayout>
@@ -9,15 +9,11 @@
             </ActionBar.actionItems>
         </ActionBar>
     </Page.actionBar>
-     <lv:RadListView class="listLayout">
-        <lv:RadListView.listViewLayout>
-            <lv:ListViewLinearLayout scrollDirection="Vertical"/>
-        </lv:RadListView.listViewLayout>
-        <lv:RadListView.itemTemplate>
-            <StackLayout class="list-group-item">
-                <Label text="{{ id }}" class="list-group-item-heading" />
-                <Label text="{{ list_name }}" textWrap="true" class="list-group-item-text" />
-            </StackLayout>
-        </lv:RadListView.itemTemplate>
-    </lv:RadListView>
+        <ListView id="listView" items="{{ lists }}" class="listLayout">
+            <ListView.itemTemplate>
+                <StackLayout orientation="horizontal" class="list-view-item">
+                    <Label class="listItems" text="{{ list_name }}"/>
+                </StackLayout>
+            </ListView.itemTemplate> 
+        </ListView>
 </Page>

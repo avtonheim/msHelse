@@ -22,7 +22,7 @@
           <Image src="~/images/analyse_ny.png" height="70px" width="70px"/>
           <Label text="Graf over dagsform"/>
           </StackLayout>
-          <Label style="font-size: 13px; margin-top: -15px;" text="Dei siste sju dagane"/>
+          <Label style="font-size: 13px; margin-top: -15px;" text="De siste syv dagene"/>
           <StackLayout loaded="onLoadedGraph" id="mood"
               xmlns="http://www.nativescript.org/tns.xsd"
               xmlns:chart="nativescript-pro-ui/chart">
@@ -67,12 +67,12 @@
   <GridLayout columns="*,*" row="*">
     <StackLayout col="0" row="0" class="smallBox" tap="onTap">
       <Image src="~/images/ovelse_ny.png" height="100px" width="100px"/>
-      <Label text="Start ei øving!" textWrap="true"/>
+      <Label text="Start en øving!" textWrap="true"/>
     </StackLayout>
 
     <StackLayout col="1" row="0" class="smallBox" tap="tapTodo">
       <Image src="~/images/gjoremal_ny.png" height="100px" width="100px"/>
-      <Label text="Planlegg noko kjekt!" textWrap="true"/>
+      <Label text="Planlegg noe gøy!" textWrap="true"/>
     </StackLayout>
   </GridLayout>
 

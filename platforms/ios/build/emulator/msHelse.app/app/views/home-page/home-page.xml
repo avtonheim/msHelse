@@ -22,8 +22,44 @@
           <Image src="~/images/analyse_ny.png" height="70px" width="70px"/>
           <Label text="Graf over dagsform"/>
           </StackLayout>
-          <Label style="font-size: 13px; margin-top: -15px;" text="Dei siste sju dagane"/>
-          <StackLayout id="mood">
+          <Label style="font-size: 13px; margin-top: -15px;" text="De siste syv dagene"/>
+          <StackLayout loaded="onLoadedGraph" id="mood"
+              xmlns="http://www.nativescript.org/tns.xsd"
+              xmlns:chart="nativescript-pro-ui/chart">
+                <chart:RadCartesianChart class="graphBox" height="300">
+                  <chart:RadCartesianChart.series>
+                        <chart:SplineAreaSeries lineColor="white" seriesName="Dagsform"
+                          selectionMode="DataPoint"
+                          outerRadiusFactor="0.8"
+                          expandRadius="0.2"
+                          items="{{ Mood }}"
+                          categoryProperty="dato"
+                          valueProperty="dagsform"
+                          showLabels="true">
+                        <chart:SplineAreaSeries.labelStyle>
+                            <chart:PointLabelStyle margin="5" fontStyle="Bold" fillColor="#60B3FC" textSize="19" textColor="White" />
+                          </chart:SplineAreaSeries.labelStyle>
+                            <chart:SplineAreaSeries.horizontalAxis>
+                              <chart:categoricalAxis labelFitMode="rotate"/>
+                            </chart:SplineAreaSeries.horizontalAxis>
+                            <chart:SplineAreaSeries.verticalAxis>
+                                <chart:LinearAxis minimum="0" majorStep="5" maximum="11"/>
+                            </chart:SplineAreaSeries.verticalAxis>
+                        </chart:SplineAreaSeries>
+                        <!--styling-->
+                        <chart:RadCartesianChart.palettes>
+                          <chart:Palette seriesName="Dagsform">
+                            <chart:Palette.entries>
+                            <chart:PaletteEntry strokeColor="white" fillColor="#8060B3FC"/>
+
+                          </chart:Palette.entries>
+                        </chart:Palette>
+                      </chart:RadCartesianChart.palettes>
+                      </chart:RadCartesianChart.series>
+                      <chart:RadCartesianChart.trackball>
+                        <chart:Trackball/>
+                      </chart:RadCartesianChart.trackball>
+                    </chart:RadCartesianChart>
           </StackLayout>
           
     </StackLayout>
@@ -31,12 +67,12 @@
   <GridLayout columns="*,*" row="*">
     <StackLayout col="0" row="0" class="smallBox" tap="onTap">
       <Image src="~/images/ovelse_ny.png" height="100px" width="100px"/>
-      <Label text="Start ei øving!" textWrap="true"/>
+      <Label text="Start en øving!" textWrap="true"/>
     </StackLayout>
 
     <StackLayout col="1" row="0" class="smallBox" tap="tapTodo">
       <Image src="~/images/gjoremal_ny.png" height="100px" width="100px"/>
-      <Label text="Planlegg noko kjekt!" textWrap="true"/>
+      <Label text="Planlegg noe gøy!" textWrap="true"/>
     </StackLayout>
   </GridLayout>
 

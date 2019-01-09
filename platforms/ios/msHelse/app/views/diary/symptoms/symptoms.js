@@ -16,7 +16,7 @@ function onNavigatingTo(args){
   var controller = frameModule.topmost().ios.controller;
   var navigationItem = controller.visibleViewController.navigationItem;
   navigationItem.setHidesBackButtonAnimated(true, false);
-
+ 
   
 
   loadDatabase(args);
@@ -38,6 +38,14 @@ function loadDatabase(args){
         console.log("OPEN DB ERROR", error);
     });
 } exports.loadDatabase = loadDatabase;
+
+function buttonClick(args){
+  const page = args.object;
+  const element = page.getViewById("setActiveButton");
+  element.classList.toggle("activeButton");
+  console.log(element.context + element.text);
+} exports.buttonClick = buttonClick;
+
 
 
 function loadJSON(args){

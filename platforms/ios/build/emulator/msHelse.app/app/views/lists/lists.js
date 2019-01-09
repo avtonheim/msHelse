@@ -6,7 +6,6 @@ var pageData = new observable.Observable();
 
 function onNavigatingTo(args) {
     var page = args.object;
-    const finsihed = false;
     (new Sqlite("my.db")).then(db => {
         db.execSQL("CREATE TABLE IF NOT EXISTS lists (id INTEGER PRIMARY KEY AUTOINCREMENT, list_name TEXT)").then(id => {
             page.bindingContext = createViewModel(db);
@@ -17,6 +16,9 @@ function onNavigatingTo(args) {
         console.log("OPEN DB ERROR", error);
     });
 } exports.onNavigatingTo = onNavigatingTo;
+
+//https://stackoverflow.com/questions/37652578/click-event-on-an-item-template sjå denne for databinding i item.itemtemplate
+//https://github.com/NativeScript/NativeScript/issues/4469#issuecomment-334079192
  
 /*Next buttin to text-general*/
 function navText(){
@@ -29,11 +31,15 @@ function loaded(args){
   } exports.loaded = loaded;
 
   function tapDone(args){
-    const index = args.index;
+    const id = args.object.index;
+    console.log("slett denne" + id);
+
+} exports.tapDone = tapDone;
+
+/*
+const index = args.index;
     const page = args.object.page;
     const listView = page.getViewById("listView");
-    page.bindingContext.lists.push({ list_name: "ferdig!"});
+    page.bindingContext.lists.push({ id: index});
     listView.refresh();
-
-	pageData.set("done", !pageData.get("done"));
-} exports.tapDone = tapDone;
+*/

@@ -334,11 +334,11 @@
 		</data>
 		<key>app/app.css</key>
 		<data>
-		xd/2oOKJ6msk4yOj6F4V0vFL+ZI=
+		N4ytfUGNP55LdBu7TV66lGJusS8=
 		</data>
 		<key>app/app.js</key>
 		<data>
-		VvHMfiO3ZTPGdLurnOzjjWRZcgM=
+		veyKYUAnGRBWa2j1BTcidjP0wfk=
 		</data>
 		<key>app/bundle-config.js</key>
 		<data>
@@ -411,6 +411,26 @@
 		<key>app/references.d.ts</key>
 		<data>
 		yDozBNmMJYY1mHH12KwQyKqK+Eg=
+		</data>
+		<key>app/tns_modules/nativescript-dom/LICENSE</key>
+		<data>
+		mmtZ7Pc/8uREL0e3Q0ZsUqZoRJg=
+		</data>
+		<key>app/tns_modules/nativescript-dom/README.md</key>
+		<data>
+		7alIOMHKQDg4gOWvO1NLR6gMrkE=
+		</data>
+		<key>app/tns_modules/nativescript-dom/changelog.md</key>
+		<data>
+		BaqCTe0ipUjnI2Xc87NUEwKcBPs=
+		</data>
+		<key>app/tns_modules/nativescript-dom/dom.js</key>
+		<data>
+		Wa+RTmQh7TUtfGH9lZQbNr3VsNs=
+		</data>
+		<key>app/tns_modules/nativescript-dom/package.json</key>
+		<data>
+		nIp1bYj9CBrmuEPiUKYGQq6UA/I=
 		</data>
 		<key>app/tns_modules/nativescript-local-notifications/CHANGELOG.md</key>
 		<data>
@@ -2398,11 +2418,11 @@
 		</data>
 		<key>app/views/diary/diary.js</key>
 		<data>
-		L/ce5T1UsdJYCxCdToEfhC5piwM=
+		0K6dvcdjaGZXypVh2ScxGkgB5Qs=
 		</data>
 		<key>app/views/diary/diary.xml</key>
 		<data>
-		ZUW/JjMea+7dXARTxSu886NAtw8=
+		eStH+nUmH/Mcd1W031JE4JSBrNU=
 		</data>
 		<key>app/views/diary/mood/mood-view-model.js</key>
 		<data>
@@ -2418,23 +2438,27 @@
 		</data>
 		<key>app/views/diary/mood/mood.xml</key>
 		<data>
-		d7PMDh6Aij2jorZaib3CL3ktL5A=
+		WrqkOEmQCNBJgDUeF4euHECj4zQ=
 		</data>
 		<key>app/views/diary/symptoms/symptoms-view-model.js</key>
 		<data>
-		r4u03+q4Oi8BQTmK8ymN0PGvu14=
+		vMN5r35TnVSPgt33dIBaUMShtqw=
 		</data>
 		<key>app/views/diary/symptoms/symptoms.css</key>
 		<data>
-		4QLCLvVqyjL1QOa7+JilwfmdoyY=
+		HY5hpxz27F+Tj/oIJZ29vhgrA1s=
 		</data>
 		<key>app/views/diary/symptoms/symptoms.js</key>
 		<data>
-		PB+CrqeHUthmP27pGjceXl+FKj0=
+		gtzgQe4auTDrDiK43Gx6ER7tsXc=
+		</data>
+		<key>app/views/diary/symptoms/symptoms.json</key>
+		<data>
+		Bkvw5SFIxFFIBXz0LFd3CkWfecg=
 		</data>
 		<key>app/views/diary/symptoms/symptoms.xml</key>
 		<data>
-		Gik9GPq1z/Qu5Q5TCR3kkjfq/+M=
+		AAu/m1WuwPMpzH0gd2ADyLTGlZk=
 		</data>
 		<key>app/views/diary/text/text-view-model.js</key>
 		<data>
@@ -2446,7 +2470,7 @@
 		</data>
 		<key>app/views/diary/text/text.js</key>
 		<data>
-		0QbZ1oCeYQ34NW+rEa3JmdjM7gQ=
+		1QsUmfDGigb8ic1KwCn5BixWSt8=
 		</data>
 		<key>app/views/diary/text/text.xml</key>
 		<data>
@@ -2490,7 +2514,7 @@
 		</data>
 		<key>app/views/graphs/patientOverview/moodgraph.xml</key>
 		<data>
-		O6t5OhxzxGJwOGSzyF8dl+LyMwQ=
+		uotvi4bdp9jqeYilsu0PB/RINaI=
 		</data>
 		<key>app/views/graphs/patientOverview/symptomgraph.js</key>
 		<data>
@@ -2502,15 +2526,15 @@
 		</data>
 		<key>app/views/home-page/home-page.css</key>
 		<data>
-		kJf+IN+fJn0ahDXrY9OHx8iczjk=
+		I/i+9SF4w5IAEloSnoGz2tb7CsY=
 		</data>
 		<key>app/views/home-page/home-page.js</key>
 		<data>
-		OARjLXX/yALccFgQQhMGM+5/Rwc=
+		+YiaA6X7JiRYJ1Vr3Gg6i+gTMEw=
 		</data>
 		<key>app/views/home-page/home-page.xml</key>
 		<data>
-		ANwl03FSkBj/elbSJAq4DclAVgo=
+		0kfdKb7lQLYuq7qfkKnk1mdNnpc=
 		</data>
 		<key>app/views/information/information.css</key>
 		<data>
@@ -2518,31 +2542,31 @@
 		</data>
 		<key>app/views/information/information.js</key>
 		<data>
-		mrVOaVaXJE++oV8FrFBnp7BCA34=
+		8j6ZSrO9Ly/bBnNJBDWNmWTcZ8w=
 		</data>
 		<key>app/views/information/information.xml</key>
 		<data>
-		FU/Crb0R/hfGElcQCUNx04uTCfQ=
+		Q6u5cyml0SXPX28Dbu1dyfORc6I=
 		</data>
 		<key>app/views/listmain/listmain.js</key>
 		<data>
-		JixCv5xRTi5ZS9NHji9hjqa7i70=
+		lg9WKpHUTcN/XhoGvzQ/QpbLbIY=
 		</data>
 		<key>app/views/listmain/listmain.xml</key>
 		<data>
-		mwS7nAbI0GXJok8KBwNvwNqElmo=
+		LnbPq+MJlWIUfX8qpilQGfe79NY=
 		</data>
 		<key>app/views/lists/lists-view-model.js</key>
 		<data>
-		eLXSnvFaANy0Hbd5bHhyB/tc2YA=
+		Rand0/0MmvhIUH0/3KTqcqZrKjk=
 		</data>
 		<key>app/views/lists/lists.js</key>
 		<data>
-		tQfUX5U4/7Jwp7toxYs7xjnXOR4=
+		DHwZXp4XhkC/ZH3rDTsoXYWddEA=
 		</data>
 		<key>app/views/lists/lists.xml</key>
 		<data>
-		crrZM42NGmRc4RHwAj73qMhYULA=
+		14b40ikUkrSl8YFTnO+o4/zd/7M=
 		</data>
 		<key>app/views/textoverview/textoverview.css</key>
 		<data>
@@ -2582,11 +2606,11 @@
 		</data>
 		<key>app/views/training/training.js</key>
 		<data>
-		Rvp4xDxSI7VPy8xabscNLdn20P4=
+		OfWdGYUbJ8LeeFNyZWwrSaKxmnI=
 		</data>
 		<key>app/views/training/training.xml</key>
 		<data>
-		PNZmHJRy9sTpTMHh1NzdY8Do1tI=
+		M1/00d2bAOcjDVkMI9nIgxEI8T8=
 		</data>
 		<key>app/views/visualisationmain/consultation/consultation.css</key>
 		<data>
@@ -2646,11 +2670,11 @@
 		</data>
 		<key>app/views/visualisationmain/visualisationmain.js</key>
 		<data>
-		sbDDVuCkC0cbYzUvfm/Lc/oYSaw=
+		jMsvYLb7Qt13NWB1iS4v1XVyM6k=
 		</data>
 		<key>app/views/visualisationmain/visualisationmain.xml</key>
 		<data>
-		SCkPA2GHx9FnqG6HA1wGXrpSE0I=
+		Ms5hZo6+aB/Xt49BSapNA9lQ2Ls=
 		</data>
 		<key>build.xcconfig</key>
 		<data>
@@ -3552,22 +3576,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			xd/2oOKJ6msk4yOj6F4V0vFL+ZI=
+			N4ytfUGNP55LdBu7TV66lGJusS8=
 			</data>
 			<key>hash2</key>
 			<data>
-			mz9/chzFb3TwzacVehlbkcwyYanmZqqk5vXeEUXpzJ0=
+			pLZUZ2kG9Y78GjI7AsiQ41ThBO3qRjgOQVUIgohKK6s=
 			</data>
 		</dict>
 		<key>app/app.js</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			VvHMfiO3ZTPGdLurnOzjjWRZcgM=
+			veyKYUAnGRBWa2j1BTcidjP0wfk=
 			</data>
 			<key>hash2</key>
 			<data>
-			UHX2ftNcWXLZiltV98FqO2fifURjhPJcPZmdhnkfAQk=
+			x3+89Ilc1gUt2TthihZn25qV3FAoHX/Dhb53E6HD4Eg=
 			</data>
 		</dict>
 		<key>app/bundle-config.js</key>
@@ -3766,6 +3790,61 @@
 			<key>hash2</key>
 			<data>
 			X5pHYco8Emfivn+R0JfB7m2/Wmi+3nt0u8Es7slK14U=
+			</data>
+		</dict>
+		<key>app/tns_modules/nativescript-dom/LICENSE</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			mmtZ7Pc/8uREL0e3Q0ZsUqZoRJg=
+			</data>
+			<key>hash2</key>
+			<data>
+			WZDxCM/T5ib021DxWjUk65gvYEABVd2VzGc1Y6hVO/4=
+			</data>
+		</dict>
+		<key>app/tns_modules/nativescript-dom/README.md</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			7alIOMHKQDg4gOWvO1NLR6gMrkE=
+			</data>
+			<key>hash2</key>
+			<data>
+			xzd/0E2NeRjtkQ/KgpU+1eZPofFX+2n8BcGBeB/+qm4=
+			</data>
+		</dict>
+		<key>app/tns_modules/nativescript-dom/changelog.md</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			BaqCTe0ipUjnI2Xc87NUEwKcBPs=
+			</data>
+			<key>hash2</key>
+			<data>
+			aO+PBzWtXaX0wFJnYmTtIGYzVJV3jWn1IfULMbyFzro=
+			</data>
+		</dict>
+		<key>app/tns_modules/nativescript-dom/dom.js</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			Wa+RTmQh7TUtfGH9lZQbNr3VsNs=
+			</data>
+			<key>hash2</key>
+			<data>
+			POUFFGHtUifyGWqZWdpOrw/YWsvfsM+kuakWF/Rf/Qo=
+			</data>
+		</dict>
+		<key>app/tns_modules/nativescript-dom/package.json</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			nIp1bYj9CBrmuEPiUKYGQq6UA/I=
+			</data>
+			<key>hash2</key>
+			<data>
+			t29UXZp9zCPNPe4u8DZrQPUCGh4KFUSVDtaJ78LR8c8=
 			</data>
 		</dict>
 		<key>app/tns_modules/nativescript-local-notifications/CHANGELOG.md</key>
@@ -9228,22 +9307,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			L/ce5T1UsdJYCxCdToEfhC5piwM=
+			0K6dvcdjaGZXypVh2ScxGkgB5Qs=
 			</data>
 			<key>hash2</key>
 			<data>
-			VccdyLVrTHVj4O4i7kzGplqrCwhzJ/8vVd3oJg1/PBo=
+			J2C5XODyV4GxTxgVxqc5OjHq4xRUa7nbXLh/WjWc6lE=
 			</data>
 		</dict>
 		<key>app/views/diary/diary.xml</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			ZUW/JjMea+7dXARTxSu886NAtw8=
+			eStH+nUmH/Mcd1W031JE4JSBrNU=
 			</data>
 			<key>hash2</key>
 			<data>
-			sad7b6yQ1NHcJe9x2/Pb66sSMUgFLYX2JtBVgeAu8mk=
+			EiwEZEpzkPPyhnWYQOeTQau7ozAiqgPlxnZVbmeVOpI=
 			</data>
 		</dict>
 		<key>app/views/diary/mood/mood-view-model.js</key>
@@ -9283,55 +9362,66 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			d7PMDh6Aij2jorZaib3CL3ktL5A=
+			WrqkOEmQCNBJgDUeF4euHECj4zQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			3ndD+ka43vpykgx2nqIA+w0qGBFSFHY3GOGsNpd5OZM=
+			kpDbRsOnggZeo2U8ZBG1Wu5J4KLw0HQdUatTJv974+M=
 			</data>
 		</dict>
 		<key>app/views/diary/symptoms/symptoms-view-model.js</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			r4u03+q4Oi8BQTmK8ymN0PGvu14=
+			vMN5r35TnVSPgt33dIBaUMShtqw=
 			</data>
 			<key>hash2</key>
 			<data>
-			YoDcNwEBu1POaHro4N6LEe3kI2z4J1yW/oqspQmj91U=
+			W0tKzArRX9GG/UBf8zcbv892nId0EdZmSylAgLY3RCw=
 			</data>
 		</dict>
 		<key>app/views/diary/symptoms/symptoms.css</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			4QLCLvVqyjL1QOa7+JilwfmdoyY=
+			HY5hpxz27F+Tj/oIJZ29vhgrA1s=
 			</data>
 			<key>hash2</key>
 			<data>
-			G5cd8rKpEvjNZJzAwsLi+ccE3/XcPoWIy2mrzm34sOE=
+			XwM+MpdmuL4TLIwNc198NyvBjekz1ZPl1cZwuvBAHbE=
 			</data>
 		</dict>
 		<key>app/views/diary/symptoms/symptoms.js</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			PB+CrqeHUthmP27pGjceXl+FKj0=
+			gtzgQe4auTDrDiK43Gx6ER7tsXc=
 			</data>
 			<key>hash2</key>
 			<data>
-			kIoikM7+xzm+cGMfOdD6ODJgC2qiHbfIllB3rQ3+VC8=
+			Kd5eyaAveZvsyzi5dghRBf3hva6I5WzQtQloaye3sP4=
+			</data>
+		</dict>
+		<key>app/views/diary/symptoms/symptoms.json</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			Bkvw5SFIxFFIBXz0LFd3CkWfecg=
+			</data>
+			<key>hash2</key>
+			<data>
+			Wvgh9Nkp+M/so+xeXRC0fM7vxT9UJZkqBSWAiNoQe+U=
 			</data>
 		</dict>
 		<key>app/views/diary/symptoms/symptoms.xml</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			Gik9GPq1z/Qu5Q5TCR3kkjfq/+M=
+			AAu/m1WuwPMpzH0gd2ADyLTGlZk=
 			</data>
 			<key>hash2</key>
 			<data>
-			K6h/019JaLgojYiRVvsK242E7leHURM6ZYTdBYWhWQM=
+			kglqQqC/ct+M7LsUbcOHC3xnOi/cyIb/4tKL7CFrQNE=
 			</data>
 		</dict>
 		<key>app/views/diary/text/text-view-model.js</key>
@@ -9360,11 +9450,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			0QbZ1oCeYQ34NW+rEa3JmdjM7gQ=
+			1QsUmfDGigb8ic1KwCn5BixWSt8=
 			</data>
 			<key>hash2</key>
 			<data>
-			wPB8ATj0u5XOGgQe0x4//AAQpNMEUHk1XbXR3jqcAQw=
+			oTdEjmn1PWUTBvBWsPRAARy6eLU0SZvVHrRogRYnHXo=
 			</data>
 		</dict>
 		<key>app/views/diary/text/text.xml</key>
@@ -9481,11 +9571,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			O6t5OhxzxGJwOGSzyF8dl+LyMwQ=
+			uotvi4bdp9jqeYilsu0PB/RINaI=
 			</data>
 			<key>hash2</key>
 			<data>
-			YammHA8txtlFsz0XLfDG6OqOLNbti1kIMoVZzSvMqh4=
+			KpfkG7NMgwDMFN3ULjcAgcVXC4bw1QKmrIvf9VGg9FU=
 			</data>
 		</dict>
 		<key>app/views/graphs/patientOverview/symptomgraph.js</key>
@@ -9514,33 +9604,33 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			kJf+IN+fJn0ahDXrY9OHx8iczjk=
+			I/i+9SF4w5IAEloSnoGz2tb7CsY=
 			</data>
 			<key>hash2</key>
 			<data>
-			65uiEnTTbZEc1Dc5U+jsrFjH063VsFuvgzuzHfXSdxk=
+			SDE5niVEa3/cz13o6ChqxWAlDeyq9DaKD1JV1X+w2E4=
 			</data>
 		</dict>
 		<key>app/views/home-page/home-page.js</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			OARjLXX/yALccFgQQhMGM+5/Rwc=
+			+YiaA6X7JiRYJ1Vr3Gg6i+gTMEw=
 			</data>
 			<key>hash2</key>
 			<data>
-			w/VUcwdbmqtJhki2jJKjBJWR+po66/nBvdQYUJbfQPY=
+			KzfEK7Huygwa5AsW4qp1v18nWKyn5p9Teg6LGUybby0=
 			</data>
 		</dict>
 		<key>app/views/home-page/home-page.xml</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			ANwl03FSkBj/elbSJAq4DclAVgo=
+			0kfdKb7lQLYuq7qfkKnk1mdNnpc=
 			</data>
 			<key>hash2</key>
 			<data>
-			Waoq5fWsgq3eu5LbU0U9bRE0FXqzPmh6o5LnZIPBTro=
+			C7I2P94fp4bS7gIiaLzKGRAX5WTfH+ASBM3KqowWbEo=
 			</data>
 		</dict>
 		<key>app/views/information/information.css</key>
@@ -9558,77 +9648,77 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			mrVOaVaXJE++oV8FrFBnp7BCA34=
+			8j6ZSrO9Ly/bBnNJBDWNmWTcZ8w=
 			</data>
 			<key>hash2</key>
 			<data>
-			Tsx2Rq7Th1b6VfX9U8lC82g7qJijluqKkzIwZqxWj0Y=
+			bBwL3aAMzMdIVpy3J77lhIglRTIka7VWUXI5Fi+i5ac=
 			</data>
 		</dict>
 		<key>app/views/information/information.xml</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			FU/Crb0R/hfGElcQCUNx04uTCfQ=
+			Q6u5cyml0SXPX28Dbu1dyfORc6I=
 			</data>
 			<key>hash2</key>
 			<data>
-			ZbaFPSKX+6tYEvLcZqPBRBzBW/3X4+QbQpsrCrUWDto=
+			OpJ3B12MNivqm4YyF5SW5ALYjnEn/K7ZghSBeKi9r+w=
 			</data>
 		</dict>
 		<key>app/views/listmain/listmain.js</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			JixCv5xRTi5ZS9NHji9hjqa7i70=
+			lg9WKpHUTcN/XhoGvzQ/QpbLbIY=
 			</data>
 			<key>hash2</key>
 			<data>
-			MBVaFTUsNp9lT4aVuDRuP8YIvoxlQpfhGm/7cjniDqg=
+			w0nOklioFN2JGqQfwmSuKybGm19swMsFoBY16ITN/Pc=
 			</data>
 		</dict>
 		<key>app/views/listmain/listmain.xml</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			mwS7nAbI0GXJok8KBwNvwNqElmo=
+			LnbPq+MJlWIUfX8qpilQGfe79NY=
 			</data>
 			<key>hash2</key>
 			<data>
-			yA8zLRhgH0T0RxP1o96uKOLpFryfRCRBya0rXz4zu5I=
+			Y6xZCcEqntFn8w4lgKcgPpjMu/DPJKDY/lMP3k4R2eA=
 			</data>
 		</dict>
 		<key>app/views/lists/lists-view-model.js</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			eLXSnvFaANy0Hbd5bHhyB/tc2YA=
+			Rand0/0MmvhIUH0/3KTqcqZrKjk=
 			</data>
 			<key>hash2</key>
 			<data>
-			ANIR3YkgPagDWTwtxIWHh1wPvJpTaPh/MfsDnEFzSOg=
+			7rFAfhiUGa5ZANc4n3mO4N243rrZzI1rkFm/X/rdrU4=
 			</data>
 		</dict>
 		<key>app/views/lists/lists.js</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			tQfUX5U4/7Jwp7toxYs7xjnXOR4=
+			DHwZXp4XhkC/ZH3rDTsoXYWddEA=
 			</data>
 			<key>hash2</key>
 			<data>
-			t8kZC6/zi7aa7/rVbK7tiDDH8GvA7TyTURBj27XKfOg=
+			EDBCw3erGp+AayAeJtmAXR9LwcNTCg6M/+mMGIxLk08=
 			</data>
 		</dict>
 		<key>app/views/lists/lists.xml</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			crrZM42NGmRc4RHwAj73qMhYULA=
+			14b40ikUkrSl8YFTnO+o4/zd/7M=
 			</data>
 			<key>hash2</key>
 			<data>
-			Dxw67pto2lXmlDvruQg0mRxXKp7X7hPeJd4div0HAt0=
+			9E+zIUt81D4L8qz+zkFqd9A5Q/aJbiWy9VSyAIC9Wzw=
 			</data>
 		</dict>
 		<key>app/views/textoverview/textoverview.css</key>
@@ -9734,22 +9824,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Rvp4xDxSI7VPy8xabscNLdn20P4=
+			OfWdGYUbJ8LeeFNyZWwrSaKxmnI=
 			</data>
 			<key>hash2</key>
 			<data>
-			6HYB+dYPxJOfviafhpliBvNS+h2WlwXcVJFV+4tf8JE=
+			YA5Ih+FRNIGluvnAyZgyk+u2YtT98akWIc73ijViCrE=
 			</data>
 		</dict>
 		<key>app/views/training/training.xml</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			PNZmHJRy9sTpTMHh1NzdY8Do1tI=
+			M1/00d2bAOcjDVkMI9nIgxEI8T8=
 			</data>
 			<key>hash2</key>
 			<data>
-			bOhc8nTX6yHAEys7BFsH2Rk/EbhOBsOcBlA+HC/o/Cc=
+			oeU+aIPXhzQkPxZPEWkAm31/csmK3O/ibUVPWEURhdI=
 			</data>
 		</dict>
 		<key>app/views/visualisationmain/consultation/consultation.css</key>
@@ -9910,22 +10000,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			sbDDVuCkC0cbYzUvfm/Lc/oYSaw=
+			jMsvYLb7Qt13NWB1iS4v1XVyM6k=
 			</data>
 			<key>hash2</key>
 			<data>
-			096C8CengGuIAnk7+4KLWP3PZaJlxmCd+DHgkI9t2zE=
+			FNXsnVF00b1tErE1mbcfKfRbqNLE0TWInTUg4emlUeo=
 			</data>
 		</dict>
 		<key>app/views/visualisationmain/visualisationmain.xml</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			SCkPA2GHx9FnqG6HA1wGXrpSE0I=
+			Ms5hZo6+aB/Xt49BSapNA9lQ2Ls=
 			</data>
 			<key>hash2</key>
 			<data>
-			MGD8ciyl3P43CXAVIsrvqRtOUfEtTZgbrSu+wS6QNvs=
+			9aV8aCuOi66G9tQdg7nvVolaUEX7aA02T4tAdHFGfgU=
 			</data>
 		</dict>
 		<key>build.xcconfig</key>

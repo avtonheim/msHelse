@@ -12,7 +12,7 @@
         <ListView id="listView" items="{{ lists }}" class="listLayout">
             <ListView.itemTemplate>
                 <StackLayout orientation="horizontal" class="list-view-item">
-                    <Label class="listItems" text="{{ list_name }}"/>
+                    <Label class="listItems" id="setActiveButton" tap="buttonClick" text="{{ list_name }}"/>
                 </StackLayout>
             </ListView.itemTemplate> 
         </ListView>

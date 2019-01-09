@@ -4,17 +4,20 @@
            <StackLayout>
               <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
            </StackLayout>
-           <ActionItem text="Tilbake" tap="tapHome" ios.position="left"/>
          </ActionBar>
      </Page.actionBar>
     <StackLayout id="diary">
       <StackLayout class="content">
-        <Image class="mainComp" src="~/images/dagbok_ny.png" height="400px" width="400px"/>
+  
+        <Image class="mainComp" src="~/images/dagbok_ny.png"/>
         <Label class="titleMain" text="Dagbok"/>
-        <Label class="body" text="I dagboka vil du bli spurt om tre ting:" textWrap="true"/>
-        <Label class="body" text="Dagsform"/>
-        <Label class="body" text="Symptom"/>
-        <Label class="body" text="Dialog"/>
+
+        <StackLayout class="textBox">
+          <Label class="h3" text="I dagboka vil du bli spurt om tre ting" textWrap="true"/>
+          <Label class="body" text="Din dagsform, dine symptom og" textWrap="true"/>
+          <Label class="body" text="hvordan du har det." textWrap="true"/>
+        </StackLayout>
+        
       </StackLayout>
         <StackLayout>
           <Button class="startEndBtn" text="Start registrering" tap="onNavMood"/>

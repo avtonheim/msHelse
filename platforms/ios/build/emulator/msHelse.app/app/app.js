@@ -6,7 +6,7 @@ purpose of the file is to pass control to the app’s first module.
 
 require("./bundle-config");
 var application = require("application");
-
+require("nativescript-dom");
 
 
 application.start({ moduleName: "views/home-page/home-page" });

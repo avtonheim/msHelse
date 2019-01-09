@@ -59,6 +59,11 @@ selectors and properties you can use to style UI components. */
   text-decoration: line-through;
 }
 
+.activeButton{
+  background-color: rgb(29, 150, 103);
+  color: white;
+}
+
 /*Remove item from list*/
 #remove{
   text-align: right;
