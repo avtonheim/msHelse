@@ -1,8 +1,8 @@
 {
   "_from": "tns-core-modules-widgets@next",
-  "_id": "tns-core-modules-widgets@5.2.0-next-2018-12-13-152456-01",
+  "_id": "tns-core-modules-widgets@5.2.1-next-2019-01-07-144039-01",
   "_inBundle": false,
-  "_integrity": "sha512-HPIfwJAFmGydnxzYAhFOUQVidZ5D4lJlAI+CIoi6d2PGB6o+Ro/Izbz0pyy0/nLk+sVJXr7JQpdNBYIt/uDVUA==",
+  "_integrity": "sha512-0g23vhbA+tmK3vHAqgourNhI9OoUY92moXMsvapgYfGKX4xguwb3s1zS/kQBFiNldZ4ZTZ8OWMlyBKdVWT/OZQ==",
   "_location": "/tns-core-modules-widgets",
   "_phantomChildren": {},
   "_requested": {
@@ -18,8 +18,8 @@
   "_requiredBy": [
     "/tns-core-modules"
   ],
-  "_resolved": "https://registry.npmjs.org/tns-core-modules-widgets/-/tns-core-modules-widgets-5.2.0-next-2018-12-13-152456-01.tgz",
-  "_shasum": "b34328f70fb49ea4d837bd4f5131df8ff99ba59f",
+  "_resolved": "https://registry.npmjs.org/tns-core-modules-widgets/-/tns-core-modules-widgets-5.2.1-next-2019-01-07-144039-01.tgz",
+  "_shasum": "ff4323cfcb0c85b348f75aab1e5b608d86122e5c",
   "_spec": "tns-core-modules-widgets@next",
   "_where": "/Users/aleksandernygardtonheim/projects/msHelse/node_modules/tns-core-modules",
   "author": {
@@ -47,5 +47,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "5.2.0-next-2018-12-13-152456-01"
+  "version": "5.2.1-next-2019-01-07-144039-01"
 }

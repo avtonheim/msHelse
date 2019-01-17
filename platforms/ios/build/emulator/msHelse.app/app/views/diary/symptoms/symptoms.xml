@@ -4,7 +4,7 @@
            <StackLayout>
               <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
            </StackLayout>
-           <ActionItem text="Neste" tap="{{ insertThis }}" ios.position="right"/>
+           <ActionItem text="Neste" tap="onNavText" ios.position="right"/>
            <ActionItem text="Avbryt" tap="tapHome" ios.position="left"/>
          </ActionBar>
      </Page.actionBar>
@@ -37,14 +37,14 @@
           </GridLayout>
           <Label class="specQuestion" text="Hadde du problem med å kjenne når du måtte på do?" textWrap="true"/>
           <GridLayout columns="*,*,*" rows="*">
-            <Button class="eventBtn" col="0" row="0" value="1" context="Vannlatning" text="Ja"></Button>
-            <Button class="eventBtn" col="1" row="0" value="1" context="Vannlatning" text="Nei"></Button>
+            <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="0" row="0" value="1" context="Vannlatning" text="Ja"></Button>
+            <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="1" row="0" value="1" context="Vannlatning" text="Nei"></Button>
           </GridLayout>
           <Label class="specQuestion" text="Når på dagen hadde du problemet?" textWrap="true"/>
           <GridLayout columns="*,*,*" rows="*">
-            <Button class="eventBtn" col="0" row="0" value="1" context="Vannlatning" text="Morgon"></Button>
-            <Button class="eventBtn" col="1" row="0" value="1" context="Vannlatning" text="Dag"></Button>
-            <Button class="eventBtn" col="2" row="0" value="1" context="Vannlatning" text="Kveld"></Button>
+            <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="0" row="0" value="1" context="Vannlatning" text="Morgon"></Button>
+            <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="1" row="0" value="1" context="Vannlatning" text="Dag"></Button>
+            <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="2" row="0" value="1" context="Vannlatning" text="Kveld"></Button>
           </GridLayout>
         </StackLayout>
       </StackLayout>
@@ -55,19 +55,19 @@
         <StackLayout class="symtomDetails" visibility="{{ showDetails2 ? 'collapsed' : 'visible' }}">
           <Label class="specQuestion" text="Hadde du problem med å sove?" textWrap="true"/>
           <GridLayout columns="*,*,*" rows="*">
-            <Button class="eventBtn" col="0" row="0" value="1" text="Ja"></Button>
-            <Button class="eventBtn" col="1" row="0" value="1" text="Nei"></Button>
+            <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="0" row="0" value="1" context="Søvnproblem" text="Ja"></Button>
+            <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="1" row="0" value="1" context="Søvnproblem" text="Nei"></Button>
           </GridLayout>
           <Label class="specQuestion" text="Hadde du problem med å sove for lenge?" textWrap="true"/>
           <GridLayout columns="*,*,*" rows="*">
-            <Button class="eventBtn" col="0" row="0" value="1" text="Ja"></Button>
-            <Button class="eventBtn" col="1" row="0" value="1" text="Nei"></Button>
+            <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="0" row="0" value="1" context="Søvnproblem" text="Ja"></Button>
+            <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="1" row="0" value="1" context="Søvnproblem" text="Nei"></Button>
           </GridLayout>
           <Label class="specQuestion" text="Når på dagen hadde du problemet?" textWrap="true"/>
           <GridLayout columns="*,*,*" rows="*">
-            <Button class="eventBtn" col="0" row="0" value="1" context="Søvnproblem" text="Morgon"></Button>
-            <Button class="eventBtn" col="1" row="0" value="1" context="Søvnproblem" text="Dag"></Button>
-            <Button class="eventBtn" col="2" row="0" value="1" context="Søvnproblem" text="Kveld"></Button>
+            <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="0" row="0" value="1" context="Søvnproblem" text="Morgon"></Button>
+            <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="1" row="0" value="1" context="Søvnproblem" text="Dag"></Button>
+            <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="2" row="0" value="1" context="Søvnproblem" text="Kveld"></Button>
           </GridLayout>
         </StackLayout>
       </StackLayout>
@@ -78,14 +78,14 @@
         <StackLayout class="symtomDetails" visibility="{{ showDetails3 ? 'collapsed' : 'visible' }}">
           <Label class="specQuestion" text="Hadde du problem med å få ereksjon?" textWrap="true"/>
           <GridLayout columns="*,*,*" rows="*">
-            <Button class="eventBtn" col="0" row="0" value="1" text="Ja"></Button>
-            <Button class="eventBtn" col="1" row="0" value="1" text="Nei"></Button>
+            <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="0" row="0" value="1" context="Ereksjonsproblem" text="Ja"></Button>
+            <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="1" row="0" value="1" context="Ereksjonsproblem" text="Nei"></Button>
           </GridLayout>
           <Label class="specQuestion" text="Når på dagen hadde du problemet?" textWrap="true"/>
           <GridLayout columns="*,*,*" rows="*">
-            <Button class="eventBtn" col="0" row="0" value="1" context="Ereksjonsproblem" text="Morgon"></Button>
-            <Button class="eventBtn" col="1" row="0" value="1" context="Ereksjonsproblem" text="Dag"></Button>
-            <Button class="eventBtn" col="2" row="0" value="1" context="Ereksjonsproblem" text="Kveld"></Button>
+            <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="0" row="0" value="1" context="Ereksjonsproblem" text="Morgon"></Button>
+            <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="1" row="0" value="1" context="Ereksjonsproblem" text="Dag"></Button>
+            <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="2" row="0" value="1" context="Ereksjonsproblem" text="Kveld"></Button>
           </GridLayout>
       </StackLayout>
       </StackLayout>
@@ -96,19 +96,19 @@
           <StackLayout class="symtomDetails" visibility="{{ showDetails4 ? 'collapsed' : 'visible' }}">
             <Label class="specQuestion" text="Fekk du Fatigue etter å ha utført ein krevjande aktivitet?" textWrap="true"/>
             <GridLayout columns="*,*,*" rows="*">
-              <Button class="eventBtn" col="0" row="0" value="1" text="Ja"></Button>
-              <Button class="eventBtn" col="1" row="0" value="1" text="Nei"></Button>
+              <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="0" row="0" value="1" context="Fatigue" text="Ja"></Button>
+              <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="1" row="0" value="1" context="Fatigue" text="Nei"></Button>
             </GridLayout>
             <Label class="specQuestion" text="Fekk du Fatigue etter normal aktivitet? (Til dømes gått tur)" textWrap="true"/>
             <GridLayout columns="*,*,*" rows="*">
-              <Button class="eventBtn" col="0" row="0" value="1" text="Ja"></Button>
-              <Button class="eventBtn" col="1" row="0" value="1" text="Nei"></Button>
+              <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="0" row="0" value="1" context="Fatigue" text="Ja"></Button>
+              <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="1" row="0" value="1" context="Fatigue" text="Nei"></Button>
             </GridLayout>
             <Label class="specQuestion" text="Når på dagen hadde du problemet?" textWrap="true"/>
             <GridLayout columns="*,*,*" rows="*">
-              <Button class="eventBtn" col="0" row="0" context="Fatigue" value="1" text="Morgon"></Button>
-              <Button class="eventBtn" col="1" row="0" context="Fatigue" value="1" text="Dag"></Button>
-              <Button class="eventBtn" col="2" row="0" context="Fatigue" value="1" text="Kveld"></Button>
+              <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="0" row="0" context="Fatigue" value="1" text="Morgon"></Button>
+              <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="1" row="0" context="Fatigue" value="1" text="Dag"></Button>
+              <Button class="eventBtn" id="setActiveButton" tap="buttonClick" col="2" row="0" context="Fatigue" value="1" text="Kveld"></Button>
             </GridLayout>
         </StackLayout>
        

@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>application-identifier</key>
-	<string>LF869K4E9U.org.nativescript.mHealth</string>
+	<string>FAKETEAMID.org.nativescript.mHealth</string>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>LF869K4E9U.org.nativescript.mHealth</string>
+		<string>FAKETEAMID.org.nativescript.mHealth</string>
 	</array>
 </dict>
 </plist>

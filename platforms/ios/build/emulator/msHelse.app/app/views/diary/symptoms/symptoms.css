@@ -43,10 +43,6 @@ GridLayout button{
   margin: 15px;
 }
 
-.activeButton{
-  background-color: beige;
-}
-
 #inputSelf{
   color: white;
   margin-top:10%;

@@ -43,6 +43,7 @@ function buttonClick(args){
   const page = args.object;
   const element = page.getViewById("setActiveButton");
   element.classList.toggle("activeButton");
+  console.log(element.context + element.text);
 } exports.buttonClick = buttonClick;
 
 

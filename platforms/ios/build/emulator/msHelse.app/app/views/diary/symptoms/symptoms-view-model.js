@@ -89,6 +89,9 @@ function createViewModel(database) {
                 });
             }
 
+            viewModel.insertThis = function() {
+               
+                }
 
     viewModel.selectPatientOverview();
     viewModel.selectDoctorConsultation();

@@ -22,8 +22,8 @@
           </StackLayout>
           <StackLayout id="attack">
               <GridLayout columns="*,*" row="*" height="150px;">
-                <Button tap="selected" class="answerBtn" col="0" row="0" text="Ja"></Button>
-                <Button tap="selected" class="answerBtn" col="1" row="0" text="Nei"></Button>
+                <Button tap="selected" id="setActiveButton" context="Attack" class="answerBtn" col="0" row="0" text="Ja"></Button>
+                <Button tap="selected" id="setActiveButton" context="Attack" class="answerBtn" col="1" row="0" text="Nei"></Button>
               </GridLayout>
           </StackLayout>
       </StackLayout>

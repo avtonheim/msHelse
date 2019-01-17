@@ -1,8 +1,8 @@
 {
   "_from": "tns-core-modules@next",
-  "_id": "tns-core-modules@5.2.0-next-2019-01-02-113109-01",
+  "_id": "tns-core-modules@5.2.1-next-2019-01-10-145030-01",
   "_inBundle": false,
-  "_integrity": "sha512-6ZafHhCs5ysZpHE64pqOvJ7uDkf94IvYY9yQsv1FAsDAYbXV7BuuPe53o3EN6Wf9VUrw7pKyU2LvUiJLI0Tt5w==",
+  "_integrity": "sha512-Fs1Auq5WV3xckWbY5dM9PwdZqzF8urLvw8eKOIWZPQo9F9DgAZiZmsGM3LHfQk3vPtCB96nkAwxpi63+dQfdww==",
   "_location": "/tns-core-modules",
   "_phantomChildren": {},
   "_requested": {
@@ -19,8 +19,8 @@
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/tns-core-modules/-/tns-core-modules-5.2.0-next-2019-01-02-113109-01.tgz",
-  "_shasum": "311d761d5bff4e7d65e9a0c17fa5db01a1763ac1",
+  "_resolved": "https://registry.npmjs.org/tns-core-modules/-/tns-core-modules-5.2.1-next-2019-01-10-145030-01.tgz",
+  "_shasum": "308a119a29b73e24d563a9660966086a68fb5c1d",
   "_spec": "tns-core-modules@next",
   "_where": "/Users/aleksandernygardtonheim/projects/msHelse",
   "bundleDependencies": false,
@@ -61,7 +61,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/NativeScript/NativeScript/commit/1ae0cfd4b3d72ced8516216566551cf3b1b726b6"
+    "url": "https://github.com/NativeScript/NativeScript/commit/0a1e7dabaa5bb6c66ff328e903d83987b1ff9fb1"
   },
   "scripts": {
     "version": "conventional-changelog -p angular -i ../CHANGELOG.md -s && git add ../CHANGELOG.md"
@@ -77,5 +77,5 @@
     }
   },
   "typings": "tns-core-modules.d.ts",
-  "version": "5.2.0-next-2019-01-02-113109-01"
+  "version": "5.2.1-next-2019-01-10-145030-01"
 }

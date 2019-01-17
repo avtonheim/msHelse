@@ -4,7 +4,7 @@
            <StackLayout>
               <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
            </StackLayout>
-           <ActionItem text="Neste" tap="{{ insertThis }}" ios.position="right"/>
+           <ActionItem text="Neste" tap="onNavText" ios.position="right"/>
            <ActionItem text="Avbryt" tap="tapHome" ios.position="left"/>
          </ActionBar>
      </Page.actionBar>
@@ -13,16 +13,13 @@
     <StackLayout class="diaryComp" id="uiFix" loaded="loaded">
         <Progress value="66"/>
       <Label class="titleMain" text="Hva har preget deg siden sist registrering?" textWrap="true"/>
-      <Label class="body" text="Trykk på et kort for å utvide" textWrap="true"/>
-
-      
 
       <StackLayout class="symptomCont" id="firstElement">
-        <Label class="symptomHead" text="Legg til eit nytt symptom" tap="toggle0"/>
+        <Label class="symptomHead" text="Legg til et nytt symptom" tap="toggle0"/>
         <Label class="body" text="{{ showDetails0 ? 'Klikk for å utvide' : 'Lukk' }}" tap="toggle0"/>
         <StackLayout visibility="{{ showDetails0 ? 'collapsed' : 'visible' }}">
-          <StackLayout id="container" class="listPicker"/>
-          
+            <Label text="selected item is.."></Label>
+          <StackLayout id="container" loaded="listLoaded"/>
         </StackLayout>
       </StackLayout>
 

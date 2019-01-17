@@ -42,11 +42,9 @@ function loadDatabase(args){
 function buttonClick(args){
   const page = args.object;
   const element = page.getViewById("setActiveButton");
-  element.classList.toggle("activeButton");
+  element.classList.toggle("activeButtonSymptom");
   console.log(element.context + element.text);
 } exports.buttonClick = buttonClick;
-
-
 
 function loadJSON(args){
   const path = fs.knownFolders.currentApp().path;
@@ -67,6 +65,9 @@ function createListPicker(args){
     listPicker.selectedIndex = 0;
     container.addChild(listPicker);
 } exports.createListPicker = createListPicker;
+
+
+
 
 
 function loaded(args){

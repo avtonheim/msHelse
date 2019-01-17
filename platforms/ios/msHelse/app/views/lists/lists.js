@@ -20,8 +20,8 @@ function onNavigatingTo(args) {
 function buttonClick(args){
     const page = args.object;
     const element = page.getViewById("setActiveButton");
-    element.classList.toggle("activeButton");
-    console.log(element);
+    element.classList.toggle("listItemsDone");
+    console.log(element.text + element.id);
   } exports.buttonClick = buttonClick;
 
 //https://stackoverflow.com/questions/37652578/click-event-on-an-item-template sjå denne for databinding i item.itemtemplate

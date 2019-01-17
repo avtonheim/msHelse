@@ -11,8 +11,8 @@ GridLayout button{
 .symptomCont{
   background-color: #82DBDE;
   border-radius: 15px;
-  min-height: 140px;
-  width: 90%;
+  min-height: 155px;
+  width: 92%;
   margin-top: 30px;
 }
 .symtomDetails{
@@ -33,7 +33,7 @@ GridLayout button{
   color: white;
   text-align: center;
   font-weight: bold;
-  font-size: 25pt;
+  font-size: 20pt;
 }
 .specQuestion{
   font-size: 18pt;
@@ -53,4 +53,11 @@ GridLayout button{
 }
 #firstElement{
   margin-top: 50px;
+}
+.activeButtonSymptom{
+  background-color:rgb(168, 119, 118);
+  color: white;
+}
+.body{
+  margin-top: 10px;
 }

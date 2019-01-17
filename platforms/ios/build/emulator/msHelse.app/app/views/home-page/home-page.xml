@@ -1,9 +1,9 @@
 <Page loaded="onLoaded">
   <Page.actionBar>
          <ActionBar class="action-bar">
-           <StackLayout>
-              <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
-           </StackLayout>
+          <StackLayout>
+             <Image src="~/images/tittel.png" class="iconTitle"></Image>
+          </StackLayout>
            <ActionBar.actionItems>
                <ActionItem text="Informasjon" tap="tapInfo" ios.position="right" />
            </ActionBar.actionItems>

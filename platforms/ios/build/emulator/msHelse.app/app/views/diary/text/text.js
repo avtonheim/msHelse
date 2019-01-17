@@ -39,8 +39,10 @@ function tapHome(){
 
 
 function selected(args){
-  var selected = args.object;
-  selected.backgroundColor = "blue";
+    const page = args.object;
+    const element = page.getViewById("setActiveButton");
+    element.classList.toggle("activeButton");
+    console.log(element.context + element.text);
 }
 
 exports.onNavigatingTo = onNavigatingTo;

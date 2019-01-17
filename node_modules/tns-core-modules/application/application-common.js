@@ -30,6 +30,7 @@ exports.resumeEvent = "resume";
 exports.exitEvent = "exit";
 exports.lowMemoryEvent = "lowMemory";
 exports.uncaughtErrorEvent = "uncaughtError";
+exports.discardedErrorEvent = "discardedError";
 exports.orientationChangedEvent = "orientationChanged";
 var cssFile = "./app.css";
 var resources = {};
@@ -96,5 +97,8 @@ function addCss(cssText) {
 exports.addCss = addCss;
 global.__onUncaughtError = function (error) {
     events.notify({ eventName: exports.uncaughtErrorEvent, object: app, android: error, ios: error, error: error });
+};
+global.__onDiscardedError = function (error) {
+    events.notify({ eventName: exports.discardedErrorEvent, object: app, error: error });
 };
 //# sourceMappingURL=application-common.js.map

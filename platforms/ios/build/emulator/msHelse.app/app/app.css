@@ -6,7 +6,6 @@ selectors and properties you can use to style UI components. */
 
 @import '~/nativescript-theme-core/css/sky.css';
 
-
 .btn {
     font-size: 18;
 }
@@ -47,16 +46,21 @@ selectors and properties you can use to style UI components. */
   font-size: 15pt;
   text-align: center;
   color: rgb(0, 0, 0);
-  background-color: rgb(236, 234, 234);
   padding: 16px;
 }
 .listItems{
-  width: 90%;
+  width: 100%;
+  font-weight: bold;
 }
 
 .listItemsDone{
-  width: 100%;
   text-decoration: line-through;
+  font-weight: normal;
+}
+
+.activeButton{
+  background-color: rgb(29, 150, 103);
+  color: white;
 }
 
 /*Remove item from list*/
@@ -86,8 +90,8 @@ selectors and properties you can use to style UI components. */
 }
 /*App icon*/
 .iconTitle{
-  text-align: center;
-  width: 200px;
+  width: 150px;
+  
 }
 
 .graph{

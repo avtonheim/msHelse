@@ -60,6 +60,9 @@ var ListViewBase = (function (_super) {
                 });
                 this._itemTemplateSelector = function (item, index, items) {
                     item["$index"] = index;
+                    if (_this._itemTemplateSelectorBindable.bindingContext === item) {
+                        _this._itemTemplateSelectorBindable.bindingContext = null;
+                    }
                     _this._itemTemplateSelectorBindable.bindingContext = item;
                     return _this._itemTemplateSelectorBindable.get("templateKey");
                 };

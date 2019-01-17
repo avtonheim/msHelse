@@ -2,7 +2,7 @@
     <Page.actionBar>
         <ActionBar class="action-bar">
           <StackLayout>
-             <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
+             <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="right"></Image>
           </StackLayout>
             <ActionBar.actionItems>
                 <ActionItem text="Ny" tap="{{ insert }}" ios.position="right" />
@@ -12,7 +12,7 @@
         <ListView id="listView" items="{{ lists }}" class="listLayout">
             <ListView.itemTemplate>
                 <StackLayout orientation="horizontal" class="list-view-item">
-                    <Label class="listItems" text="{{ list_name }}"/>
+                    <Label class="listItems" id="setActiveButton" tap="buttonClick" text="{{ list_name }}"/>
                 </StackLayout>
             </ListView.itemTemplate> 
         </ListView>
