@@ -16,12 +16,10 @@ function onNavigatingTo(args){
   var controller = frameModule.topmost().ios.controller;
   var navigationItem = controller.visibleViewController.navigationItem;
   navigationItem.setHidesBackButtonAnimated(true, false);
- 
-  
-
   loadDatabase(args);
-  loadJSON(args);   
+  loadJSON(args);
 }
+
 
 function loadDatabase(args){
       var page = args.object;
@@ -37,14 +35,14 @@ function loadDatabase(args){
     }, error => {
         console.log("OPEN DB ERROR", error);
     });
-} exports.loadDatabase = loadDatabase;
+} 
 
 function buttonClick(args){
   const page = args.object;
   const element = page.getViewById("setActiveButton");
   element.classList.toggle("activeButtonSymptom");
   console.log(element.context + element.text);
-} exports.buttonClick = buttonClick;
+} 
 
 function loadJSON(args){
   const path = fs.knownFolders.currentApp().path;
@@ -55,7 +53,7 @@ function loadJSON(args){
   this.selectedSymptoms.push(symptomsJSON.symptomList);
 
   createListPicker(args);
-} exports.loadJSON = loadJSON;
+} 
 
 function createListPicker(args){
     const page = args.object;
@@ -64,10 +62,7 @@ function createListPicker(args){
     listPicker.items = this.selectedSymptoms;
     listPicker.selectedIndex = 0;
     container.addChild(listPicker);
-} exports.createListPicker = createListPicker;
-
-
-
+} 
 
 
 function loaded(args){
@@ -112,6 +107,10 @@ function toggle4(args){
 }
 
 exports.onNavigatingTo = onNavigatingTo;
+exports.loadDatabase = loadDatabase;
+exports.buttonClick = buttonClick;
+exports.createListPicker = createListPicker;
+exports.loadJSON = loadJSON;
 exports.loaded = loaded;
 exports.tapHome = tapHome;
 exports.onNavText = onNavText;

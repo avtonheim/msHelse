@@ -12,7 +12,7 @@
        <Progress value="99"/>
        <StackLayout class="p-10">
            <StackLayout class="question" horizontalAlignment="left">
-             <Label text="Kva kjekke ting har du gjort sidan sist registrering?" textWrap="true"></Label>
+             <Label text="Hva har du gjort av gøyale ting siden sist?" textWrap="true"></Label>
            </StackLayout>
           <StackLayout class="response" horizontalAlignment="right">
               <TextView id="subject" hint="Klikk for å legge til tekst" text="{{ textItem }}" textWrap="true" autocorrect="true"/>

@@ -9,7 +9,7 @@ function tapGraph(){
 }
 
 function tapText(){
-  frameModule.topmost().navigate('views/textoverview/textoverview');
+  frameModule.topmost().navigate('views/textview/textview');
 }
 
 function tapReport(){

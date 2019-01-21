@@ -8,8 +8,8 @@
    </Page.actionBar>
       <StackLayout>
         <StackLayout class="p-20">
-           <Label class="h1" text="Oversikt over alt"></Label>
-           <Label class="body" textWrap="true" text="Dette er ein totaloversikt"></Label>
+           <Label class="h1" text="Totaloversikt"></Label>
+           <Label class="body" textWrap="true" text="De nyeste vises først."></Label>
         </StackLayout>
      <StackLayout>
            <ListView items="{{ Texts }}" style="height: 100%;">

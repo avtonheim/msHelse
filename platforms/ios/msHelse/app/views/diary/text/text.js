@@ -5,25 +5,28 @@ var Dialogs = require("ui/dialogs");
 
 
 function onNavigatingTo(args){
-var page = args.object;
-
-//Controlling the native back-button
-var controller = frameModule.topmost().ios.controller;
-var navigationItem = controller.visibleViewController.navigationItem;
-navigationItem.setHidesBackButtonAnimated(true, false);
-if (!Sqlite.exists("populated.db")) {
-        Sqlite.copyDatabase("populated.db");
-    }
-(new Sqlite("populated.db")).then(db => {
-       db.execSQL("CREATE TABLE IF NOT EXISTS dialouge (id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT, timestamp INT)").then(id => {
-           page.bindingContext = createViewModel(db);
-       }, error => {
-           console.log("CREATE TABLE ERROR", error);
-       });
-   }, error => {
-       console.log("OPEN DB ERROR", error);
-   });
+    //Controlling the native back-button
+    var controller = frameModule.topmost().ios.controller;
+    var navigationItem = controller.visibleViewController.navigationItem;
+    navigationItem.setHidesBackButtonAnimated(true, false);
+    loadDatabase(args);
 }
+
+function loadDatabase(args) {
+    var page = args.object;
+            if (!Sqlite.exists("populated.db")) {
+                Sqlite.copyDatabase("populated.db");
+            }
+        (new Sqlite("populated.db")).then(db => {
+            db.execSQL("CREATE TABLE IF NOT EXISTS dialouge (id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT, timestamp INT)").then(id => {
+                page.bindingContext = createViewModel(db);
+            }, error => {
+                console.log("CREATE TABLE ERROR", error);
+            });
+        }, error => {
+            console.log("OPEN DB ERROR", error);
+        });
+} 
 
 function tapHome(){
   Dialogs.confirm({
@@ -46,5 +49,6 @@ function selected(args){
 }
 
 exports.onNavigatingTo = onNavigatingTo;
+exports.loadDatabase = loadDatabase;
 exports.tapHome = tapHome;
 exports.selected = selected;
