@@ -1,6 +1,5 @@
 var Observable = require("data/observable").Observable;
 var ObservableArray = require("data/observable-array").ObservableArray;
-var Sqlite = require("nativescript-sqlite");
 var Dialogs = require("ui/dialogs");
 
 function createViewModel(database) {
@@ -14,7 +13,7 @@ function createViewModel(database) {
           okButtonText: "Legg til",
           cancelButtonText: "Avbryt"
         }).then(result => {
-            database.execSQL("INSERT INTO lists (list_name) VALUES (?)", [result.text]).then(id => {
+            database.execSQL("INSERT INTO lists (list_name, status) VALUES (?, ?)", [result.text, "doing"]).then(id => {
                 this.lists.push({id: id, list_name: result.text});
             }, error => {
                 console.log("INSERT ERROR", error);
@@ -24,9 +23,36 @@ function createViewModel(database) {
 
     viewModel.select = function() {
         this.lists = new ObservableArray([]);
-        database.all("SELECT id, list_name FROM lists").then(rows => {
+        database.all("SELECT id, list_name FROM lists WHERE status = 'doing'").then(rows => {
             for(var row in rows) {
                 this.lists.push({id: rows[row][0], list_name: rows[row][1]});
+            }
+        }, error => {
+            console.log("SELECT ERROR", error);
+        });
+    }
+
+    /* Denne skal kunne sette done basert på klikk i listview */
+    viewModel.updateItemDone = function(args) {
+        var listName = args.object.text;
+        this.listsDone = new ObservableArray([]);
+        database.all("UPDATE lists SET status = 'done' WHERE list_name = (list_name) VALUES (?) ", [listName]).then(rows => {
+            for(var row in rows) {
+                
+                this.listsDone.push({id: rows[row][0], list_name: rows[row][1]});
+                console.log(this.listsDone);
+            }
+        }, error => {
+            console.log("SELECT ERROR", error);
+        });
+    }
+
+     
+     viewModel.doneItems = function() {
+        this.listsDone = new ObservableArray([]);
+        database.all("SELECT id, list_name FROM lists WHERE status = 'done'").then(rows => {
+            for(var row in rows) {
+                this.listsDone.push({id: rows[row][0], list_name: rows[row][1]});
             }
         }, error => {
             console.log("SELECT ERROR", error);
@@ -46,6 +72,7 @@ function createViewModel(database) {
 
 
     viewModel.select();
+    viewModel.doneItems();
 
     return viewModel;
 }

@@ -1,13 +1,11 @@
 var frameModule = require('ui/frame');
 
-function onLoaded(){
-
+exports.navList = function(){
+  frameModule.topmost().navigate('views/listmain/lists/lists');
 }
 
-function navList(){
-  frameModule.topmost().navigate('views/lists/lists');
+exports.navFinish = function(){
+  frameModule.topmost().navigate('views/listmain/finsihed/finished');
 }
 
 
-exports.navList = navList;
-exports.onLoaded = onLoaded;

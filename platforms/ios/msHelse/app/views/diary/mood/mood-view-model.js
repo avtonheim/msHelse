@@ -1,6 +1,5 @@
 var Observable = require("data/observable").Observable;
 var ObservableArray = require("data/observable-array").ObservableArray;
-var Sqlite = require("nativescript-sqlite");
 var frameModule = require('ui/frame');
 
 function createViewModel(database) {
@@ -32,9 +31,6 @@ function createViewModel(database) {
                 for(var row in rows) {
                 this.SelectMoodWeekly.push({average: rows[row][0]});
                }
-               if (isEmpty(this.SelectMoodWeekly)){
-                this.emptyData.push('Du må fullføre en registrering i dagboken din for å vise denne grafen.');
-            }
             }, error => {
                 console.log("SELECT ERROR", error);
             });
@@ -62,9 +58,6 @@ function createViewModel(database) {
                 for(var row in rows) {
                  this.Mood.push({id: rows[row][0], dagsform: rows[row][1], dato: rows[row][2]});
                }
-               if (isEmpty(this.Mood)){
-                this.emptyData.push('Du må fullføre en registrering i dagboken din for å vise denne grafen.');
-            }
             }, error => {
                 console.log("SELECT ERROR", error);
             });

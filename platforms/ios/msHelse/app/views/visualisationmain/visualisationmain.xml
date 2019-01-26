@@ -1,13 +1,9 @@
 <Page loaded="onLoaded">
   <Page.actionBar>
-         <ActionBar class="action-bar">
-           <StackLayout>
-              <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
-           </StackLayout>
+         <ActionBar class="action-bar" title="Analyse">
          </ActionBar>
 
      </Page.actionBar>
-<ScrollView>
   <StackLayout>
     <StackLayout class="content">
     <Image class="mainComp" src="~/images/analyse_ny.png" height="400px" width="400px"/>
@@ -23,5 +19,4 @@
       <Label text="Oversikt over tekst"/>
     </StackLayout>
   </StackLayout>
-  </ScrollView>
 </Page>

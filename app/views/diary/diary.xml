@@ -1,9 +1,6 @@
 <Page loaded="onLoaded">
   <Page.actionBar>
-         <ActionBar title="mHelse" class="action-bar">
-           <StackLayout>
-              <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
-           </StackLayout>
+         <ActionBar class="action-bar" title="Dagbok">
          </ActionBar>
      </Page.actionBar>
     <StackLayout id="diary">

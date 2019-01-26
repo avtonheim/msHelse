@@ -36,6 +36,7 @@ function createViewModel(database) {
               database.all("SELECT content, timestamp FROM dialouge").then(rows => {
                   for(var row in rows) {
                     this.Texts.push({content: rows[row][0], timestamp: rows[row][1]});
+                    this.Texts.reverse();
                   }
               }, error => {
                   console.log("SELECT ERROR", error);

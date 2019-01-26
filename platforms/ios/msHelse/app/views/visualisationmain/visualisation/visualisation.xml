@@ -1,9 +1,6 @@
 <Page loaded="onLoad">
   <Page.actionBar>
-       <ActionBar class="action-bar">
-         <StackLayout>
-            <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
-         </StackLayout>
+       <ActionBar class="action-bar" title="Grafer">
        </ActionBar>
    </Page.actionBar>
    <ScrollView>
@@ -11,21 +8,21 @@
      <Label class="h1" text="Graf over dagbok"></Label>
      <Label class="body" textWrap="true" text="Dette er ein oversikt over dine symptom og dagsform."></Label>
 
-     <StackLayout class="graphContainer">
+     <StackLayout class="graphContainer" loaded="onNavigatingTo">
        <Label class="h2" text="Symptom"></Label>
        <StackLayout id="symptomTextVisual">
        </StackLayout>
-  <ScrollView orientation="horizontal">
-    <GridLayout columns="350,350" rows="*">
-       <StackLayout col="0" row="0" id="symptomGraph"></StackLayout>
-      <StackLayout col="1" row="0" id="detailedGraph"></StackLayout>
-      </GridLayout>
-    </ScrollView>
-      <StackLayout orientation="horizontal" horizontalAlignment="center">
-      <Image src="~/images/swipe.png" height="70px" width="70px"/>
-      <Label class="textInBox" text="Sveip for å vise ein detaljert oversikt!" textWrap="true"></Label>
-    </StackLayout>
-    </StackLayout>
+       <SegmentedBar loaded="sbLoaded" row="0"  class="m-5" selectedIndex="{{ sbSelectedIndex }}">
+              <SegmentedBar.items>
+                  <SegmentedBarItem title="Oversikt" />
+                  <SegmentedBarItem title="Detaljer" />
+              </SegmentedBar.items>
+        </SegmentedBar>
+      <GridLayout columns="350" rows="*">
+        <StackLayout col="0" row="0" id="symptomGraph" visibility="{{ visibility1 ? 'visible' : 'collapsed' }}"></StackLayout>
+        <StackLayout col="0" row="0" id="detailedGraph" visibility="{{ visibility2 ? 'visible' : 'collapsed' }}"></StackLayout>
+        </GridLayout>
+      </StackLayout>
 
      <StackLayout class="graphContainer">
       <Label class="h2" text="Dagsform"></Label>

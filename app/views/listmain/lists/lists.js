@@ -6,8 +6,11 @@ var pageData = new observable.Observable();
 
 function onNavigatingTo(args) {
     var page = args.object;
-    (new Sqlite("my.db")).then(db => {
-        db.execSQL("CREATE TABLE IF NOT EXISTS lists (id INTEGER PRIMARY KEY AUTOINCREMENT, list_name TEXT)").then(id => {
+    if(!Sqlite.exists("populated.db")) {
+        Sqlite.copyDatabase("populated.db");
+    }
+    (new Sqlite("populated.db")).then(db => {
+        db.execSQL("CREATE TABLE IF NOT EXISTS lists (id INTEGER PRIMARY KEY AUTOINCREMENT, list_name TEXT, status TEXT)").then(id => {
             page.bindingContext = createViewModel(db);
         }, error => {
             console.log("CREATE TABLE ERROR", error);
@@ -32,21 +35,3 @@ function navText(){
   FrameModule.topmost().navigate('views/diary/text/text');
 } exports.navText = navText;
 
-function loaded(args){    
-    pageData.set("done", true);
-    args.object.bindingContext = pageData;
-  } exports.loaded = loaded;
-
-  function tapDone(args){
-    const id = args.object.index;
-    console.log("slett denne" + id);
-
-} exports.tapDone = tapDone;
-
-/*
-const index = args.index;
-    const page = args.object.page;
-    const listView = page.getViewById("listView");
-    page.bindingContext.lists.push({ id: index});
-    listView.refresh();
-*/

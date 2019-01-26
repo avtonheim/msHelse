@@ -1,17 +1,14 @@
 <Page loaded="pageLoaded">
   <Page.actionBar>
-         <ActionBar class="action-bar">
-           <StackLayout>
-              <Image src="~/images/tittel.png" class="iconTitle" ios.position="center"></Image>
-           </StackLayout>
+         <ActionBar class="action-bar" title="Pusteøvelse">
            <ActionBar.actionItems>
-               <ActionItem id="stopBtn" text="Stopp øving" tap="stopMind" ios.position="right" />
+               <ActionItem id="stopBtn" text="Stopp" tap="stopMind" ios.position="right" />
            </ActionBar.actionItems>
          </ActionBar>
      </Page.actionBar>
     <StackLayout class="content">
     <StackLayout>
-      <Label class="titleMain" text="Pusteøving"/>
+      <Label class="titleMain" text="Pusteøvelse"/>
       <Label class="body" text="Øvinga går ut på at du skal finne fokus og avslapping." textWrap="true"/>
       <Label class="body" text="Klikk på blomsten for å starte (1 min)." textWrap="true"/>
     </StackLayout>

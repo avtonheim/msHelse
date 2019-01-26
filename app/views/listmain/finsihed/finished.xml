@@ -1,0 +1,16 @@
+<Page navigatingTo="onNavigatingTo">
+    <Page.actionBar>
+        <ActionBar class="action-bar" title="Fullførte gjøremål">
+            <ActionBar.actionItems>
+            </ActionBar.actionItems>
+        </ActionBar>
+    </Page.actionBar>
+     <ListView id="listView" items="{{ listsDone }}" class="listLayout">
+            <ListView.itemTemplate>
+                <StackLayout orientation="horizontal" class="list-view-item">
+                    <Label class="listItemsDone" text="{{ list_name }}"/>
+                </StackLayout>
+            </ListView.itemTemplate> 
+        </ListView>
+       
+</Page>

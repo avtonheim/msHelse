@@ -1,6 +1,6 @@
 <Page loaded="onLoaded">
   <Page.actionBar>
-         <ActionBar title="msHelse" class="action-bar">
+         <ActionBar title="Gjøremål" class="action-bar">
          </ActionBar>
      </Page.actionBar>
   <StackLayout>
@@ -11,7 +11,7 @@
     <StackLayout class="navButton" style="background-color:#DE8282;" tap="navList">
       <Label text="Planlegg noe kjekt!"/>
     </StackLayout>
-    <StackLayout class="navButton" style="background-color:#DE8282;" tap="navList">
+    <StackLayout class="navButton" style="background-color:#DE8282;" tap="navFinish">
       <Label text="Se fullførte mål"/>
     </StackLayout>
   </StackLayout>

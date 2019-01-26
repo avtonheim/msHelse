@@ -7,10 +7,27 @@
   border-radius: 15px;
   font-size: 20pt;
 }
-.response{
-  margin-bottom: 40px;
-}
 
 .activeButton {
   background-color: blueviolet;
+}
+
+.question{
+  background-color: #6CE3FF;
+  color: white;
+  font-weight: bold;
+  width: 580px;
+  height: 150px;
+  border-radius: 0px 30px 30px 30px;
+  padding: 30px;
+  font-size: 18pt;
+}
+.response{
+  padding: 30px;
+  border-radius: 30px 30px 0px 30px;
+  margin-top: 20px;
+  background-color: #80CEBF;
+  width: 580px;
+  height: auto;
+  margin-bottom: 40px;
 }

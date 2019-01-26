@@ -1,9 +1,6 @@
 <Page navigatingTo="onNavigatingTo">
   <Page.actionBar>
-         <ActionBar title="mHelse" class="action-bar">
-           <StackLayout>
-              <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
-           </StackLayout>
+         <ActionBar class="action-bar" title="Dagsform">
            <ActionItem text="Neste" tap="navSymptom" ios.position="right"/>
            <ActionItem text="Avbryt" tap="tapHome" ios.position="left"/>
            </ActionBar>

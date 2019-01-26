@@ -1,3 +1,10 @@
+
+SegmentedBar{
+  color: #1280A0;
+  background-color: transparent;
+  selected-background-color: #1280A0;
+  selected-color: white;
+}
 .graphContainer{
   background-color: #EBA0A0;
   border-radius: 15px;
@@ -6,7 +13,7 @@
 }
 .graphBox{
   background-color: #EBA0A0;
-  height: 300px;
+  height: 310px;
 }
 .h2{
   margin-top: 40px;
@@ -14,4 +21,7 @@
 }
 .body{
   margin-bottom: 10px;
+}
+#symptomText {
+  margin-bottom: 20px;
 }

@@ -1,8 +1,7 @@
-var frameModule = require("ui/frame");
 var createViewModel = require("../../diary/mood/mood-view-model").createViewModel;
 var Sqlite = require("nativescript-sqlite");
 
-function onPageLoaded(args){
+exports.onPageLoaded = function(args){
     var page = args.object;
    if(!Sqlite.exists("populated.db")) {
             Sqlite.copyDatabase("populated.db");
@@ -16,7 +15,11 @@ function onPageLoaded(args){
        }, error => {
            console.log("OPEN DB ERROR", error);
        });
-    
-      
 
-} exports.onPageLoaded = onPageLoaded;
+    if(this.MoodAnalysis){
+        console.log("Data!" + this.MoodAnalysis);
+    } else {
+        console.log("No data!");
+    }
+} 
+

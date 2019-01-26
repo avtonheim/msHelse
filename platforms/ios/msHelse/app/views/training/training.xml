@@ -1,9 +1,6 @@
 <Page loaded="onLoaded">
   <Page.actionBar>
-         <ActionBar class="action-bar">
-           <StackLayout>
-              <Image src="~/images/tittel.png" class="iconTitle" android.position="actionBar" ios.position="center"></Image>
-           </StackLayout>
+         <ActionBar class="action-bar" title="Øvelse">
          </ActionBar>
      </Page.actionBar>
   <StackLayout>

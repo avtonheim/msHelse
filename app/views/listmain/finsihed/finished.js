@@ -1,4 +1,4 @@
-var createViewModel = require("./lists-view-model").createViewModel;
+var createViewModel = require("../lists/lists-view-model").createViewModel;
 var Sqlite = require("nativescript-sqlite");
 var FrameModule = require("ui/frame");
 var observable = require("data/observable");
@@ -6,8 +6,11 @@ var pageData = new observable.Observable();
 
 function onNavigatingTo(args) {
     var page = args.object;
-    (new Sqlite("my.db")).then(db => {
-        db.execSQL("CREATE TABLE IF NOT EXISTS lists (id INTEGER PRIMARY KEY AUTOINCREMENT, list_name TEXT)").then(id => {
+    if(!Sqlite.exists("populated.db")) {
+        Sqlite.copyDatabase("populated.db");
+    }
+    (new Sqlite("populated.db")).then(db => {
+        db.execSQL("CREATE TABLE IF NOT EXISTS lists (id INTEGER PRIMARY KEY AUTOINCREMENT, list_name TEXT, status TEXT)").then(id => {
             page.bindingContext = createViewModel(db);
         }, error => {
             console.log("CREATE TABLE ERROR", error);

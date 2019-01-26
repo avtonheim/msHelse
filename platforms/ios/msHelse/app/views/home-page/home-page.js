@@ -2,9 +2,6 @@ var createViewModel = require("../diary/mood/mood-view-model").createViewModel;
 var Sqlite = require("nativescript-sqlite");
 var frameModule = require('ui/frame');
 
-var builder = require('ui/builder');
-var fs = require('file-system');
-
 function onLoaded(){
   //Controlling the native back-button
   var controller = frameModule.topmost().ios.controller;
@@ -27,12 +24,6 @@ function onLoadedGraph(args){
 }, error => {
    console.log("OPEN DB ERROR", error);
 });
-
- /* var stackLayout = page.getViewById('mood');
-  var path = fs.knownFolders.currentApp().path;
-  var componentJS = require(path + '/views/graphs/patientOverview/moodgraph.js');
-  var component = builder.load(path + '/views/graphs/patientOverview/moodgraph.xml', componentJS);
-  stackLayout.addChild(component);*/
 
 } exports.onLoadedGraph = onLoadedGraph;
 
