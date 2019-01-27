@@ -8,7 +8,7 @@
      <ListView id="listView" items="{{ listsDone }}" class="listLayout">
             <ListView.itemTemplate>
                 <StackLayout orientation="horizontal" class="list-view-item">
-                    <Label class="listItemsDone" text="{{ list_name }}"/>
+                    <Label class="listItemsDone" id="setActiveButton" tap="{{ $parents['ListView'].updateItemDoing, $parents['ListView'].updateItemDoing  }}" text="{{ list_name }}"/>
                 </StackLayout>
             </ListView.itemTemplate> 
         </ListView>

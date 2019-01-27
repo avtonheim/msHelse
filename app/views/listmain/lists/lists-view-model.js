@@ -32,13 +32,33 @@ function createViewModel(database) {
         });
     }
 
-    /* Denne skal kunne sette done basert på klikk i listview */
     viewModel.updateItemDone = function(args) {
-        var listName = args.object.text;
-        this.listsDone = new ObservableArray([]);
-        database.all("UPDATE lists SET status = 'done' WHERE list_name = (list_name) VALUES (?) ", [listName]).then(rows => {
+        const page = args.object;
+        const element = page.getViewById("setActiveButton");
+        element.classList.toggle("listItemsDone");
+        console.log(element.text);
+   
+       // this.lists= new ObservableArray([]);
+        database.execSQL("UPDATE lists SET status = 'done' WHERE list_name = ?", [element.text]).then(rows => {
             for(var row in rows) {
-                
+                this.lists.push({id: rows[row][0], list_name: rows[row][1]});
+                console.log(this.lists);
+            }
+        }, error => {
+            console.log("SELECT ERROR", error);
+        });
+    }
+
+    /* If the user would like to add the item in the todo list again. */
+    viewModel.updateItemDoing = function(args) {
+        const page = args.object;
+        const element = page.getViewById("setActiveButton");
+        element.classList.toggle("listItemsDone");
+        console.log(element.text);
+   
+        this.listsDone = new ObservableArray([]);
+        database.execSQL("UPDATE lists SET status = 'doing' WHERE list_name = ?", [element.text]).then(rows => {
+            for(var row in rows) {
                 this.listsDone.push({id: rows[row][0], list_name: rows[row][1]});
                 console.log(this.listsDone);
             }

@@ -3,13 +3,14 @@
         <ActionBar class="action-bar" title="Huskeliste">
             <ActionBar.actionItems>
                 <ActionItem text="Ny" tap="{{ insert }}" ios.position="right" />  
+                <ActionItem text="Sjekk" tap="getClasses" ios.position="left"/>
             </ActionBar.actionItems>
         </ActionBar>
     </Page.actionBar>
         <ListView id="listView" items="{{ lists }}" class="listLayout">
             <ListView.itemTemplate>
                 <StackLayout orientation="horizontal" class="list-view-item">
-                    <Label class="listItems" id="setActiveButton" tap="buttonClick" text="{{ list_name }}"/>
+                    <Label class="listItems" id="setActiveButton" tap="{{ $parents['ListView'].updateItemDone, $parents['ListView'].updateItemDone  }}" text="{{ list_name }}"/>
                 </StackLayout>
             </ListView.itemTemplate> 
         </ListView>

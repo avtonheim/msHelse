@@ -1,33 +1,28 @@
 {
-    "symptomList": 
-        [
-            "Vannlatning",
-            "Synsproblem",
-            "Angst",
-            "Spasme"
-        ],
-        "index": 2,
-        "selectedItem": "",
-    "selectedSymptoms": {
-        "Vannlatning": {
-            "questionOne": "Hadde du problem med å tisse når du var på do?",
-            "questionTwo": "Hadde du problem med å kjenne når du måtte på do?",
-            "questionThree": "Når på dagen hadde du problemet?"
+    "selectedSymptoms": [
+        { 
+            "id": 0, 
+            "symptom": "Vannlatning", 
+            "questionOne": "Hadde du problem med å tisse når du var på do?",  
+            "questionTwo": "Hadde du problem med å kjenne når du måtte på do?"
         },
-        "Søvnproblem": {
-            "questionOne": "Hadde du problem med å sove?",
-            "questionTwo": "Hadde du problem med å sove for lenge?",
-            "questionThree": "Når på dagen hadde du problemet?"
+        { 
+            "id": 1,
+            "symptom": "Søvnproblem", 
+            "questionOne": "Hadde du problem med å sove?",  
+            "questionTwo": "Hadde du problem med å sove for lenge?"
         },
-        "Ereksjonsproblem": {
-            "questionOne": "Hadde du problem med å få ereksjon?",
-            "questionTwo": "Når på dagen hadde du problemet?"
+        { 
+            "id": 2, 
+            "symptom": "Ereksjonsproblem", 
+            "questionOne": "Hadde du problem med å få ereksjon?",  
+            "questionTwo": "Hadde du problem med å sove for lenge?"
         },
-        "Fatigue": {
-            "questionOne": "Fikk du Fatigue etter å ha utført en krevende aktivitet?",
-            "questionTwo": "Fikk du Fatigue etter normal aktivitet? (For eksempel gått tur)",
-            "questionThree": "Når på dagen hadde du problemet?"
+        { 
+            "id": 3,
+            "symptom": "Fatigue", 
+            "questionOne": "Fikk du Fatigue etter å ha utført en krevende aktivitet?",  
+            "questionTwo": "Fikk du Fatigue etter normal aktivitet? (For eksempel gått tur)"
         }
-
-    }
+    ]
 }

@@ -15,9 +15,10 @@
         <Label class="symptomHead" text="Legg til et nytt symptom" tap="toggle0"/>
         <Label class="body" text="{{ showDetails0 ? 'Klikk for å utvide' : 'Lukk' }}" tap="toggle0"/>
         <StackLayout visibility="{{ showDetails0 ? 'collapsed' : 'visible' }}">
-          <StackLayout id="container" loaded="onListPickerLoaded"/>
+          <StackLayout id="container"/>
         </StackLayout>
       </StackLayout>
+
 
       <StackLayout class="symptomCont">
         <Label class="symptomHead" text="Vannlatning" tap="toggle1"/>

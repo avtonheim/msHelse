@@ -4,6 +4,10 @@ GridLayout button{
   background-color: gray;
   margin: 20px;
 }
+
+ListPicker{
+  color: white;
+}
 .titleMain{
   font-size: 35pt;
   padding: 5px;

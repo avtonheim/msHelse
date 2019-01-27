@@ -1,5 +1,6 @@
 var createViewModel = require("./symptoms-view-model").createViewModel;
 const ListPicker = require("tns-core-modules/ui/list-picker").ListPicker;
+const fromObject = require("tns-core-modules/data/observable").fromObject;
 var Sqlite = require("nativescript-sqlite");
 var frameModule = require('ui/frame');
 var observable = require("data/observable");
@@ -47,11 +48,9 @@ function buttonClick(args){
 function loadJSON(args){
   const path = fs.knownFolders.currentApp().path;
   const symptomsJSON = require(path + '/views/diary/symptoms/symptoms.json');
-
-  this.symptomList = new ObservableArray([]); 
-  console.log(symptomsJSON.symptomList); // "debug"
-  this.selectedSymptoms.push(symptomsJSON.symptomList);
-
+  this.selectedSymptoms = new ObservableArray([]); 
+  console.log(symptomsJSON.selectedSymptoms); // "debug"
+  this.selectedSymptoms.push(symptomsJSON.selectedSymptoms);
   createListPicker(args);
 } 
 
@@ -59,11 +58,20 @@ function createListPicker(args){
     const page = args.object;
     const container = page.getViewById("container");
     const listPicker = new ListPicker();
+  
     listPicker.items = this.selectedSymptoms;
     listPicker.selectedIndex = 0;
+    listPicker.textField = "symptom";
+    listPicker.selectedValue = "";
     container.addChild(listPicker);
+    const vm = listPicker.page.bindingContext;
+    
+    listPicker.on("selectedIndexChange", (lpargs) => {
+      vm.set("index", listPicker.selectedIndex);
+      console.log(`ListPicker selected value: ${listPicker.selectedValue}`);
+      console.log(`ListPicker selected index: ${listPicker.selectedIndex}`);
+  });
 } 
-
 
 function loaded(args){
   pageData.set("showDetails0", true);
